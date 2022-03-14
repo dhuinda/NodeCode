@@ -1,4 +1,4 @@
-using LLVMSharp.Interop;
+using LLVMSharp;
 
 namespace CodeDesigner.Core.ast;
 
@@ -13,7 +13,7 @@ public class ASTVariableExpression : ASTNode
         Name = name;
     }
 
-    public override unsafe LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef codegen(CodegenData data)
     {
         if (!data.NamedValues.ContainsKey(Name))
         {
@@ -21,6 +21,6 @@ public class ASTVariableExpression : ASTNode
             throw new InvalidCodeException("unknown variable identifier " + Name + ". Maybe the variable isn't in the correct context?");
         }
 
-        return LLVM.BuildLoad(data.Builder, data.NamedValues[Name], CodeGenerator.StringToSBytes(Name));
+        return LLVM.BuildLoad(data.Builder, data.NamedValues[Name], Name);
     }
 }

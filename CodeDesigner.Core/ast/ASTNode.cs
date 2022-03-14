@@ -1,4 +1,4 @@
-using LLVMSharp.Interop;
+using LLVMSharp;
 
 namespace CodeDesigner.Core;
 

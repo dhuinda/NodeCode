@@ -1,35 +1,27 @@
-﻿using System.Text;
+﻿using System.Runtime.InteropServices;
+using System.Text;
 
 namespace CodeDesigner.Core
 {
     
-    using LLVMSharp.Interop;
+    using LLVMSharp;
     
     public class CodeGenerator
     {
-        public static unsafe sbyte* StringToSBytes(string s)
+        public static void Run(List<ASTNode> ast)
         {
-            byte[] bytes = Encoding.ASCII.GetBytes(s);
-            sbyte* sp;
-            fixed (byte* p = bytes)
-            {
-                sp = (sbyte*) p;
-            }
-
-            return sp;
-        }
-        public static unsafe void Run(List<ASTNode> ast)
-        {
-            sbyte* error;
+            string error;
             
             LLVM.InitializeCore(LLVM.GetGlobalPassRegistry());
-            LLVM.InitializeNativeAsmPrinter();
-            LLVM.InitializeNativeAsmParser();
-            LLVM.InitializeNativeDisassembler();
-            LLVM.InitializeNativeTarget();
+            LLVM.InitializeX86AsmPrinter();
+            LLVM.InitializeX86AsmParser();
+            LLVM.InitializeX86Disassembler();
+            LLVM.InitializeX86Target();
+            LLVM.InitializeX86TargetInfo();
+            LLVM.InitializeX86TargetMC();
 
             LLVMContextRef context = LLVM.ContextCreate();
-            LLVMModuleRef module = LLVM.ModuleCreateWithNameInContext(StringToSBytes("program"), context);
+            LLVMModuleRef module = LLVM.ModuleCreateWithNameInContext("program", context);
             LLVMBuilderRef builder = LLVM.CreateBuilderInContext(context);
 
             Dictionary<String, LLVMValueRef> namedValues = new Dictionary<string, LLVMValueRef>();
@@ -42,37 +34,37 @@ namespace CodeDesigner.Core
             
             LLVM.DumpModule(module);
             
-            if (LLVM.VerifyModule(module, LLVMVerifierFailureAction.LLVMPrintMessageAction, &error) != 0)
+            if (LLVM.VerifyModule(module, LLVMVerifierFailureAction.LLVMPrintMessageAction, out error).Value != 0)
             {
-                Console.WriteLine("Failed to validate module: " + error->ToString());
+                Console.WriteLine("Failed to validate module: " + error);
                 return;
             }
 
-            if (LLVM.WriteBitcodeToFile(module, StringToSBytes("./output.bc")) != 0)
+            if (LLVM.WriteBitcodeToFile(module, "./output.bc") != 0)
             {
                 Console.Error.WriteLine("Failed to write bitcode to file!");
                 return;
             }
 
-            sbyte* triple = LLVM.GetDefaultTargetTriple();
-            var target = new LLVMTarget();
-            var targetPtr = &target;
+            string triple = Marshal.PtrToStringAnsi(LLVM.GetDefaultTargetTriple());
+            Console.WriteLine("triple: " + triple);
+            var target = new LLVMTargetRef();
 
-            if (LLVM.GetTargetFromTriple(triple, &targetPtr, &error) != 0)
+            if (LLVM.GetTargetFromTriple(triple, out target, out error).Value != 0)
             {
-                Console.Error.WriteLine("Failed to get target from triple: " + error->ToString());
+                Console.Error.WriteLine("Failed to get target from triple: " + error);
                 return;
             }
 
             var cpu = "generic";
             var cpuFeatures = "";
-            LLVMTargetMachineRef tm = LLVM.CreateTargetMachine(targetPtr, triple, StringToSBytes(cpu),
-                StringToSBytes(cpuFeatures), LLVMCodeGenOptLevel.LLVMCodeGenLevelNone, LLVMRelocMode.LLVMRelocDefault,
+            LLVMTargetMachineRef tm = LLVM.CreateTargetMachine(target, triple, cpu,
+                cpuFeatures, LLVMCodeGenOptLevel.LLVMCodeGenLevelNone, LLVMRelocMode.LLVMRelocDefault,
                 LLVMCodeModel.LLVMCodeModelDefault);
-            if (LLVM.TargetMachineEmitToFile(tm, module, StringToSBytes("./output.o"), LLVMCodeGenFileType.LLVMObjectFile,
-                    &error) != 0)
+            if (LLVM.TargetMachineEmitToFile(tm, module, Marshal.StringToHGlobalAnsi("./output.o"), LLVMCodeGenFileType.LLVMObjectFile,
+                    out error).Value != 0)
             {
-                Console.Error.WriteLine("Failed to emit relocatable object file: " + error->ToString());
+                Console.Error.WriteLine("Failed to emit relocatable object file: " + error);
                 return;
             }
             

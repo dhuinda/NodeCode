@@ -1,4 +1,4 @@
-using LLVMSharp.Interop;
+using LLVMSharp;
 
 namespace CodeDesigner.Core.ast;
 using Core;
@@ -16,7 +16,7 @@ public class ASTVariableDefinition : ASTNode
         VariableType = variableType;
     }
 
-    public override unsafe LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef codegen(CodegenData data)
     {
         LLVMTypeRef llvmType;
         if (VariableType.IsPrimitive)
@@ -29,7 +29,7 @@ public class ASTVariableDefinition : ASTNode
             throw new Exception("classes are not implemented yet");
         }
 
-        LLVMValueRef alloca = LLVM.BuildAlloca(data.Builder, llvmType, CodeGenerator.StringToSBytes(Name));
+        LLVMValueRef alloca = LLVM.BuildAlloca(data.Builder, llvmType, Name);
         data.NamedValues.Add(Name, alloca);
         return alloca;
     }

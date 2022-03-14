@@ -1,4 +1,4 @@
-using LLVMSharp.Interop;
+using LLVMSharp;
 
 namespace CodeDesigner.Core.ast;
 
@@ -13,8 +13,8 @@ public class ASTStringExpression : ASTNode
         Value = value;
     }
     
-    public override unsafe LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef codegen(CodegenData data)
     {
-        return LLVM.BuildGlobalStringPtr(data.Builder, CodeGenerator.StringToSBytes(Value), CodeGenerator.StringToSBytes("string"));
+        return LLVM.BuildGlobalStringPtr(data.Builder, Value, "string");
     }
 }

@@ -1,4 +1,4 @@
-using LLVMSharp.Interop;
+using LLVMSharp;
 
 namespace CodeDesigner.Core.ast;
 
@@ -18,7 +18,7 @@ public class ASTVariableDeclaration : ASTNode
         Value = value;
     }
 
-    public override unsafe LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef codegen(CodegenData data)
     {
         if (!Type.IsPrimitive)
         {
@@ -28,7 +28,7 @@ public class ASTVariableDeclaration : ASTNode
         var llvmType =
             VariableType.GetLLVMType(Type.PrimitiveType.GetValueOrDefault(PrimitiveVariableType.VOID),
                 data.Context);
-        LLVMValueRef alloca = LLVM.BuildAlloca(data.Builder, llvmType, CodeGenerator.StringToSBytes(Name));
+        LLVMValueRef alloca = LLVM.BuildAlloca(data.Builder, llvmType, Name);
         LLVM.BuildStore(data.Builder, Value.codegen(data), alloca);
         data.NamedValues.Add(Name, alloca);
         return alloca;

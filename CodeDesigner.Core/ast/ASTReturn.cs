@@ -1,4 +1,4 @@
-using LLVMSharp.Interop;
+using LLVMSharp;
 
 namespace CodeDesigner.Core.ast;
 
@@ -15,7 +15,7 @@ public class ASTReturn : ASTNode
         Expression = expression;
     }
     
-    public override unsafe LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef codegen(CodegenData data)
     {
         if (Expression != null)
         {

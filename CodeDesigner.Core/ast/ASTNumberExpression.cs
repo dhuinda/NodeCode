@@ -1,4 +1,4 @@
-using LLVMSharp.Interop;
+using LLVMSharp;
 
 namespace CodeDesigner.Core.ast;
 
@@ -20,12 +20,12 @@ public class ASTNumberExpression : ASTNode
     {
         if (Type == PrimitiveVariableType.INTEGER)
         {
-            return LLVM.ConstIntOfString(LLVM.Int64TypeInContext(data.Context), CodeGenerator.StringToSBytes(Value), 10);
+            return LLVM.ConstIntOfString(LLVM.Int64TypeInContext(data.Context), Value, 10);
         }
 
         if (Type == PrimitiveVariableType.DOUBLE)
         {
-            return LLVM.ConstRealOfString(LLVM.DoubleTypeInContext(data.Context), CodeGenerator.StringToSBytes(Value));
+            return LLVM.ConstRealOfString(LLVM.DoubleTypeInContext(data.Context), Value);
         }
 
         throw new Exception("unable to use PrimitiveVariableType " + Type + " as a number");

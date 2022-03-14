@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using LLVMSharp.Interop;
+using LLVMSharp;
 
 namespace CodeDesigner.Core.ast;
 using Core;
@@ -21,13 +21,13 @@ public class ASTFunctionDefinition : ASTNode
         ReturnType = returnType;
     }
 
-    public override unsafe LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef codegen(CodegenData data)
     {
         Console.WriteLine("codegen for " + Name);
-        LLVMValueRef func = LLVM.GetNamedFunction(data.Module, CodeGenerator.StringToSBytes(Name));
+        LLVMValueRef func = LLVM.GetNamedFunction(data.Module, Name);
         var paramTypes = new LLVMTypeRef[Params.Count];
 
-        if (func == null)
+        if (true)
         {
             for (var i = 0; i < Params.Count; i++)
             {
@@ -57,12 +57,12 @@ public class ASTFunctionDefinition : ASTNode
             }
 
             Console.WriteLine("Creating function type");
-            var functionType = LLVMTypeRef.CreateFunction(llvmReturnType, paramTypes, false);
-            func = LLVM.AddFunction(data.Module, CodeGenerator.StringToSBytes(Name), functionType);
+            var functionType = LLVM.FunctionType(llvmReturnType, paramTypes, false);
+            func = LLVM.AddFunction(data.Module, Name, functionType);
         }
 
         LLVMBasicBlockRef funcEntryBlock =
-            LLVM.AppendBasicBlockInContext(data.Context, func, CodeGenerator.StringToSBytes("entry"));
+            LLVM.AppendBasicBlockInContext(data.Context, func, "entry");
         LLVM.PositionBuilderAtEnd(data.Builder, funcEntryBlock);
         data.NamedValues.Clear();
         // todo: init args
