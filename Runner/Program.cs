@@ -3,19 +3,16 @@
 using CodeDesigner.Core;
 using CodeDesigner.Core.ast;
 
-List<ASTNode> ast = new List<ASTNode>();
+var ast = new List<ASTNode>();
 ast.Add(new ASTFunctionDefinition(
     "ENTRY_FUNC", 
     new List<ASTVariableDefinition>(),
     new List<ASTNode>
     {
-        new ASTReturn(new ASTBinaryExpression(
-            BinaryOperator.GT,
-            new ASTNumberExpression("2.5", PrimitiveVariableType.DOUBLE),
-            new ASTNumberExpression("2", PrimitiveVariableType.DOUBLE)
-        ))
+        new ASTVariableDeclaration("myVar", new VariableType(PrimitiveVariableType.STRING), new ASTStringExpression("Hello, world!")),
+        new ASTReturn(new ASTVariableExpression("myVar"))
     },
-    new VariableType(true, PrimitiveVariableType.BOOLEAN, null)
+    new VariableType(PrimitiveVariableType.STRING)
 ));
 
 CodeGenerator.Run(ast);

@@ -1,6 +1,5 @@
 ﻿using System.Text;
 
-//todo: next is ASTVariableExpression
 namespace CodeDesigner.Core
 {
     

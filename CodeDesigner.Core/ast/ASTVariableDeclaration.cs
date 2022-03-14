@@ -32,6 +32,5 @@ public class ASTVariableDeclaration : ASTNode
         LLVM.BuildStore(data.Builder, Value.codegen(data), alloca);
         data.NamedValues.Add(Name, alloca);
         return alloca;
-
     }
 }

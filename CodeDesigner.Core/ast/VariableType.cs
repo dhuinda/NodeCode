@@ -18,6 +18,18 @@ public class VariableType
         ClassName = className;
     }
 
+    public VariableType(PrimitiveVariableType primitiveType)
+    {
+        IsPrimitive = true;
+        PrimitiveType = primitiveType;
+    }
+
+    public VariableType(string className)
+    {
+        IsPrimitive = false;
+        ClassName = className;
+    }
+
     public static unsafe LLVMTypeRef GetLLVMType(PrimitiveVariableType type, LLVMContextRef context)
     {
         return type switch
@@ -26,6 +38,7 @@ public class VariableType
             PrimitiveVariableType.DOUBLE => LLVM.DoubleTypeInContext(context),
             PrimitiveVariableType.BOOLEAN => LLVM.Int1TypeInContext(context),
             PrimitiveVariableType.VOID => LLVM.VoidTypeInContext(context),
+            PrimitiveVariableType.STRING => LLVM.PointerType(LLVM.Int8TypeInContext(context), 0),
             _ => throw new Exception("unimplemented primitive type")
         };
     }
