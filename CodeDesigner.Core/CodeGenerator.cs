@@ -25,7 +25,7 @@ namespace CodeDesigner.Core
             var builder = LLVM.CreateBuilderInContext(context);
 
             var namedValues = new Dictionary<string, LLVMValueRef>();
-            var data = new CodegenData(builder, context, null, namedValues, module);
+            var data = new CodegenData(builder, context, null, namedValues, module, "default");
             
             foreach (var node in ast)
             {

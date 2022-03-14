@@ -23,8 +23,13 @@ public class ASTFunctionDefinition : ASTNode
 
     public override LLVMValueRef codegen(CodegenData data)
     {
-        Console.WriteLine("codegen for " + Name);
-        LLVMValueRef func = LLVM.GetNamedFunction(data.Module, Name);
+        if (data.Func.HasValue)
+        {
+            throw new InvalidCodeException("cannot define a function within a function");
+        }
+        var fullName = Name == "main" ? "__main" : $"{data.NamespaceName}.{Name}";
+        Console.WriteLine("codegen for " + fullName);
+        var func = LLVM.GetNamedFunction(data.Module, fullName);
         var paramTypes = new LLVMTypeRef[Params.Count];
 
         for (var i = 0; i < Params.Count; i++)
@@ -57,7 +62,7 @@ public class ASTFunctionDefinition : ASTNode
         var functionType = LLVM.FunctionType(llvmReturnType, paramTypes, false);
         if (func.Pointer.ToInt64() == 0)
         {
-            func = LLVM.AddFunction(data.Module, Name, functionType);
+            func = LLVM.AddFunction(data.Module, fullName, functionType);
         }
 
         var funcEntryBlock = LLVM.AppendBasicBlockInContext(data.Context, func, "entry");
@@ -84,6 +89,7 @@ public class ASTFunctionDefinition : ASTNode
             LLVM.BuildRetVoid(data.Builder);
         }
         data.NamedValues.Clear();
+        data.Func = null;
         return func;
     }
 }

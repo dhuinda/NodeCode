@@ -15,7 +15,21 @@ public class ASTFunctionInvocation : ASTNode
 
     public override LLVMValueRef codegen(CodegenData data)
     {
-        var func = LLVM.GetNamedFunction(data.Module, Name);
+        string fullName;
+        if (Name.StartsWith("extern."))
+        {
+            fullName = Name[7..];
+        }
+        else if (Name.Contains("."))
+        {
+            fullName = Name;
+        }
+        else
+        {
+            fullName = $"{data.NamespaceName}.{Name}";
+        }
+        Console.WriteLine("calling " + fullName);
+        var func = LLVM.GetNamedFunction(data.Module, fullName);
         var argsV = new List<LLVMValueRef>();
         foreach (var arg in Args)
         {

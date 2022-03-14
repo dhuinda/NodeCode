@@ -1,10 +1,10 @@
 #include <iostream>
 
 extern "C" {
-    void ENTRY_FUNC();
+    void __main();
 }
 
 int main() {
-    ENTRY_FUNC();
+    __main();
     return 0;
 }
