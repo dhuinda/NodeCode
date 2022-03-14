@@ -29,7 +29,6 @@ public class ASTIfStatement : ASTNode
             elseBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "elsebody");
         }
         var mergeBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "mergeif");
-        // todo: if empty ElseBody, skip straight to mergeif (and don't add elsebody BasicBlock)
         LLVM.BuildCondBr(data.Builder, conditionValue, ifBlock, elseBlock.HasValue ? elseBlock.Value : mergeBlock);
 
         LLVM.PositionBuilderAtEnd(data.Builder, ifBlock);

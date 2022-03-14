@@ -43,92 +43,94 @@ public class ASTBinaryExpression : ASTNode
         }
         var l = Lhs.codegen(data);
         var r = Rhs.codegen(data);
+        var typeKind = LLVM.GetTypeKind(LLVM.TypeOf(l));
         switch (Op) {
             case BinaryOperator.PLUS:
-                if (!LLVM.IsAConstantInt(l).IsNull()) {
-                    return LLVM.BuildAdd(data.Builder, l, r, "addtmp");
+                if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
+                    var a = LLVM.BuildAdd(data.Builder, l, r, "addtmp");
+                    return a;
                 }
-                if (!LLVM.IsAConstantFP(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
                     return LLVM.BuildFAdd(data.Builder, l, r, "addtmp");
                 }
                 throw new Exception("Error: unknown add type");
             case BinaryOperator.MINUS:
-                if (!LLVM.IsAConstantInt(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
                     return LLVM.BuildSub(data.Builder, l, r, "subtmp");
                 }
-                if (!LLVM.IsAConstantFP(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
                     return LLVM.BuildFSub(data.Builder, l, r, "subtmp");
                 }
                 throw new Exception("Error: unknown subtract type");
             case BinaryOperator.TIMES:
-                if (!LLVM.IsAConstantInt(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
                     return LLVM.BuildMul(data.Builder, l, r, "multmp");
                 }
-                if (!LLVM.IsAConstantFP(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
                     return LLVM.BuildFMul(data.Builder, l, r, "multmp");
                 }
                 throw new Exception("Error: unknown multiplication type");
             case BinaryOperator.DIVIDE:
-                if (!LLVM.IsAConstantInt(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
                     return LLVM.BuildSDiv(data.Builder, l, r, "divtmp");
                 }
-                if (!LLVM.IsAConstantFP(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
                     return LLVM.BuildFDiv(data.Builder, l, r, "divtmp");
                 }
                 throw new Exception("Error: unknown division type");
             case BinaryOperator.LT:
-                if (!LLVM.IsAConstantInt(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
                     return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntSLT, l, r, "cmptmp");
                 }
-                if (!LLVM.IsAConstantFP(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
                     return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealOLT, l, r, "cmptmp");
                 }
                 throw new Exception("Error: unknown comparison type");
             case BinaryOperator.GT:
-                if (!LLVM.IsAConstantInt(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
                     return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntSGT, l, r, "cmptmp");
                 }
-                if (!LLVM.IsAConstantFP(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
                     return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealOGT, l, r, "cmptmp");
                 }
                 throw new Exception("Error: unknown comparison type");
             case BinaryOperator.LE:
-                if (!LLVM.IsAConstantInt(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
                     return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntSLE, l, r, "cmptmp");
                 }
-                if (!LLVM.IsAConstantFP(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
                     return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealOLT, l, r, "cmptmp");
                 }
                 throw new Exception("Error: unknown comparison type");
             case BinaryOperator.GE:
-                if (!LLVM.IsAConstantInt(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
                     return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntSGT, l, r, "cmptmp");
                 }
-                if (!LLVM.IsAConstantFP(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
                     return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealOGT, l, r, "cmptmp");
                 }
                 throw new Exception("Error: unknown comparison type");
             case BinaryOperator.EQ:
-                if (!LLVM.IsAConstantInt(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
                     return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntEQ, l, r, "cmptmp");
                 }
-                if (!LLVM.IsAConstantFP(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
                     return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealOEQ, l, r, "cmptmp");
                 }
                 throw new Exception("Error: unknown comparison type");
             case BinaryOperator.NE:
-                if (!LLVM.IsAConstantInt(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
                     return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntNE, l, r, "cmptmp");
                 }
-                if (!LLVM.IsAConstantFP(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
                     return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealONE, l, r, "cmptmp");
                 }
                 throw new Exception("Error: unknown comparison type");
             case BinaryOperator.MODULO:
-                if (!LLVM.IsAConstantInt(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
                     return LLVM.BuildSRem(data.Builder, l, r, "modtmp");
                 }
-                if (!LLVM.IsAConstantFP(l).IsNull()) {
+                if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
                     return LLVM.BuildFRem(data.Builder, l, r, "modtmp");
                 }
                 throw new Exception("Error: unknown modulo type");
