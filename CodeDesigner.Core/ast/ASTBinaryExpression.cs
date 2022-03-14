@@ -6,9 +6,9 @@ using Core;
 
 public class ASTBinaryExpression : ASTNode
 {
-    private BinaryOperator Op;
-    private ASTNode Lhs;
-    private ASTNode Rhs;
+    public BinaryOperator Op;
+    public ASTNode Lhs;
+    public ASTNode Rhs;
 
     public ASTBinaryExpression(BinaryOperator op, ASTNode lhs, ASTNode rhs)
     {

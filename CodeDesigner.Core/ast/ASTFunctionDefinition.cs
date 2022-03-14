@@ -27,8 +27,13 @@ public class ASTFunctionDefinition : ASTNode
         {
             throw new InvalidCodeException("cannot define a function within a function");
         }
+
+        if (Name.Contains('.'))
+        {
+            throw new InvalidCodeException("a function's name cannot contain a '.'");
+        }
         var fullName = Name == "main" ? "__main" : $"{data.NamespaceName}.{Name}";
-        Console.WriteLine("codegen for " + fullName);
+        Console.WriteLine("codegen for function " + fullName);
         var func = LLVM.GetNamedFunction(data.Module, fullName);
         var paramTypes = new LLVMTypeRef[Params.Count];
 

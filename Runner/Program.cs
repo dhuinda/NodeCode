@@ -6,28 +6,8 @@ ast.Add(
     new ASTPrototypeDeclaration("printf", new List<VariableType>
     {
         new(PrimitiveVariableType.STRING)
-    }, new VariableType(PrimitiveVariableType.VOID), true, "extern")
+    }, new VariableType(PrimitiveVariableType.VOID), true)
 );
-ast.Add(new ASTPrototypeDeclaration("add",
-    new List<VariableType>
-    {
-    new(PrimitiveVariableType.INTEGER),
-    new(PrimitiveVariableType.INTEGER)
-    },
-    new VariableType(PrimitiveVariableType.INTEGER),
-    false,
-    "calculator"
-));
-ast.Add(new ASTPrototypeDeclaration("subtract",
-    new List<VariableType>
-    {
-    new(PrimitiveVariableType.INTEGER),
-    new(PrimitiveVariableType.INTEGER)
-    },
-    new VariableType(PrimitiveVariableType.INTEGER),
-    false,
-    "calculator"
-));
 ast.Add(new ASTFunctionDefinition(
     "main", 
     new List<ASTVariableDefinition>(),

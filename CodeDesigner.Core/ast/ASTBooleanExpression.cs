@@ -4,7 +4,7 @@ namespace CodeDesigner.Core.ast;
 
 public class ASTBooleanExpression : ASTNode
 {
-    private bool Value;
+    public bool Value;
 
     public ASTBooleanExpression(bool value)
     {

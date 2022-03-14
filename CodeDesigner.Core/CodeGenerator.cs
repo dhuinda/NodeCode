@@ -10,8 +10,9 @@ namespace CodeDesigner.Core
     {
         public static void Run(List<ASTNode> ast)
         {
-            string error;
-            
+            var prototypeAnalyzer = new PrototypeAnalyzer(ast);
+            prototypeAnalyzer.Run();
+
             LLVM.InitializeCore(LLVM.GetGlobalPassRegistry());
             LLVM.InitializeX86AsmPrinter();
             LLVM.InitializeX86AsmParser();
@@ -34,7 +35,7 @@ namespace CodeDesigner.Core
             
             LLVM.DumpModule(module);
             
-            if (LLVM.VerifyModule(module, LLVMVerifierFailureAction.LLVMPrintMessageAction, out error).Value != 0)
+            if (LLVM.VerifyModule(module, LLVMVerifierFailureAction.LLVMPrintMessageAction, out var error).Value != 0)
             {
                 Console.WriteLine("Failed to validate module: " + error);
                 return;
