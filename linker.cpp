@@ -1,11 +1,10 @@
 #include <iostream>
 
 extern "C" {
-    char* ENTRY_FUNC();
+    void ENTRY_FUNC();
 }
 
 int main() {
-    char* result = ENTRY_FUNC();
-    std::cout << result << std::endl;
+    ENTRY_FUNC();
     return 0;
 }

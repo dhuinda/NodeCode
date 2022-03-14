@@ -20,14 +20,14 @@ namespace CodeDesigner.Core
             LLVM.InitializeX86TargetInfo();
             LLVM.InitializeX86TargetMC();
 
-            LLVMContextRef context = LLVM.ContextCreate();
-            LLVMModuleRef module = LLVM.ModuleCreateWithNameInContext("program", context);
-            LLVMBuilderRef builder = LLVM.CreateBuilderInContext(context);
+            var context = LLVM.ContextCreate();
+            var module = LLVM.ModuleCreateWithNameInContext("program", context);
+            var builder = LLVM.CreateBuilderInContext(context);
 
-            Dictionary<String, LLVMValueRef> namedValues = new Dictionary<string, LLVMValueRef>();
-            CodegenData data = new CodegenData(builder, context, null, namedValues, module);
+            var namedValues = new Dictionary<string, LLVMValueRef>();
+            var data = new CodegenData(builder, context, null, namedValues, module);
             
-            foreach (ASTNode node in ast)
+            foreach (var node in ast)
             {
                 node.codegen(data);
             }
@@ -46,11 +46,10 @@ namespace CodeDesigner.Core
                 return;
             }
 
-            string triple = Marshal.PtrToStringAnsi(LLVM.GetDefaultTargetTriple());
+            var triple = Marshal.PtrToStringAnsi(LLVM.GetDefaultTargetTriple()) ?? throw new InvalidOperationException();
             Console.WriteLine("triple: " + triple);
-            var target = new LLVMTargetRef();
 
-            if (LLVM.GetTargetFromTriple(triple, out target, out error).Value != 0)
+            if (LLVM.GetTargetFromTriple(triple, out var target, out error).Value != 0)
             {
                 Console.Error.WriteLine("Failed to get target from triple: " + error);
                 return;
@@ -58,7 +57,7 @@ namespace CodeDesigner.Core
 
             var cpu = "generic";
             var cpuFeatures = "";
-            LLVMTargetMachineRef tm = LLVM.CreateTargetMachine(target, triple, cpu,
+            var tm = LLVM.CreateTargetMachine(target, triple, cpu,
                 cpuFeatures, LLVMCodeGenOptLevel.LLVMCodeGenLevelNone, LLVMRelocMode.LLVMRelocDefault,
                 LLVMCodeModel.LLVMCodeModelDefault);
             if (LLVM.TargetMachineEmitToFile(tm, module, Marshal.StringToHGlobalAnsi("./output.o"), LLVMCodeGenFileType.LLVMObjectFile,

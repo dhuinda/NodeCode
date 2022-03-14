@@ -15,6 +15,6 @@ public class ASTStringExpression : ASTNode
     
     public override LLVMValueRef codegen(CodegenData data)
     {
-        return LLVM.BuildGlobalStringPtr(data.Builder, Value, "string");
+        return LLVM.BuildGlobalStringPtr(data.Builder, Value, "");
     }
 }

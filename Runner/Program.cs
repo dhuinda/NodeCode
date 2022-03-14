@@ -9,10 +9,16 @@ ast.Add(new ASTFunctionDefinition(
     new List<ASTVariableDefinition>(),
     new List<ASTNode>
     {
-        new ASTVariableDeclaration("myVar", new VariableType(PrimitiveVariableType.STRING), new ASTStringExpression("Hello, world!")),
-        new ASTReturn(new ASTVariableExpression("myVar"))
+        new ASTExternDeclaration("printf", new List<VariableType>
+        {
+            new(PrimitiveVariableType.STRING)
+        }, PrimitiveVariableType.VOID, true),
+        new ASTFunctionInvocation("printf", new List<ASTNode>
+        {
+            new ASTStringExpression("Hello, world!\n")
+        })
     },
-    new VariableType(PrimitiveVariableType.STRING)
+    new VariableType(PrimitiveVariableType.VOID)
 ));
 
 CodeGenerator.Run(ast);
