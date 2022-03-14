@@ -25,20 +25,20 @@ public class ASTBinaryExpression : ASTNode
         }
         if (Op is BinaryOperator.AND or BinaryOperator.OR) {
             LLVMValueRef lhsValue = Lhs.codegen(data);
-            LLVMBasicBlockRef ifBB = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "condif");
-            LLVMBasicBlockRef mergeBB = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "mergeif");
+            LLVMBasicBlockRef ifBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "condif");
+            LLVMBasicBlockRef mergeBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "mergeif");
             LLVMValueRef resultAlloca = LLVM.BuildAlloca(data.Builder, LLVM.Int1TypeInContext(data.Context), "condtmp");
             LLVM.BuildStore(data.Builder, lhsValue, resultAlloca);
             if (Op == BinaryOperator.AND) {
-                LLVM.BuildCondBr(data.Builder, lhsValue, ifBB, mergeBB);
+                LLVM.BuildCondBr(data.Builder, lhsValue, ifBlock, mergeBlock);
             } else {
-                LLVM.BuildCondBr(data.Builder, lhsValue, mergeBB, ifBB);
+                LLVM.BuildCondBr(data.Builder, lhsValue, mergeBlock, ifBlock);
             }
-            LLVM.PositionBuilderAtEnd(data.Builder, ifBB);
+            LLVM.PositionBuilderAtEnd(data.Builder, ifBlock);
             LLVMValueRef rhsValue = Rhs.codegen(data);
             LLVM.BuildStore(data.Builder, rhsValue, resultAlloca);
-            LLVM.BuildBr(data.Builder, mergeBB);
-            LLVM.PositionBuilderAtEnd(data.Builder, mergeBB);
+            LLVM.BuildBr(data.Builder, mergeBlock);
+            LLVM.PositionBuilderAtEnd(data.Builder, mergeBlock);
             return LLVM.BuildLoad(data.Builder, resultAlloca, "");
         }
         var l = Lhs.codegen(data);

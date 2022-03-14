@@ -13,10 +13,16 @@ ast.Add(new ASTFunctionDefinition(
         {
             new(PrimitiveVariableType.STRING)
         }, PrimitiveVariableType.VOID, true),
-        new ASTFunctionInvocation("printf", new List<ASTNode>
-        {
-            new ASTStringExpression("Hello, world!\n")
-        })
+        new ASTIfStatement(new ASTBinaryExpression(BinaryOperator.GT, new ASTNumberExpression("2", PrimitiveVariableType.INTEGER), new ASTNumberExpression("1", PrimitiveVariableType.INTEGER)),
+                new List<ASTNode>()
+                {
+                    new ASTFunctionInvocation("printf", new List<ASTNode>
+                    {
+                        new ASTStringExpression("true\n")
+                    })
+                },
+                new List<ASTNode>()
+            )
     },
     new VariableType(PrimitiveVariableType.VOID)
 ));
