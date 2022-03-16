@@ -24,11 +24,9 @@ public class ASTVariableDeclaration : ASTNode
         {
             throw new Exception("classes aren't implemented yet");
         }
-        
-        var llvmType =
-            VariableType.GetLLVMType(Type.PrimitiveType.GetValueOrDefault(PrimitiveVariableType.VOID),
-                data.Context);
-        LLVMValueRef alloca = LLVM.BuildAlloca(data.Builder, llvmType, Name);
+
+        var llvmType = Type.GetLLVMType(data);
+        var alloca = LLVM.BuildAlloca(data.Builder, llvmType, Name);
         LLVM.BuildStore(data.Builder, Value.codegen(data), alloca);
         data.NamedValues.Add(Name, alloca);
         return alloca;

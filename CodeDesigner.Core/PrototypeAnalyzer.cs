@@ -118,7 +118,7 @@ public class PrototypeAnalyzer
         foreach (var (fullName, node) in _futurePrototypes)
         {
             Console.WriteLine("generating prototype for " + fullName);
-            var paramTypes = node.Params.Select(param => param.VariableType).ToList();
+            var paramTypes = node.Params.Select(param => param.Type).ToList();
             _ast.Insert(0, new ASTPrototypeDeclaration(fullName, paramTypes, node.ReturnType, false));
         }
     }

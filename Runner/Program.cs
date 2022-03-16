@@ -2,59 +2,42 @@
 using CodeDesigner.Core.ast;
 
 var ast = new List<ASTNode>();
-ast.Add(
-    new ASTPrototypeDeclaration("printf", new List<VariableType>
-    {
-        new(PrimitiveVariableType.STRING)
-    }, new VariableType(PrimitiveVariableType.VOID), true)
-);
-ast.Add(new ASTFunctionDefinition(
-    "main", 
-    new List<ASTVariableDefinition>(),
-    new List<ASTNode>
+
+ast.Add(new ASTPrototypeDeclaration("printf", new List<VariableType>
+{
+    new(PrimitiveVariableType.STRING)
+}, new VariableType(PrimitiveVariableType.VOID), true));
+
+ast.Add(new ASTClassDefinition("MyClass", new List<ASTVariableDefinition>
+{
+    new("a", new VariableType(PrimitiveVariableType.INTEGER)),
+    new("b", new VariableType("MyClass"))
+}, new List<ASTFunctionDefinition>
+{
+    new("test", new List<ASTVariableDefinition>(), new List<ASTNode>
     {
         new ASTFunctionInvocation("extern.printf", new List<ASTNode>
         {
-            new ASTStringExpression("1-2: %d\n"),
-            new ASTFunctionInvocation("calculator.subtract", new List<ASTNode>
-            {
-                new ASTNumberExpression("1", PrimitiveVariableType.INTEGER),
-                new ASTNumberExpression("2", PrimitiveVariableType.INTEGER)
-            })
+            new ASTStringExpression("this.a: %d\n"),
+            new ASTClassFieldAccess(new ASTVariableExpression("this"), "a")
         })
-    },
-    new VariableType(PrimitiveVariableType.VOID)
-));
-ast.Add(new ASTNamespace("calculator", new List<ASTNode>
+    }, new VariableType(PrimitiveVariableType.VOID))
+}));
+ast.Add(new ASTFunctionDefinition("main", new List<ASTVariableDefinition>(), new List<ASTNode>
 {
-    new ASTFunctionDefinition(
-         "add",
-         new List<ASTVariableDefinition>
-         {
-             new("a", new VariableType(PrimitiveVariableType.INTEGER)),
-             new("b", new VariableType(PrimitiveVariableType.INTEGER))
-         },
-         new List<ASTNode>
-         {
-             new ASTReturn(new ASTBinaryExpression(BinaryOperator.PLUS, new ASTVariableExpression("a"),
-                 new ASTVariableExpression("b")))
-         },
-         new VariableType(PrimitiveVariableType.INTEGER)),
-    new ASTFunctionDefinition("subtract", new List<ASTVariableDefinition>
+    new ASTClassInstantiation("myClassInst", "MyClass", new List<ASTNode>(), new List<VariableType>()),
+    new ASTClassFieldStore(new ASTVariableExpression("myClassInst"), "a", new ASTNumberExpression("2", PrimitiveVariableType.INTEGER)),
+    new ASTFunctionInvocation("MyClass__test", new List<ASTNode>
     {
-        new("a", new VariableType(PrimitiveVariableType.INTEGER)),
-        new("b", new VariableType(PrimitiveVariableType.INTEGER))
-    },
-    new List<ASTNode>
-        {
-            new ASTReturn(new ASTFunctionInvocation("add", new List<ASTNode>
-            {
-                new ASTVariableExpression("a"),
-                new ASTBinaryExpression(BinaryOperator.TIMES, new ASTNumberExpression("-1", PrimitiveVariableType.INTEGER), new ASTVariableExpression("b"))
-            }))
-        },
-    new VariableType(PrimitiveVariableType.INTEGER))
-}
-));
+        new ASTVariableExpression("myClassInst")
+    }),
+    new ASTClassInstantiation("myNestedClassInst", "MyClass", new List<ASTNode>(), new List<VariableType>()),
+    new ASTClassFieldStore(new ASTVariableExpression("myClassInst"), "b", new ASTVariableExpression("myNestedClassInst")),
+    new ASTClassFieldStore(new ASTClassFieldAccess(new ASTVariableExpression("myClassInst"), "b"), "a", new ASTNumberExpression("1337", PrimitiveVariableType.INTEGER)),
+    new ASTFunctionInvocation("MyClass__test", new List<ASTNode>
+    {
+        new ASTClassFieldAccess(new ASTVariableExpression("myClassInst"), "b")
+    })
+}, new(PrimitiveVariableType.VOID)));
 
 CodeGenerator.Run(ast);

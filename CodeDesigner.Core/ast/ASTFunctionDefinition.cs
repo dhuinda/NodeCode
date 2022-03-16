@@ -28,43 +28,22 @@ public class ASTFunctionDefinition : ASTNode
             throw new InvalidCodeException("cannot define a function within a function");
         }
 
-        if (Name.Contains('.'))
+        var fullName = Name;
+        if (!Name.Contains('.'))
         {
-            throw new InvalidCodeException("a function's name cannot contain a '.'");
+            fullName = Name == "main" ? "__main" : $"{data.NamespaceName}.{Name}";
+            // throw new InvalidCodeException("a function's name cannot contain a '.'");
         }
-        var fullName = Name == "main" ? "__main" : $"{data.NamespaceName}.{Name}";
         Console.WriteLine("codegen for function " + fullName);
         var func = LLVM.GetNamedFunction(data.Module, fullName);
         var paramTypes = new LLVMTypeRef[Params.Count];
 
         for (var i = 0; i < Params.Count; i++)
         {
-            LLVMTypeRef llvmType;
-            if (Params[i].VariableType.IsPrimitive)
-            {
-                llvmType = VariableType.GetLLVMType(Params[i].VariableType.PrimitiveType.GetValueOrDefault(PrimitiveVariableType.VOID), data.Context);
-            }
-            else
-            {
-                throw new Exception("classes aren't implemented yet");
-            }
-
-            paramTypes[i] = llvmType;
+            paramTypes[i] = Params[i].Type.GetLLVMType(data);
         }
 
-        LLVMTypeRef llvmReturnType;
-        if (ReturnType.IsPrimitive)
-        {
-            llvmReturnType =
-                VariableType.GetLLVMType(ReturnType.PrimitiveType.GetValueOrDefault(PrimitiveVariableType.VOID),
-                    data.Context);
-        }
-        else
-        {
-            throw new Exception("classes aren't implemented yet");
-        }
-
-        var functionType = LLVM.FunctionType(llvmReturnType, paramTypes, false);
+        var functionType = LLVM.FunctionType(ReturnType.GetLLVMType(data), paramTypes, false);
         if (func.Pointer.ToInt64() == 0)
         {
             func = LLVM.AddFunction(data.Module, fullName, functionType);

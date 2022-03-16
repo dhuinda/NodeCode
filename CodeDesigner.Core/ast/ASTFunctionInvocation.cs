@@ -20,7 +20,7 @@ public class ASTFunctionInvocation : ASTNode
         {
             fullName = Name[7..];
         }
-        else if (Name.Contains("."))
+        else if (Name.Contains('.'))
         {
             fullName = Name;
         }

@@ -1,3 +1,4 @@
+using System.Diagnostics.Tracing;
 using LLVMSharp;
 
 namespace CodeDesigner.Core.ast;
@@ -30,17 +31,53 @@ public class VariableType
         ClassName = className;
     }
 
-    public static unsafe LLVMTypeRef GetLLVMType(PrimitiveVariableType type, LLVMContextRef context)
+    public LLVMTypeRef GetLLVMType(CodegenData data)
     {
-        return type switch
+        if (IsPrimitive)
         {
-            PrimitiveVariableType.INTEGER => LLVM.Int64TypeInContext(context),
-            PrimitiveVariableType.DOUBLE => LLVM.DoubleTypeInContext(context),
-            PrimitiveVariableType.BOOLEAN => LLVM.Int1TypeInContext(context),
-            PrimitiveVariableType.VOID => LLVM.VoidTypeInContext(context),
-            PrimitiveVariableType.STRING => LLVM.PointerType(LLVM.Int8TypeInContext(context), 0),
-            _ => throw new Exception("unimplemented primitive type")
-        };
+            if (!PrimitiveType.HasValue)
+            {
+                throw new Exception("expected primitive type to have value");
+            }
+            return PrimitiveType.Value switch
+            {
+                PrimitiveVariableType.INTEGER => LLVM.Int64TypeInContext(data.Context),
+                PrimitiveVariableType.DOUBLE => LLVM.DoubleTypeInContext(data.Context),
+                PrimitiveVariableType.BOOLEAN => LLVM.Int1TypeInContext(data.Context),
+                PrimitiveVariableType.VOID => LLVM.VoidTypeInContext(data.Context),
+                PrimitiveVariableType.STRING => LLVM.PointerType(LLVM.Int8TypeInContext(data.Context), 0),
+                _ => throw new Exception("unimplemented primitive type")
+            };
+        }
+
+        if (ClassName == null)
+        {
+            throw new Exception("expected object type to have a class name");
+        }
+
+        var fullClassName = ClassName.Contains('.') ? ClassName! : $"default.{ClassName}";
+        if (!data.Classes.ContainsKey(fullClassName))
+        {
+            throw new InvalidCodeException("unknown class " + fullClassName);
+        }
+
+        return LLVM.PointerType(data.Classes[fullClassName].Type, 0);
+    }
+
+    public static string GetClassNameOfObject(LLVMValueRef obj)
+    {
+        var className = LLVM.TypeOf(obj).ToString();
+        if (className.StartsWith('%'))
+        {
+            className = className[1..];
+        }
+
+        if (className.EndsWith('*'))
+        {
+            className = className[..^1];
+        }
+
+        return className;
     }
     
 }
