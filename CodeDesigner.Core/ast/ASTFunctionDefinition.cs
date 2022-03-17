@@ -34,7 +34,6 @@ public class ASTFunctionDefinition : ASTNode
             fullName = Name == "main" ? "__main" : $"{data.NamespaceName}.{Name}";
             // throw new InvalidCodeException("a function's name cannot contain a '.'");
         }
-        Console.WriteLine("codegen for function " + fullName);
         var func = LLVM.GetNamedFunction(data.Module, fullName);
         var paramTypes = new LLVMTypeRef[Params.Count];
 
@@ -44,12 +43,13 @@ public class ASTFunctionDefinition : ASTNode
         }
 
         var functionType = LLVM.FunctionType(ReturnType.GetLLVMType(data), paramTypes, false);
-        if (func.Pointer.ToInt64() == 0)
+        var isAlreadyDefined = func.Pointer.ToInt64() != 0;
+        if (!isAlreadyDefined)
         {
             func = LLVM.AddFunction(data.Module, fullName, functionType);
         }
 
-        var funcEntryBlock = LLVM.AppendBasicBlockInContext(data.Context, func, "entry");
+        var funcEntryBlock = fullName == "__main" && isAlreadyDefined ? LLVM.GetFirstBasicBlock(func) : LLVM.AppendBasicBlockInContext(data.Context, func, "entry");
         LLVM.PositionBuilderAtEnd(data.Builder, funcEntryBlock);
         data.NamedValues.Clear();
         data.Func = func;
@@ -68,7 +68,7 @@ public class ASTFunctionDefinition : ASTNode
             node.Codegen(data);
         }
         
-        if (ReturnType.IsPrimitive && ReturnType.PrimitiveType == PrimitiveVariableType.VOID)
+        if (ReturnType.IsPrimitive && ReturnType.PrimitiveType == PrimitiveVariableType.VOID && (fullName != "__main" || isAlreadyDefined))
         {
             LLVM.BuildRetVoid(data.Builder);
         }

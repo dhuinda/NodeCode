@@ -46,12 +46,7 @@ public class ASTClassFieldStore : ASTNode
             throw new InvalidCodeException("unknown field of class " + className + ": " + FieldName);
         }
 
-        var elementIndex = new[]
-        {
-            LLVM.ConstInt(LLVM.Int32TypeInContext(data.Context), 0, new LLVMBool(0)),
-            LLVM.ConstInt(LLVM.Int32TypeInContext(data.Context), (ulong) fieldNumber, new LLVMBool(0))
-        };
-        var gep = LLVM.BuildGEP(data.Builder, obj, elementIndex, "gep");
+        var gep = LLVM.BuildStructGEP(data.Builder, obj, (uint) fieldNumber + 1, "gep");
         LLVM.BuildStore(data.Builder, Value.Codegen(data), gep);
         return gep;
     }

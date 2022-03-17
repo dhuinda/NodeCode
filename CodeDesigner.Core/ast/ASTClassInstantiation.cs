@@ -34,6 +34,11 @@ public class ASTClassInstantiation : ASTNode
         data.NamedValues.Add(Identifier, alloca);
         data.ObjectTypes.Add(Identifier, fullName);
         // todo: constructors
+        if (classData.VtableGlobal.HasValue)
+        {
+            var gep = LLVM.BuildStructGEP(data.Builder, LLVM.BuildLoad(data.Builder, alloca, ""), 0, "");
+            LLVM.BuildStore(data.Builder, classData.VtableGlobal.Value, gep);
+        }
         return alloca;
     }
 }

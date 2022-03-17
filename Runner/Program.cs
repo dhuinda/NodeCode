@@ -22,7 +22,11 @@ ast.Add(new ASTClassDefinition("MyClass", new List<ASTVariableDefinition>
             new ASTClassFieldAccess(new ASTVariableExpression("this"), "a")
         })
     }, new VariableType(PrimitiveVariableType.VOID))
-}));
+},
+    new Dictionary<string, MethodAttributes>
+    {
+        {"test", new MethodAttributes(true)}
+    }));
 ast.Add(new ASTFunctionDefinition("main", new List<ASTVariableDefinition>(), new List<ASTNode>
 {
     new ASTClassInstantiation("myClassInst", "MyClass", new List<ASTNode>(), new List<VariableType>()),

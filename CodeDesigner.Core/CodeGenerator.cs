@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
+using CodeDesigner.Core.ast;
 
 namespace CodeDesigner.Core
 {
@@ -27,6 +28,7 @@ namespace CodeDesigner.Core
 
             var data = new CodegenData(builder, context, null, module, "default");
             
+            ast.Insert(0, new ASTFunctionDefinition("main", new List<ASTVariableDefinition>(), new List<ASTNode>(), new VariableType(PrimitiveVariableType.VOID)));
             foreach (var node in ast)
             {
                 node.Codegen(data);

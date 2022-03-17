@@ -15,6 +15,7 @@ public class ASTClassFieldAccess : ASTNode
 
     public override LLVMValueRef Codegen(CodegenData data)
     {
+        Console.WriteLine("field access");
         var obj = Object.Codegen(data);
         if (LLVM.GetTypeKind(LLVM.TypeOf(obj)) != LLVMTypeKind.LLVMPointerTypeKind ||
             LLVM.GetTypeKind(LLVM.GetElementType(LLVM.TypeOf(obj))) != LLVMTypeKind.LLVMStructTypeKind)
@@ -23,6 +24,7 @@ public class ASTClassFieldAccess : ASTNode
         }
 
         var className = VariableType.GetClassNameOfObject(obj);
+        Console.WriteLine("className: " + className);
         if (!data.Classes.ContainsKey(className))
         {
             throw new Exception("unknown class " + className);
@@ -44,12 +46,8 @@ public class ASTClassFieldAccess : ASTNode
             throw new InvalidCodeException("unknown field of class " + className + ": " + FieldName);
         }
 
-        var elementIndex = new[]
-        {
-            LLVM.ConstInt(LLVM.Int32TypeInContext(data.Context), 0, new LLVMBool(0)),
-            LLVM.ConstInt(LLVM.Int32TypeInContext(data.Context), (ulong) fieldNumber, new LLVMBool(0))
-        };
-        var gep = LLVM.BuildGEP(data.Builder, obj, elementIndex, "gep");
+        var gep = LLVM.BuildStructGEP(data.Builder, obj, (uint) fieldNumber + 1, "gep");
+        Console.WriteLine("finished field access");
         return LLVM.BuildLoad(data.Builder, gep, "");
 
     }
