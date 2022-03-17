@@ -13,7 +13,7 @@ public class ASTNamespace : ASTNode
         Body = body;
     }
     
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
         if (data.Func.HasValue)
         {
@@ -22,7 +22,7 @@ public class ASTNamespace : ASTNode
         data.NamespaceName = Name;
         foreach (var node in Body)
         {
-            node.codegen(data);
+            node.Codegen(data);
         }
 
         data.NamespaceName = "default";

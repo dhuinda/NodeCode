@@ -29,7 +29,7 @@ namespace CodeDesigner.Core
             
             foreach (var node in ast)
             {
-                node.codegen(data);
+                node.Codegen(data);
             }
             
             LLVM.DumpModule(module);

@@ -21,7 +21,7 @@ public class ASTFunctionDefinition : ASTNode
         ReturnType = returnType;
     }
 
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
         if (data.Func.HasValue)
         {
@@ -65,7 +65,7 @@ public class ASTFunctionDefinition : ASTNode
         
         foreach (var node in Body)
         {
-            node.codegen(data);
+            node.Codegen(data);
         }
         
         if (ReturnType.IsPrimitive && ReturnType.PrimitiveType == PrimitiveVariableType.VOID)

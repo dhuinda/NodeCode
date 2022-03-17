@@ -11,13 +11,13 @@ public class ASTReturn : ASTNode
         Expression = expression;
     }
     
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
         if (Expression == null)
         {
             return LLVM.BuildRetVoid(data.Builder);
         }
-        LLVMValueRef val = Expression.codegen(data);
+        LLVMValueRef val = Expression.Codegen(data);
         return LLVM.BuildRet(data.Builder, val);
     }
 }

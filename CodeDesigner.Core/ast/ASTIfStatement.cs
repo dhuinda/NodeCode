@@ -15,9 +15,9 @@ public class ASTIfStatement : ASTNode
         ElseBody = elseBody;
     }
     
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
-        var conditionValue = Condition.codegen(data);
+        var conditionValue = Condition.Codegen(data);
         if (!data.Func.HasValue)
         {
             throw new Exception("expected to be inside a function");
@@ -34,7 +34,7 @@ public class ASTIfStatement : ASTNode
         LLVM.PositionBuilderAtEnd(data.Builder, ifBlock);
         foreach (var node in IfBody)
         {
-            node.codegen(data);
+            node.Codegen(data);
         }
         LLVM.BuildBr(data.Builder, mergeBlock);
 
@@ -43,7 +43,7 @@ public class ASTIfStatement : ASTNode
             LLVM.PositionBuilderAtEnd(data.Builder, elseBlock.Value);
             foreach (var node in ElseBody)
             {
-                node.codegen(data);
+                node.Codegen(data);
             }
 
             LLVM.BuildBr(data.Builder, mergeBlock);

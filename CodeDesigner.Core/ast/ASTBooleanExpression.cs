@@ -11,7 +11,7 @@ public class ASTBooleanExpression : ASTNode
         Value = value;
     }
 
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
         return LLVM.ConstInt(LLVM.Int1TypeInContext(data.Context), (ulong) (Value ? 1 : 0), false);
     }

@@ -13,7 +13,7 @@ public class ASTVariableExpression : ASTNode
         Name = name;
     }
 
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
         if (!data.NamedValues.ContainsKey(Name))
         {

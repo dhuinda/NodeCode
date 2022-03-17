@@ -18,7 +18,7 @@ public class ASTPrototypeDeclaration : ASTNode
         IsVarArgs = isVarArgs;
     }
 
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
         var llvmParamTypes = new List<LLVMTypeRef>();
         foreach (var argType in ParamTypes)

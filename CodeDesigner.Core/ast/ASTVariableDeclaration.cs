@@ -18,7 +18,7 @@ public class ASTVariableDeclaration : ASTNode
         Value = value;
     }
 
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
         if (!Type.IsPrimitive)
         {
@@ -27,7 +27,7 @@ public class ASTVariableDeclaration : ASTNode
 
         var llvmType = Type.GetLLVMType(data);
         var alloca = LLVM.BuildAlloca(data.Builder, llvmType, Name);
-        LLVM.BuildStore(data.Builder, Value.codegen(data), alloca);
+        LLVM.BuildStore(data.Builder, Value.Codegen(data), alloca);
         data.NamedValues.Add(Name, alloca);
         return alloca;
     }

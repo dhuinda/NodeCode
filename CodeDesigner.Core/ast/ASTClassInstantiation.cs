@@ -19,7 +19,7 @@ public class ASTClassInstantiation : ASTNode
         GenericTypes = genericTypes;
     }
 
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
         var fullName = ClassName.Contains('.') ? ClassName : $"default.{ClassName}";
         if (!data.Classes.ContainsKey(fullName))

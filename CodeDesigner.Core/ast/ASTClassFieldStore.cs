@@ -15,9 +15,9 @@ public class ASTClassFieldStore : ASTNode
         Value = value;
     }
 
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
-        var obj = Object.codegen(data);
+        var obj = Object.Codegen(data);
         
         if (LLVM.GetTypeKind(LLVM.TypeOf(obj)) != LLVMTypeKind.LLVMPointerTypeKind ||
             LLVM.GetTypeKind(LLVM.GetElementType(LLVM.TypeOf(obj))) != LLVMTypeKind.LLVMStructTypeKind)
@@ -52,7 +52,7 @@ public class ASTClassFieldStore : ASTNode
             LLVM.ConstInt(LLVM.Int32TypeInContext(data.Context), (ulong) fieldNumber, new LLVMBool(0))
         };
         var gep = LLVM.BuildGEP(data.Builder, obj, elementIndex, "gep");
-        LLVM.BuildStore(data.Builder, Value.codegen(data), gep);
+        LLVM.BuildStore(data.Builder, Value.Codegen(data), gep);
         return gep;
     }
 }

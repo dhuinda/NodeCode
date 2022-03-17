@@ -15,7 +15,7 @@ public class ASTVariableDefinition : ASTNode
         Type = type;
     }
 
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
         var llvmType = Type.GetLLVMType(data);
         var alloca = LLVM.BuildAlloca(data.Builder, llvmType, Name);

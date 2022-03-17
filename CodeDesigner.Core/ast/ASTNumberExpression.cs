@@ -16,7 +16,7 @@ public class ASTNumberExpression : ASTNode
         Type = type;
     }
 
-    public override unsafe LLVMValueRef codegen(CodegenData data)
+    public override unsafe LLVMValueRef Codegen(CodegenData data)
     {
         if (Type == PrimitiveVariableType.INTEGER)
         {

@@ -17,14 +17,14 @@ public class ASTBinaryExpression : ASTNode
         Rhs = rhs;
     }
     
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
         if (!data.Func.HasValue)
         {
             throw new Exception("expected to be inside a function");
         }
         if (Op is BinaryOperator.AND or BinaryOperator.OR) {
-            LLVMValueRef lhsValue = Lhs.codegen(data);
+            LLVMValueRef lhsValue = Lhs.Codegen(data);
             LLVMBasicBlockRef ifBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "condif");
             LLVMBasicBlockRef mergeBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "mergeif");
             LLVMValueRef resultAlloca = LLVM.BuildAlloca(data.Builder, LLVM.Int1TypeInContext(data.Context), "condtmp");
@@ -35,14 +35,14 @@ public class ASTBinaryExpression : ASTNode
                 LLVM.BuildCondBr(data.Builder, lhsValue, mergeBlock, ifBlock);
             }
             LLVM.PositionBuilderAtEnd(data.Builder, ifBlock);
-            LLVMValueRef rhsValue = Rhs.codegen(data);
+            LLVMValueRef rhsValue = Rhs.Codegen(data);
             LLVM.BuildStore(data.Builder, rhsValue, resultAlloca);
             LLVM.BuildBr(data.Builder, mergeBlock);
             LLVM.PositionBuilderAtEnd(data.Builder, mergeBlock);
             return LLVM.BuildLoad(data.Builder, resultAlloca, "");
         }
-        var l = Lhs.codegen(data);
-        var r = Rhs.codegen(data);
+        var l = Lhs.Codegen(data);
+        var r = Rhs.Codegen(data);
         var typeKind = LLVM.GetTypeKind(LLVM.TypeOf(l));
         switch (Op) {
             case BinaryOperator.PLUS:

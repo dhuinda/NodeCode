@@ -13,7 +13,7 @@ public class ASTVariableAssignment : ASTNode
         Value = value;
     }
 
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
         if (!data.NamedValues.ContainsKey(Name))
         {
@@ -21,7 +21,7 @@ public class ASTVariableAssignment : ASTNode
         }
 
         var llvmVar = data.NamedValues[Name];
-        LLVM.BuildStore(data.Builder, Value.codegen(data), llvmVar);
+        LLVM.BuildStore(data.Builder, Value.Codegen(data), llvmVar);
         return llvmVar;
     }
 }

@@ -13,7 +13,7 @@ public class ASTFunctionInvocation : ASTNode
         Args = args;
     }
 
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
         string fullName;
         if (Name.StartsWith("extern."))
@@ -33,7 +33,7 @@ public class ASTFunctionInvocation : ASTNode
         var argsV = new List<LLVMValueRef>();
         foreach (var arg in Args)
         {
-            argsV.Add(arg.codegen(data));
+            argsV.Add(arg.Codegen(data));
         }
 
         return LLVM.BuildCall(data.Builder, func, argsV.ToArray(), "");

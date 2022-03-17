@@ -27,17 +27,11 @@ ast.Add(new ASTFunctionDefinition("main", new List<ASTVariableDefinition>(), new
 {
     new ASTClassInstantiation("myClassInst", "MyClass", new List<ASTNode>(), new List<VariableType>()),
     new ASTClassFieldStore(new ASTVariableExpression("myClassInst"), "a", new ASTNumberExpression("2", PrimitiveVariableType.INTEGER)),
-    new ASTFunctionInvocation("MyClass__test", new List<ASTNode>
-    {
-        new ASTVariableExpression("myClassInst")
-    }),
+    new ASTMethodInvocation(new ASTVariableExpression("myClassInst"), "test", new List<ASTNode>()),
     new ASTClassInstantiation("myNestedClassInst", "MyClass", new List<ASTNode>(), new List<VariableType>()),
     new ASTClassFieldStore(new ASTVariableExpression("myClassInst"), "b", new ASTVariableExpression("myNestedClassInst")),
     new ASTClassFieldStore(new ASTClassFieldAccess(new ASTVariableExpression("myClassInst"), "b"), "a", new ASTNumberExpression("1337", PrimitiveVariableType.INTEGER)),
-    new ASTFunctionInvocation("MyClass__test", new List<ASTNode>
-    {
-        new ASTClassFieldAccess(new ASTVariableExpression("myClassInst"), "b")
-    })
+    new ASTMethodInvocation(new ASTClassFieldAccess(new ASTVariableExpression("myClassInst"), "b"), "test", new List<ASTNode>())
 }, new(PrimitiveVariableType.VOID)));
 
 CodeGenerator.Run(ast);

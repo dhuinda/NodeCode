@@ -13,9 +13,9 @@ public class ASTClassFieldAccess : ASTNode
         FieldName = fieldName;
     }
 
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
-        var obj = Object.codegen(data);
+        var obj = Object.Codegen(data);
         if (LLVM.GetTypeKind(LLVM.TypeOf(obj)) != LLVMTypeKind.LLVMPointerTypeKind ||
             LLVM.GetTypeKind(LLVM.GetElementType(LLVM.TypeOf(obj))) != LLVMTypeKind.LLVMStructTypeKind)
         {

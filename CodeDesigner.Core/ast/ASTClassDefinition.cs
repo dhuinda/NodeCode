@@ -15,7 +15,7 @@ public class ASTClassDefinition : ASTNode
         Methods = methods;
     }
 
-    public override LLVMValueRef codegen(CodegenData data)
+    public override LLVMValueRef Codegen(CodegenData data)
     {
         var fullName = $"{data.NamespaceName}.{Name}";
         Console.WriteLine("codegen for class def " + fullName);
@@ -49,7 +49,7 @@ public class ASTClassDefinition : ASTNode
 
             var methodType = LLVM.FunctionType(method.ReturnType.GetLLVMType(data), paramTypes.ToArray(), false);
             var func = LLVM.AddFunction(data.Module, method.Name, methodType);
-            method.codegen(data);
+            method.Codegen(data);
         }
 
         return new LLVMValueRef();
