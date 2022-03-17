@@ -6,22 +6,22 @@ namespace CodeDesigner.Core.ast;
 public class ASTClassInstantiation : ASTNode
 {
     public string Identifier;
-    public string ClassName;
+    public ClassType ClassType;
     public List<ASTNode> Args;
     public List<VariableType> GenericTypes;
 
-    public ASTClassInstantiation(string identifier, string className, List<ASTNode> args,
+    public ASTClassInstantiation(string identifier, ClassType classType, List<ASTNode> args,
         List<VariableType> genericTypes)
     {
         Identifier = identifier;
-        ClassName = className;
+        ClassType = classType;
         Args = args;
         GenericTypes = genericTypes;
     }
 
     public override LLVMValueRef Codegen(CodegenData data)
     {
-        var fullName = ClassName.Contains('.') ? ClassName : $"default.{ClassName}";
+        var fullName = ClassType.Name.Contains('.') ? ClassType.GetGenericName() : $"default.{ClassType.GetGenericName()}";
         if (!data.Classes.ContainsKey(fullName))
         {
             throw new InvalidCodeException("cannot find class " + fullName + " to instantiate");

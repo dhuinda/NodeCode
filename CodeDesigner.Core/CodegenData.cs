@@ -12,6 +12,7 @@ public class CodegenData
     public string NamespaceName;
     public Dictionary<string, ClassData> Classes;
     public Dictionary<string, string> ObjectTypes;
+    public Dictionary<string, string> Generics;
 
     public CodegenData(LLVMBuilderRef builder, LLVMContextRef context, LLVMValueRef? func,
         LLVMModuleRef module, string namespaceName)
@@ -24,6 +25,7 @@ public class CodegenData
         NamespaceName = namespaceName;
         Classes = new Dictionary<string, ClassData>();
         ObjectTypes = new Dictionary<string, string>();
+        Generics = new Dictionary<string, string>();
     }
     
 }

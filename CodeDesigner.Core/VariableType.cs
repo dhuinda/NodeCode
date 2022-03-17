@@ -1,4 +1,3 @@
-using System.Diagnostics.Tracing;
 using LLVMSharp;
 
 namespace CodeDesigner.Core.ast;
@@ -10,13 +9,13 @@ public class VariableType
 
     public readonly PrimitiveVariableType? PrimitiveType;
 
-    public readonly string? ClassName;
+    public readonly ClassType? ClassType;
 
-    public VariableType(bool isPrimitive, PrimitiveVariableType? primitiveType, string? className)
+    public VariableType(bool isPrimitive, PrimitiveVariableType? primitiveType, ClassType? classType)
     {
         IsPrimitive = isPrimitive;
         PrimitiveType = primitiveType;
-        ClassName = className;
+        ClassType = classType;
     }
 
     public VariableType(PrimitiveVariableType primitiveType)
@@ -25,10 +24,10 @@ public class VariableType
         PrimitiveType = primitiveType;
     }
 
-    public VariableType(string className)
+    public VariableType(ClassType classType)
     {
         IsPrimitive = false;
-        ClassName = className;
+        ClassType = classType;
     }
 
     public LLVMTypeRef GetLLVMType(CodegenData data)
@@ -50,12 +49,38 @@ public class VariableType
             };
         }
 
-        if (ClassName == null)
+        if (ClassType == null)
         {
-            throw new Exception("expected object type to have a class name");
+            throw new Exception("expected object type to have a class type");
         }
 
-        var fullClassName = ClassName.Contains('.') ? ClassName! : $"default.{ClassName}";
+        if (data.Generics.ContainsKey(ClassType.Name))
+        {
+            ClassType.Name = data.Generics[ClassType.Name];
+        }
+
+        switch (ClassType.Name)
+        {
+            case "Integer":
+            {
+                return new VariableType(PrimitiveVariableType.INTEGER).GetLLVMType(data);
+            }
+            case "Double":
+            {
+                return new VariableType(PrimitiveVariableType.DOUBLE).GetLLVMType(data);
+            }
+            case "Boolean":
+            {
+                return new VariableType(PrimitiveVariableType.BOOLEAN).GetLLVMType(data);
+            }
+            case "String":
+            {
+                return new VariableType(PrimitiveVariableType.STRING).GetLLVMType(data);
+            }
+        }
+        
+        var genericName = ClassType.GetGenericName();
+        var fullClassName = ClassType.Name.Contains('.') ? genericName : $"default.{genericName}";
         if (!data.Classes.ContainsKey(fullClassName))
         {
             throw new InvalidCodeException("unknown class " + fullClassName);
@@ -75,6 +100,11 @@ public class VariableType
         if (className.EndsWith('*'))
         {
             className = className[..^1];
+        }
+
+        if (className.StartsWith('"') && className.EndsWith('"'))
+        {
+            className = className[1..^1];
         }
 
         return className;
