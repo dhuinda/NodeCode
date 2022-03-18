@@ -7,9 +7,9 @@ using Core;
 public class ASTVariableDeclaration : ASTNode
 {
 
-    private string Name;
-    private VariableType Type;
-    private ASTNode Value;
+    public string Name;
+    public VariableType Type;
+    public ASTNode Value;
 
     public ASTVariableDeclaration(string name, VariableType type, ASTNode value)
     {

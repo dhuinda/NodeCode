@@ -11,8 +11,9 @@ namespace CodeDesigner.Core
     {
         public static void Run(List<ASTNode> ast)
         {
-            var prototypeAnalyzer = new PrototypeAnalyzer(ast);
-            prototypeAnalyzer.Run();
+            var analysisManager = new AnalysisManager();
+            analysisManager.AddAnalyzer(new PrototypeAnalyzer());
+            analysisManager.RunAnalysis(ast);
 
             LLVM.InitializeCore(LLVM.GetGlobalPassRegistry());
             LLVM.InitializeX86AsmPrinter();

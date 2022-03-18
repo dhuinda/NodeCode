@@ -7,119 +7,60 @@ namespace CodeDesigner.Core;
 /// they are defined. In the LLVM IR, these prototypes are usually removed (by built-in LLVM optimizations) and the
 /// prototypes and functions are just merged, with the functions in the correct order.
 /// </summary>
-public class PrototypeAnalyzer
+public class PrototypeAnalyzer : IAnalyzer
 {
 
-    // todo: if more analysis steps are needed (i.e., type inference and generic type generation), there should
-    // probably be a unified traversal class which then invokes *Analyzer with a specific node. just to reduce how many
-    // times the AST is traversed
-    private readonly List<ASTNode> _ast;
     private readonly HashSet<string> _functionNames = new();
     private readonly HashSet<string> _neededPrototypes = new();
     private readonly Dictionary<string, ASTFunctionDefinition> _futurePrototypes = new();
-    private string _currentNamespace = "default";
 
-    public PrototypeAnalyzer(List<ASTNode> ast)
+    private readonly HashSet<string> _nodeTypes = new()
     {
-        _ast = ast;
+        "ASTFunctionDefinition", "ASTFunctionInvocation"
+    };
+
+    public bool ShouldAnalyzeNode(ASTNode astNode)
+    {
+        return _nodeTypes.Contains(astNode.GetType().Name);
     }
 
-    private void Analyze(ASTNode node)
+    public void Analyze(ASTNode node, string currentNamespace)
     {
         switch (node.GetType().Name)
         {
             case "ASTFunctionDefinition":
             {
                 var funcDef = (ASTFunctionDefinition) node;
-                var fullName = $"{_currentNamespace}.{funcDef.Name}";
+                var fullName = $"{currentNamespace}.{funcDef.Name}";
                 _functionNames.Add(fullName);
                 if (_neededPrototypes.Contains(fullName))
                 {
                     _neededPrototypes.Remove(fullName);
                     _futurePrototypes.Add(fullName, funcDef);
                 }
-                foreach (var b in funcDef.Body)
-                {
-                    Analyze(b);
-                }
-
                 break;
             }
             case "ASTFunctionInvocation":
             {
                 var funcInv = (ASTFunctionInvocation) node;
-                var fullName = funcInv.Name.Contains('.') ? funcInv.Name : $"{_currentNamespace}.{funcInv.Name}";
+                var fullName = funcInv.Name.Contains('.') ? funcInv.Name : $"{currentNamespace}.{funcInv.Name}";
                 if (!funcInv.Name.StartsWith("extern.") && !_functionNames.Contains(fullName))
                 {
                     _neededPrototypes.Add(fullName);
-                }
-
-                foreach (var arg in funcInv.Args)
-                {
-                    Analyze(arg);
-                }
-
-                break;
-            }
-            case "ASTNamespace":
-            {
-                var nmspc = (ASTNamespace) node;
-                _currentNamespace = nmspc.Name;
-                foreach (var child in nmspc.Body)
-                {
-                    Analyze(child);
-                }
-
-                _currentNamespace = "default";
-                break;
-            }
-            case "ASTIfStatement":
-            {
-                var ifStmt = (ASTIfStatement) node;
-                Analyze(ifStmt.Condition);
-                foreach (var child in ifStmt.IfBody)
-                {
-                    Analyze(child);
-                }
-
-                foreach (var child in ifStmt.ElseBody)
-                {
-                    Analyze(child);
-                }
-
-                break;
-            }
-            case "ASTBinaryExpression":
-            {
-                var binExp = (ASTBinaryExpression) node;
-                Analyze(binExp.Lhs);
-                Analyze(binExp.Rhs);
-                break;
-            }
-            case "ASTReturn":
-            {
-                var ret = (ASTReturn) node;
-                if (ret.Expression != null)
-                {
-                    Analyze(ret.Expression);
                 }
                 break;
             }
         }
     }
-    
-    public void Run()
-    {
-        foreach (var node in _ast)
-        {
-            Analyze(node);
-        }
 
+    public void Finalize(List<ASTNode> ast)
+    {
+        Console.WriteLine("finalizing");
         foreach (var (fullName, node) in _futurePrototypes)
         {
             Console.WriteLine("generating prototype for " + fullName);
             var paramTypes = node.Params.Select(param => param.Type).ToList();
-            _ast.Insert(0, new ASTPrototypeDeclaration(fullName, paramTypes, node.ReturnType, false));
+            ast.Insert(0, new ASTPrototypeDeclaration(fullName, paramTypes, node.ReturnType, false));
         }
     }
     
