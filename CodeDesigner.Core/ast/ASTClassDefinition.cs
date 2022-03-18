@@ -21,63 +21,35 @@ public class ASTClassDefinition : ASTNode
 
     public override LLVMValueRef Codegen(CodegenData data)
     {
-        // todo: figure out a way to have a ClassType<Integer> have a field that is a ClassType<Double> if the former is defined first in GenericUsages
         foreach (var genericUsage in GenericUsages)
         {
-            var genericUsageClass = new List<ClassType>();
-            foreach (var vt in genericUsage)
-            {
-                if (vt.IsPrimitive)
-                {
-                    if (vt.PrimitiveType == null)
-                    {
-                        throw new Exception("expected primitive to contain primitive type");
-                    }
-
-                    if (vt.PrimitiveType == PrimitiveVariableType.INTEGER)
-                    {
-                        genericUsageClass.Add(new ClassType("Integer"));
-                    } else if (vt.PrimitiveType == PrimitiveVariableType.DOUBLE)
-                    {
-                        genericUsageClass.Add(new ClassType("Double"));
-                    } else if (vt.PrimitiveType == PrimitiveVariableType.STRING)
-                    {
-                        genericUsageClass.Add(new ClassType("String"));
-                    } else if (vt.PrimitiveType == PrimitiveVariableType.BOOLEAN)
-                    {
-                        genericUsageClass.Add(new ClassType("Boolean"));
-                    } else
-                    {
-                        throw new InvalidCodeException("invalid primitive as generic usage");
-                    }
-                }
-                else if (vt.ClassType != null)
-                {
-                    genericUsageClass.Add(vt.ClassType);
-                }
-                else
-                {
-                    throw new Exception("expected object type to have a ClassType");
-                }
-            }
-
+            var genericUsageClass = ClassType.ConvertGenericUsage(genericUsage);
             var genericMap = new Dictionary<string, string>();
             for (var i = 0; i < ClassType.GenericTypes.Count; i++)
             {
                 genericMap.Add(ClassType.GenericTypes[i].GetGenericName(), genericUsageClass[i].GetGenericName());
             }
-
             data.Generics = genericMap;
-            var fullName = $"{data.NamespaceName}.{new ClassType(ClassType.Name, genericUsageClass).GetGenericName()}";
+
+            var fullName = $"{data.NamespaceName}.{ClassType.Of(ClassType.Name, genericUsageClass).GetGenericName()}";
             Console.WriteLine("codegen for class def " + fullName);
             var fieldLlvmTypes = new List<LLVMTypeRef>();
             var classFieldTypes = new List<ClassFieldType>();
-            var classType = LLVM.StructCreateNamed(data.Context, fullName);
-            Console.WriteLine("add");
-            data.Classes.Add(fullName, new ClassData(classType, null));
+
+            if (!data.Classes.ContainsKey(fullName))
+            {
+                throw new Exception("expected class " + fullName + "to have a struct already generated during analysis");
+            }
+            
+            var classDef = data.Classes[fullName].Type;
             foreach (var field in Fields)
             {
+                if (!field.Type.IsPrimitive)
+                {
+                    Console.WriteLine(field.Type.ClassType!.Name);
+                }
                 var fieldType = field.Type.GetLLVMType(data);
+                Console.WriteLine(field.Name + ": " + fieldType);
                 fieldLlvmTypes.Add(fieldType);
                 classFieldTypes.Add(new ClassFieldType(field.Name, fieldType));
             }
@@ -89,8 +61,7 @@ public class ASTClassDefinition : ASTNode
             foreach (var method in Methods)
             {
                 methodOrder.Add(method.Name);
-                var shortName = method.Name;
-                method.Name = $"{fullName}__{method.Name}";
+                var fullMethodName = $"{fullName}__{method.Name}";
                 method.Params.Add(new ASTVariableDefinition("this", new VariableType(new ClassType(fullName))));
                 var paramTypes = new List<LLVMTypeRef>();
                 foreach (var param in method.Params)
@@ -99,8 +70,8 @@ public class ASTClassDefinition : ASTNode
                 }
 
                 var methodType = LLVM.FunctionType(method.ReturnType.GetLLVMType(data), paramTypes.ToArray(), false);
-                var func = LLVM.AddFunction(data.Module, method.Name, methodType);
-                if (MethodAttributesMap.ContainsKey(shortName) && MethodAttributesMap[shortName].IsVirtual)
+                var func = LLVM.AddFunction(data.Module, fullMethodName, methodType);
+                if (MethodAttributesMap.ContainsKey(method.Name) && MethodAttributesMap[method.Name].IsVirtual)
                 {
                     vtableTypeBody.Add(LLVM.PointerType(methodType, 0));
                     vtableValues.Add(func);
@@ -109,9 +80,9 @@ public class ASTClassDefinition : ASTNode
             var vtableType = LLVM.StructTypeInContext(data.Context, vtableTypeBody.ToArray(), false);
             fieldLlvmTypes.Insert(0, LLVM.PointerType(vtableType, 0));
             
-            LLVM.StructSetBody(classType, fieldLlvmTypes.ToArray(), false);
+            LLVM.StructSetBody(classDef, fieldLlvmTypes.ToArray(), false);
             data.Classes.Remove(fullName); // todo: see if this remove is needed, or if Dictionaries automatically replace old values
-            data.Classes.Add(fullName, new ClassData(classType, classFieldTypes, null, methodOrder, MethodAttributesMap));
+            data.Classes.Add(fullName, new ClassData(classDef, classFieldTypes, null, methodOrder, MethodAttributesMap));
             LLVM.StructSetBody(vtableType, vtableTypeBody.ToArray(), false);
             
             // todo: only add vtable to classes with 1+ virtual methods
@@ -128,11 +99,15 @@ public class ASTClassDefinition : ASTNode
             }
 
             data.Classes.Remove(fullName);
-            data.Classes.Add(fullName, new ClassData(classType, classFieldTypes, vtableGlobal, methodOrder, MethodAttributesMap));
+            data.Classes.Add(fullName, new ClassData(classDef, classFieldTypes, vtableGlobal, methodOrder, MethodAttributesMap));
 
             foreach (var method in Methods)
             {
+                var originalMethodName = method.Name;
+                method.Name = $"{fullName}__{method.Name}";
                 method.Codegen(data);
+                method.Name = originalMethodName;
+                method.Params.RemoveAt(method.Params.Count - 1);
             }
 
             data.Generics = new Dictionary<string, string>();

@@ -16,7 +16,7 @@ ast.Add(new ASTClassDefinition(new ClassType("MyClass", new List<ClassType>
     new("a", new VariableType(PrimitiveVariableType.INTEGER)),
     new("b", new VariableType(new ClassType("MyClass", new List<ClassType>
     {
-        new ClassType("Double")
+        new ClassType("Integer")
     }))),
     new("c", new VariableType(new ClassType("T")))
 }, new List<ASTFunctionDefinition>
@@ -43,6 +43,10 @@ ast.Add(new ASTClassDefinition(new ClassType("MyClass", new List<ClassType>
         new()
         {
             new VariableType(PrimitiveVariableType.DOUBLE)
+        },
+        new()
+        {
+            new(PrimitiveVariableType.INTEGER)
         }
     }));
 ast.Add(new ASTFunctionDefinition("main", new List<ASTVariableDefinition>(), new List<ASTNode>
@@ -50,8 +54,14 @@ ast.Add(new ASTFunctionDefinition("main", new List<ASTVariableDefinition>(), new
     new ASTClassInstantiation("myClassInst", new("MyClass", new  List<ClassType>() { new("Double") }), new List<ASTNode>(), new List<VariableType>()), // todo: allow primitives as generic type in API and then wrap them in the constructor
     new ASTClassFieldStore(new ASTVariableExpression("myClassInst"), "a", new ASTNumberExpression("2", PrimitiveVariableType.INTEGER)),
     new ASTMethodInvocation(new ASTVariableExpression("myClassInst"), "test", new List<ASTNode>()),
-    new ASTClassInstantiation("myNestedClassInst", new("MyClass", new List<ClassType>() { new("Double") }), new List<ASTNode>(), new List<VariableType>()),
+    new ASTClassInstantiation("myNestedClassInst", new("MyClass", new List<ClassType>() { new("Integer") }), new List<ASTNode>(), new List<VariableType>()),
+    new ASTClassFieldStore(new ASTVariableExpression("myNestedClassInst"), "c", new ASTNumberExpression("7331", PrimitiveVariableType.INTEGER)),
     new ASTClassFieldStore(new ASTVariableExpression("myClassInst"), "b", new ASTVariableExpression("myNestedClassInst")),
+    new ASTFunctionInvocation("extern.printf", new List<ASTNode>()
+    {
+        new ASTStringExpression("myClassInst.b.c: %d\n"),
+        new ASTMethodInvocation(new ASTClassFieldAccess(new ASTVariableExpression("myClassInst"), "b"), "getC", new List<ASTNode>())
+    }),
     new ASTClassFieldStore(new ASTClassFieldAccess(new ASTVariableExpression("myClassInst"), "b"), "a", new ASTNumberExpression("1337", PrimitiveVariableType.INTEGER)),
     new ASTMethodInvocation(new ASTClassFieldAccess(new ASTVariableExpression("myClassInst"), "b"), "test", new List<ASTNode>()),
     new ASTClassFieldStore(new ASTVariableExpression("myClassInst"), "c", new ASTNumberExpression("420", PrimitiveVariableType.DOUBLE)),

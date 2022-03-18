@@ -4,7 +4,7 @@ public interface IAnalyzer
 {
     bool ShouldAnalyzeNode(ASTNode astNode);
     
-    void Analyze(ASTNode astNode, string currentNamespace);
+    void Analyze(ASTNode node, string currentNamespace);
 
     void Finalize(List<ASTNode> ast);
 }

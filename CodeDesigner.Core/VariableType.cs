@@ -54,12 +54,9 @@ public class VariableType
             throw new Exception("expected object type to have a class type");
         }
 
-        if (data.Generics.ContainsKey(ClassType.Name))
-        {
-            ClassType.Name = data.Generics[ClassType.Name];
-        }
+        var classTypeName = data.Generics.ContainsKey(ClassType.Name) ? data.Generics[ClassType.Name] : ClassType.Name;
 
-        switch (ClassType.Name)
+        switch (classTypeName)
         {
             case "Integer":
             {
@@ -79,8 +76,8 @@ public class VariableType
             }
         }
         
-        var genericName = ClassType.GetGenericName();
-        var fullClassName = ClassType.Name.Contains('.') ? genericName : $"default.{genericName}";
+        var genericName = new ClassType(classTypeName, ClassType.GenericTypes).GetGenericName();
+        var fullClassName = classTypeName.Contains('.') ? genericName : $"default.{genericName}";
         if (!data.Classes.ContainsKey(fullClassName))
         {
             throw new InvalidCodeException("unknown class " + fullClassName);

@@ -11,9 +11,6 @@ namespace CodeDesigner.Core
     {
         public static void Run(List<ASTNode> ast)
         {
-            var analysisManager = new AnalysisManager();
-            analysisManager.AddAnalyzer(new PrototypeAnalyzer());
-            analysisManager.RunAnalysis(ast);
 
             LLVM.InitializeCore(LLVM.GetGlobalPassRegistry());
             LLVM.InitializeX86AsmPrinter();
@@ -28,6 +25,11 @@ namespace CodeDesigner.Core
             var builder = LLVM.CreateBuilderInContext(context);
 
             var data = new CodegenData(builder, context, null, module, "default");
+            
+            var analysisManager = new AnalysisManager();
+            analysisManager.AddAnalyzer(new PrototypeAnalyzer());
+            analysisManager.AddAnalyzer(new ClassAnalyzer(data));
+            analysisManager.RunAnalysis(ast);
             
             ast.Insert(0, new ASTFunctionDefinition("main", new List<ASTVariableDefinition>(), new List<ASTNode>(), new VariableType(PrimitiveVariableType.VOID)));
             foreach (var node in ast)

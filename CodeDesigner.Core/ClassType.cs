@@ -1,3 +1,5 @@
+using CodeDesigner.Core.ast;
+
 namespace CodeDesigner.Core;
 
 public class ClassType
@@ -37,4 +39,52 @@ public class ClassType
 
         return genericName + ">";
     }
+
+    public static List<ClassType> ConvertGenericUsage(List<VariableType> genericUsage)
+    {
+        var genericUsageClass = new List<ClassType>();
+        foreach (var vt in genericUsage)
+        {
+            if (vt.IsPrimitive)
+            {
+                if (vt.PrimitiveType == null)
+                {
+                    throw new Exception("expected primitive to contain primitive type");
+                }
+
+                if (vt.PrimitiveType == PrimitiveVariableType.INTEGER)
+                {
+                    genericUsageClass.Add(new ClassType("Integer"));
+                } else if (vt.PrimitiveType == PrimitiveVariableType.DOUBLE)
+                {
+                    genericUsageClass.Add(new ClassType("Double"));
+                } else if (vt.PrimitiveType == PrimitiveVariableType.STRING)
+                {
+                    genericUsageClass.Add(new ClassType("String"));
+                } else if (vt.PrimitiveType == PrimitiveVariableType.BOOLEAN)
+                {
+                    genericUsageClass.Add(new ClassType("Boolean"));
+                } else
+                {
+                    throw new InvalidCodeException("invalid primitive as generic usage");
+                }
+            }
+            else if (vt.ClassType != null)
+            {
+                genericUsageClass.Add(vt.ClassType);
+            }
+            else
+            {
+                throw new Exception("expected object type to have a ClassType");
+            }
+        }
+
+        return genericUsageClass;
+    }
+
+    public static ClassType Of(string name, List<ClassType> genericUsageClass)
+    {
+        return new ClassType(name, genericUsageClass);
+    }
+    
 }
