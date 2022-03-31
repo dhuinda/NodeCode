@@ -61,4 +61,8 @@
     <Folder Include="Designer\Canvas\Nodes\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CodeDesigner.Core\CodeDesigner.Core.csproj" />
+  </ItemGroup>
+
 </Project>
