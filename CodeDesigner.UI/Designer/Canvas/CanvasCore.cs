@@ -24,7 +24,7 @@ namespace CodeDesigner.UI.Designer.Canvas
         {
             Node node = new ();
             node.SetCanvas(this);
-            node.Width = new Random().Next(50, 150);
+            node.Width = 80;
 
             Nodes.Add(node);
 
