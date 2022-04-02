@@ -8,30 +8,72 @@ public class ASTClassDefinition : ASTNode
     public List<ASTVariableDefinition> Fields;
     public List<ASTFunctionDefinition> Methods;
     public Dictionary<string, MethodAttributes> MethodAttributesMap;
-    public List<List<VariableType>> GenericUsages;// = new(); // todo: auto generate using an analysis step
+    public List<List<ClassType>> GenericUsages = new();
 
-    public ASTClassDefinition(ClassType classType, List<ASTVariableDefinition> fields, List<ASTFunctionDefinition> methods, Dictionary<string, MethodAttributes> methodAttributesMap, List<List<VariableType>> genericUsages)
+    public ASTClassDefinition(ClassType classType, List<ASTVariableDefinition> fields, List<ASTFunctionDefinition> methods, Dictionary<string, MethodAttributes> methodAttributesMap)
     {
         ClassType = classType;
         Fields = fields;
         Methods = methods;
         MethodAttributesMap = methodAttributesMap;
-        GenericUsages = genericUsages;
+    }
+    
+    public ASTClassDefinition(ClassType classType, List<ASTVariableDefinition> fields, List<ASTFunctionDefinition> methods)
+    {
+        ClassType = classType;
+        Fields = fields;
+        Methods = methods;
+        MethodAttributesMap = new();
     }
 
+
+    public static VariableType MapVariableTypeToGenericType(VariableType v, List<ClassType> genericUsage, ClassType classType)
+    {
+        if (v.IsPrimitive || v.ClassType == null)
+        {
+            return v;
+        }
+
+        VariableType result = v;
+        for (var i = 0; i < classType.GenericTypes.Count; i++)
+        {
+            if (v.ClassType.Name == classType.GenericTypes[i].Name)
+            {
+                Console.WriteLine("found generic type");
+                result = new(genericUsage[i]);
+                break;
+            }
+        }
+
+        if (result.IsPrimitive || result.ClassType == null)
+        {
+            return result;
+        }
+        for (var i = 0; i < result.ClassType.GenericTypes.Count; i++)
+        {
+            var newType = MapVariableTypeToGenericType(new VariableType(result.ClassType.GenericTypes[i]), genericUsage, classType);
+            if (newType.IsPrimitive || newType.ClassType == null)
+            {
+                throw new Exception("generic types should be classes");
+            }
+            result.ClassType.GenericTypes[i] = newType.ClassType;
+        }
+
+        return result;
+    }
+    
     public override LLVMValueRef Codegen(CodegenData data)
     {
         foreach (var genericUsage in GenericUsages)
         {
-            var genericUsageClass = ClassType.ConvertGenericUsage(genericUsage);
             var genericMap = new Dictionary<string, string>();
             for (var i = 0; i < ClassType.GenericTypes.Count; i++)
             {
-                genericMap.Add(ClassType.GenericTypes[i].GetGenericName(), genericUsageClass[i].GetGenericName());
+                genericMap.Add(ClassType.GenericTypes[i].GetGenericName(), genericUsage[i].GetGenericName());
             }
             data.Generics = genericMap;
 
-            var fullName = $"{data.NamespaceName}.{ClassType.Of(ClassType.Name, genericUsageClass).GetGenericName()}";
+            var fullName = $"{data.NamespaceName}.{ClassType.Of(ClassType.Name, genericUsage).GetGenericName()}";
             Console.WriteLine("codegen for class def " + fullName);
             var fieldLlvmTypes = new List<LLVMTypeRef>();
             var classFieldTypes = new List<ClassFieldType>();
@@ -48,7 +90,7 @@ public class ASTClassDefinition : ASTNode
                 {
                     Console.WriteLine(field.Type.ClassType!.Name);
                 }
-                var fieldType = field.Type.GetLLVMType(data);
+                var fieldType = MapVariableTypeToGenericType(field.Type, genericUsage, ClassType).GetLLVMType(data);
                 Console.WriteLine(field.Name + ": " + fieldType);
                 fieldLlvmTypes.Add(fieldType);
                 classFieldTypes.Add(new ClassFieldType(field.Name, fieldType));

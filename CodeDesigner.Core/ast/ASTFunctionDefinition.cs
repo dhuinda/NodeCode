@@ -71,6 +71,9 @@ public class ASTFunctionDefinition : ASTNode
         if (ReturnType.IsPrimitive && ReturnType.PrimitiveType == PrimitiveVariableType.VOID && (fullName != "__main" || isAlreadyDefined))
         {
             LLVM.BuildRetVoid(data.Builder);
+        } else if (Body.Count != 0 && Body[^1].GetType().Name != "ASTReturn")
+        {
+            LLVM.BuildRetVoid(data.Builder);
         }
         data.NamedValues.Clear();
         data.Func = null;

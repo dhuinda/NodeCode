@@ -20,6 +20,10 @@ public class ASTPrototypeDeclaration : ASTNode
 
     public override LLVMValueRef Codegen(CodegenData data)
     {
+        if (LLVM.GetNamedFunction(data.Module, Name).Pointer.ToInt64() != 0)
+        {
+            return new LLVMValueRef();
+        }
         var llvmParamTypes = new List<LLVMTypeRef>();
         foreach (var argType in ParamTypes)
         {
