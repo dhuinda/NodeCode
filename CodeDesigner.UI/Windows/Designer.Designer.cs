@@ -188,6 +188,7 @@
             // 
             // pictureBoxButton4
             // 
+            this.pictureBoxButton4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pictureBoxButton4.BackColor = System.Drawing.Color.Transparent;
             this.pictureBoxButton4.Image = global::CodeDesigner.UI.Properties.Resources.Exit_35px_RED;
             this.pictureBoxButton4.Location = new System.Drawing.Point(10, 446);
@@ -197,6 +198,7 @@
             this.pictureBoxButton4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxButton4.TabIndex = 3;
             this.pictureBoxButton4.TabStop = false;
+            this.pictureBoxButton4.Click += new System.EventHandler(this.ExitBtnClicked);
             // 
             // pictureBoxButton3
             // 

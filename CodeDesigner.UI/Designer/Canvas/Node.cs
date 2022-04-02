@@ -16,6 +16,7 @@ namespace CodeDesigner.UI.Designer.Canvas
     {
         public List<Node> Children;
         public Node Parent;
+        public int HeightFactor = 1;
 
         public bool Intersecting = false;
         public bool NodeHasParent = false;
@@ -42,7 +43,7 @@ namespace CodeDesigner.UI.Designer.Canvas
             deleteButton.BackColor = Color.FromArgb(14, 19, 29);
             deleteButton.ForeColor = Color.White;
             deleteButton.Width = 100;
-            deleteButton.Click += DeleteButtonOnClick;
+            //deleteButton.Click += DeleteButtonOnClick;
 
             ToolStripItem unbindButton = new ToolStripButton("Unbind Node", null);
 
@@ -51,8 +52,8 @@ namespace CodeDesigner.UI.Designer.Canvas
             unbindButton.Width = 100;
             unbindButton.Click += delegate(object? sender, EventArgs args)
             {
-                if (NodeHasParent)
-                    Parent.RemoveChildNode(this);
+                /*if (NodeHasParent)
+                    Parent.RemoveChildNode(this);*/
             };
 
             ToolStripItem moveUpBtn = new ToolStripButton("Move Up", null);
@@ -62,7 +63,7 @@ namespace CodeDesigner.UI.Designer.Canvas
             moveUpBtn.Width = 100;
             moveUpBtn.Click += delegate(object? sender, EventArgs args)
             {
-                MoveNodeUp();
+                //MoveNodeUp();
             };
 
             ToolStripItem moveDownBtn = new ToolStripButton("Move Down", null);
@@ -72,7 +73,7 @@ namespace CodeDesigner.UI.Designer.Canvas
             moveDownBtn.Width = 100;
             moveDownBtn.Click += delegate(object? sender, EventArgs args)
             {
-                MoveNodeDown();
+               //MoveNodeDown();
             };
 
             cms.Items.Add(deleteButton);
@@ -92,7 +93,7 @@ namespace CodeDesigner.UI.Designer.Canvas
             Children = new List<Node>();
         }
 
-        public void MoveNodes(MouseEventArgs e, Point lastPoint)
+        /*public void MoveNodes(MouseEventArgs e, Point lastPoint)
         {
             Top += e.Y - lastPoint.Y;
             Left += e.X - lastPoint.X;
@@ -119,6 +120,18 @@ namespace CodeDesigner.UI.Designer.Canvas
         public void SetNodeAsChild(Node node)
         {
             Children.Add(node);
+
+            if (NodeHasParent)
+            {
+                int index = Parent.Children.IndexOf(this);
+
+                if (index == Parent.Children.Count)
+                    return;
+
+                Parent.SetChildIndex(index, node);
+            }
+
+
             node.Parent = this;
             node.NodeHasParent = true;
 
@@ -130,6 +143,34 @@ namespace CodeDesigner.UI.Designer.Canvas
             Children.Remove(node);
             node.Parent = null;
             node.NodeHasParent = false;
+        }
+
+        public void SetChildIndex(int index, Node child)
+        {
+            if (Children.Count < 2)
+                return;
+
+            Node[] tempNode = new Node[Children.Count + 1];
+
+            bool offset = false;
+            for (int i = 0; i < Children.Count; i++)
+            {
+                if (i == index)
+                {
+                    tempNode[i] = child;
+                    offset = true;
+                }
+
+                if (offset)
+                    tempNode[i + 1] = Children[i];
+                else
+                    tempNode[i] = Children[i];
+            }
+
+            Children.Clear();
+            Children.AddRange(tempNode);
+
+            FormatNodes();
         }
 
         private void MoveNodeUp()
@@ -199,19 +240,30 @@ namespace CodeDesigner.UI.Designer.Canvas
         public void FormatNodes()
         {
             int heightFactor = 1;
+            int heightOffset = 0;
 
             foreach (Node child in Children.ToArray())
             {
                 child.Top = Top + heightFactor * 40;
                 child.Left = Left + 30;
 
+                if (heightOffset != 0)
+                    child.Top += (heightOffset * 40) - 40;
+
+                heightOffset += child.HeightFactor;
+
                 heightFactor++;
+
+                for (int i = 1; i < child.Children.Count; i++)
+                    heightFactor++;
             }
-        }
+
+            HeightFactor = heightFactor;
+        }*/
 
         #region UI LOGIC
 
-        private void DeleteButtonOnClick(object? sender, EventArgs e)
+        /*private void DeleteButtonOnClick(object? sender, EventArgs e)
         {
             foreach (Node n in Children.ToArray())
             {
@@ -231,7 +283,7 @@ namespace CodeDesigner.UI.Designer.Canvas
             _canvas.Nodes.Remove(this);
             _canvas.Core.Form.DesignerCanvas.Controls.Remove(this);
             Dispose();
-        }
+        }*/
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -242,7 +294,7 @@ namespace CodeDesigner.UI.Designer.Canvas
             base.OnMouseDown(e);
         }
 
-        protected override void OnMouseUp(MouseEventArgs e)
+        /*protected override void OnMouseUp(MouseEventArgs e)
         {
             _canvas.CheckOverlapping(this);
 
@@ -253,7 +305,7 @@ namespace CodeDesigner.UI.Designer.Canvas
                 
 
             base.OnMouseUp(e);
-        }
+        }*/
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
@@ -263,10 +315,10 @@ namespace CodeDesigner.UI.Designer.Canvas
                 return;
             }
 
-            if (e.Button == MouseButtons.Left)
+            /*if (e.Button == MouseButtons.Left)
             {
                 MoveNodes(e, _lastPoint);
-            }
+            }*/
 
             _canvas.CheckOverlapping(this);
 

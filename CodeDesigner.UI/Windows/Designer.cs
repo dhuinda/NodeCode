@@ -31,5 +31,10 @@ namespace CodeDesigner.UI.Windows
         {
             Core.IncrementBlockType(0);
         }
+
+        private void ExitBtnClicked(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
     }
 }
