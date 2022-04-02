@@ -28,6 +28,9 @@ namespace CodeDesigner.Core
             
             var analysisManager = new AnalysisManager();
             analysisManager.AddAnalyzer(new PrototypeAnalyzer());
+            analysisManager.AddAnalyzer(new GenericAnalyzer());
+            analysisManager.RunAnalysis(ast);
+            analysisManager.ClearAnalyzers();
             analysisManager.AddAnalyzer(new ClassAnalyzer(data));
             analysisManager.RunAnalysis(ast);
             

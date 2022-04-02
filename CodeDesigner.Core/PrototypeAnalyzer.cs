@@ -24,7 +24,7 @@ public class PrototypeAnalyzer : IAnalyzer
         return _nodeTypes.Contains(astNode.GetType().Name);
     }
 
-    public void Analyze(ASTNode node, string currentNamespace)
+    public void Analyze(ASTNode node, string currentNamespace, string? parentClass)
     {
         switch (node.GetType().Name)
         {

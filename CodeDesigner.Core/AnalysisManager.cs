@@ -8,6 +8,7 @@ public class AnalysisManager
 
     private List<IAnalyzer> _analyzers;
     private string _currentNamespace = "default";
+    private string? _currentClass = null;
 
     public AnalysisManager()
     {
@@ -19,6 +20,11 @@ public class AnalysisManager
         _analyzers.Add(analysisStep);
         return this;
     }
+
+    public void ClearAnalyzers()
+    {
+        _analyzers.Clear();
+    }
     
     private void RunAnalysisOnNode(ASTNode node)
     {
@@ -26,7 +32,7 @@ public class AnalysisManager
         {
             if (analyzer.ShouldAnalyzeNode(node))
             {
-                analyzer.Analyze(node, _currentNamespace);
+                analyzer.Analyze(node, _currentNamespace, _currentClass);
             }
         }
     }
@@ -46,6 +52,7 @@ public class AnalysisManager
             case "ASTClassDefinition":
             {
                 var classDef = (ASTClassDefinition) node;
+                _currentClass = $"{_currentNamespace}.{classDef.ClassType.Name}";
                 foreach (var field in classDef.Fields)
                 {
                     Traverse(field);
@@ -55,6 +62,7 @@ public class AnalysisManager
                     Traverse(method);
                 }
 
+                _currentClass = null;
                 break;
             }
             case "ASTClassFieldAccess":
@@ -86,6 +94,11 @@ public class AnalysisManager
                 foreach (var b in funcDef.Body)
                 {
                     Traverse(b);
+                }
+
+                foreach (var p in funcDef.Params)
+                {
+                    Traverse(p);
                 }
                 break;
             }

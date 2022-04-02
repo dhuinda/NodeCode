@@ -24,7 +24,7 @@ public class ClassAnalyzer : IAnalyzer
         return _nodesTypes.Contains(astNode.GetType().Name);
     }
 
-    public void Analyze(ASTNode node, string currentNamespace)
+    public void Analyze(ASTNode node, string currentNamespace, string? parentClass)
     {
         switch (node.GetType().Name)
         {
@@ -43,8 +43,7 @@ public class ClassAnalyzer : IAnalyzer
         {
             foreach (var genericUsage in classDef.GenericUsages)
             {
-                var genericUsageClass = ClassType.ConvertGenericUsage(genericUsage);
-                var genericClassName = ClassType.Of(name, genericUsageClass).GetGenericName();
+                var genericClassName = ClassType.Of(name, genericUsage).GetGenericName();
                 var classType = LLVM.StructCreateNamed(_data.Context, genericClassName);
                 _data.Classes.Add(genericClassName, new ClassData(classType, null));
             }

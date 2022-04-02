@@ -8,19 +8,33 @@ public class ASTClassInstantiation : ASTNode
     public string Identifier;
     public ClassType ClassType;
     public List<ASTNode> Args;
-    public List<VariableType> GenericTypes;
 
-    public ASTClassInstantiation(string identifier, ClassType classType, List<ASTNode> args,
-        List<VariableType> genericTypes)
+    public ASTClassInstantiation(string identifier, ClassType classType, List<ASTNode> args)
     {
         Identifier = identifier;
         ClassType = classType;
         Args = args;
-        GenericTypes = genericTypes;
+    }
+    
+    public ASTClassInstantiation(string identifier, ClassType classType)
+    {
+        Identifier = identifier;
+        ClassType = classType;
+        Args = new();
     }
 
     public override LLVMValueRef Codegen(CodegenData data)
     {
+        foreach (var t in ClassType.GenericTypes)
+        {
+            foreach (var (alias, type) in data.Generics)
+            {
+                if (t.Name.Equals(alias))
+                {
+                    t.Name = type;
+                }
+            }
+        }
         var fullName = ClassType.Name.Contains('.') ? ClassType.GetGenericName() : $"default.{ClassType.GetGenericName()}";
         if (!data.Classes.ContainsKey(fullName))
         {

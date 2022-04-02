@@ -36,7 +36,11 @@ public class ASTIfStatement : ASTNode
         {
             node.Codegen(data);
         }
-        LLVM.BuildBr(data.Builder, mergeBlock);
+
+        if (IfBody.Count != 0 && !IfBody[^1].GetType().Name.Equals("ASTReturn"))
+        {
+            LLVM.BuildBr(data.Builder, mergeBlock);
+        }
 
         if (elseBlock.HasValue)
         {
@@ -46,7 +50,10 @@ public class ASTIfStatement : ASTNode
                 node.Codegen(data);
             }
 
-            LLVM.BuildBr(data.Builder, mergeBlock);
+            if (ElseBody.Count != 0 && !ElseBody[^1].GetType().Name.Equals("ASTReturn"))
+            {
+                LLVM.BuildBr(data.Builder, mergeBlock);
+            }
         }
         LLVM.PositionBuilderAtEnd(data.Builder, mergeBlock);
         return mergeBlock;
