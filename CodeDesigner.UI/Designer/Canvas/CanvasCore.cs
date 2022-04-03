@@ -124,9 +124,10 @@ namespace CodeDesigner.UI.Designer.Canvas
                                     input.AttachedNode = node;
                                     input.DropPanel.BackColor = Color.Transparent;
                                     input.CreatePreviewString();
-                                    
+
                                     var difference = TextRenderer.MeasureText(node.NodeToString(), input.DropLabel.Font).Width - input.DropPanel.Width;
                                     input.DropPanel.Width += difference; 
+                                    input.DropLabel.Width += difference;
                                     Nodes[i].Width += difference;
 
                                     node.Hide();
