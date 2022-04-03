@@ -14,8 +14,9 @@ namespace CodeDesigner.UI.Designer.Canvas
 {
     public partial class Node : Panel
     {
-        public Nodes.Node BindedNode { get; set; }
-        public bool NodeIsBinded { get; set; }
+        public List<Node> Children;
+        public Node Parent;
+        public int HeightFactor = 1;
 
         public bool Intersecting = false;
         public bool NodeHasParent = false;
@@ -24,6 +25,7 @@ namespace CodeDesigner.UI.Designer.Canvas
         private CanvasCore _canvas;
 
         private Color _color = Color.FromArgb(24, 29, 39);
+
 
         public Node()
         {
@@ -41,24 +43,38 @@ namespace CodeDesigner.UI.Designer.Canvas
             deleteButton.BackColor = Color.FromArgb(14, 19, 29);
             deleteButton.ForeColor = Color.White;
             deleteButton.Width = 100;
+            deleteButton.Click += DeleteButtonOnClick;
 
             ToolStripItem unbindButton = new ToolStripButton("Unbind Node", null);
 
             unbindButton.BackColor = Color.FromArgb(14, 19, 29);
             unbindButton.ForeColor = Color.White;
             unbindButton.Width = 100;
+            unbindButton.Click += delegate(object? sender, EventArgs args)
+            {
+                if (NodeHasParent)
+                    Parent.RemoveChildNode(this);
+            };
 
             ToolStripItem moveUpBtn = new ToolStripButton("Move Up", null);
 
             moveUpBtn.BackColor = Color.FromArgb(14, 19, 29);
             moveUpBtn.ForeColor = Color.White;
             moveUpBtn.Width = 100;
+            moveUpBtn.Click += delegate(object? sender, EventArgs args)
+            {
+                MoveNodeUp();
+            };
 
             ToolStripItem moveDownBtn = new ToolStripButton("Move Down", null);
 
             moveDownBtn.BackColor = Color.FromArgb(14, 19, 29);
             moveDownBtn.ForeColor = Color.White;
             moveDownBtn.Width = 100;
+            moveDownBtn.Click += delegate(object? sender, EventArgs args)
+            {
+               MoveNodeDown();
+            };
 
             cms.Items.Add(deleteButton);
             cms.Items.Add(unbindButton);
@@ -73,10 +89,21 @@ namespace CodeDesigner.UI.Designer.Canvas
             ContextMenuStrip = cms;
 
             cms.Width = 100;
+
+            Children = new List<Node>();
         }
 
         public void MoveNodes(MouseEventArgs e, Point lastPoint)
         {
+            Top += e.Y - lastPoint.Y;
+            Left += e.X - lastPoint.X;
+
+            foreach (Node c in Children)
+            {
+                c.MoveNodes(e, lastPoint);
+            }
+
+            _lastPoint = lastPoint;
         }
 
         public void SetColor(Color color)
@@ -90,12 +117,173 @@ namespace CodeDesigner.UI.Designer.Canvas
             _canvas = canvas;
         }
 
+        public void SetNodeAsChild(Node node)
+        {
+            Children.Add(node);
+
+            if (NodeHasParent)
+            {
+                int index = Parent.Children.IndexOf(this);
+
+                if (index == Parent.Children.Count)
+                    return;
+
+                Parent.SetChildIndex(index, node);
+            }
+
+
+            node.Parent = this;
+            node.NodeHasParent = true;
+
+            FormatNodes();
+        }
+
+        public void RemoveChildNode(Node node)
+        {
+            Children.Remove(node);
+            node.Parent = null;
+            node.NodeHasParent = false;
+        }
+
+        public void SetChildIndex(int index, Node child)
+        {
+            if (Children.Count < 2)
+                return;
+
+            Node[] tempNode = new Node[Children.Count + 1];
+
+            bool offset = false;
+            for (int i = 0; i < Children.Count; i++)
+            {
+                if (i == index)
+                {
+                    tempNode[i] = child;
+                    offset = true;
+                }
+
+                if (offset)
+                    tempNode[i + 1] = Children[i];
+                else
+                    tempNode[i] = Children[i];
+            }
+
+            Children.Clear();
+            Children.AddRange(tempNode);
+
+            FormatNodes();
+        }
+
+        private void MoveNodeUp()
+        {
+            if (!NodeHasParent)
+                return;
+
+            if (Parent.Children.Count < 2)
+                return;
+
+            int nodeIndex = Parent.Children.IndexOf(this);
+
+            Node[] nodes = new Node[Parent.Children.Count];
+
+            for (int i = 0; i < nodes.Length; i++)
+            {
+                if (i == nodeIndex - 1)
+                    nodes[i] = Parent.Children[i + 1];
+
+                if (i == nodeIndex)
+                    nodes[i] = Parent.Children[nodeIndex - 1];
+
+                if (i != nodeIndex && i != nodeIndex - 1)
+                {
+                    nodes[i] = Parent.Children[i];
+                }
+            }
+
+            Parent.Children.Clear();
+            Parent.Children.AddRange(nodes);
+
+            Parent.FormatNodes();
+        }
+
+        private void MoveNodeDown()
+        {
+            if (!NodeHasParent)
+                return;
+
+            if (Parent.Children.Count < 2)
+                return;
+
+            int nodeIndex = Parent.Children.IndexOf(this);
+
+            Node[] nodes = new Node[Parent.Children.Count];
+
+            for (int i = 0; i < nodes.Length; i++)
+            {
+                if (i == nodeIndex + 1)
+                    nodes[i] = Parent.Children[i - 1];
+
+                if (i == nodeIndex)
+                    nodes[i] = Parent.Children[nodeIndex + 1];
+
+                if (i != nodeIndex && i != nodeIndex - 1)
+                {
+                    nodes[i] = Parent.Children[i];
+                }
+            }
+
+            Parent.Children.Clear();
+            Parent.Children.AddRange(nodes);
+
+            Parent.FormatNodes();
+        }
+
         public void FormatNodes()
         {
-            
+            int heightFactor = 1;
+            int heightOffset = 0;
+
+            foreach (Node child in Children.ToArray())
+            {
+                child.Top = Top + heightFactor * 40;
+                child.Left = Left + 30;
+
+                if (heightOffset != 0)
+                    child.Top += (heightOffset * 40) - 40;
+
+                heightOffset += child.HeightFactor;
+
+                heightFactor++;
+
+                for (int i = 1; i < child.Children.Count; i++)
+                    heightFactor++;
+            }
+
+            HeightFactor = heightFactor;
         }
 
         #region UI LOGIC
+
+        private void DeleteButtonOnClick(object? sender, EventArgs e)
+        {
+            foreach (Node n in Children.ToArray())
+            {
+                RemoveChildNode(n);
+            }
+
+            if (NodeHasParent)
+            {
+                Node tempParent = Parent;
+                Parent.RemoveChildNode(this);
+
+                tempParent.FormatNodes();
+            }
+
+
+            Hide();
+            _canvas.Nodes.Remove(this);
+            _canvas.Core.Form.DesignerCanvas.Controls.Remove(this);
+            Dispose();
+        }
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -108,6 +296,14 @@ namespace CodeDesigner.UI.Designer.Canvas
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
+            _canvas.CheckOverlapping(this);
+
+            if (!Intersecting)
+                SetColor(Color.FromArgb(24, 29, 39));
+
+            _canvas.ReleaseOverlapping(this);
+                
+
             base.OnMouseUp(e);
         }
 
@@ -120,12 +316,9 @@ namespace CodeDesigner.UI.Designer.Canvas
             }
 
             if (e.Button == MouseButtons.Left)
-                if (!NodeIsBinded || !BindedNode.HasParent)
-                {
-                    Top += e.Y - _lastPoint.Y;
-                    Left += e.X - _lastPoint.X;
-                }
-            
+            {
+                MoveNodes(e, _lastPoint);
+            }
 
             _canvas.CheckOverlapping(this);
 
