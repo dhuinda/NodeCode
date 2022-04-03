@@ -114,12 +114,28 @@ namespace CodeDesigner.UI.Designer.Canvas
             {
                 var parentChild = (ParentNode) child;
                 child.FormatNodes();
-                for (int i = 1; i < parentChild.Children.Count; i++)
-                    heightFactor++;
+                heightFactor += GetChildHeight(parentChild);
             }
         }
 
         HeightFactor = heightFactor;
+    }
+
+    public int GetChildHeight(ParentNode child)
+    {
+        int height = 0;
+
+        foreach (Node n in child.Children)
+        {
+            height++;
+
+            if (n.CanHaveChildren())
+            {
+                height += GetChildHeight((ParentNode)n);
+            }
+        }
+
+        return height;
     }
 
 
