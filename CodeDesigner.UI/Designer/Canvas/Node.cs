@@ -7,7 +7,7 @@ using CodeDesigner.UI.Resources.Controls;
 
 namespace CodeDesigner.UI.Designer.Canvas;
 
-public partial class Node : Panel
+public partial class Node : Panel, INode
 {
 
     public NodeType NodeType = NodeType.DEFAULT;
@@ -347,7 +347,7 @@ public partial class Node : Panel
         };
     }
 
-    public abstract string NodeToString()
+    public string NodeToString()
     {
         return null;
     }

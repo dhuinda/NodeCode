@@ -15,7 +15,7 @@ public class VariableDefinitionNode : Node
         DrawObjects();
     }
 
-    protected override string NodeToString()
+    public string NodeToString()
     {
         return "Declare " + (TextboxObject)NodeObjects[1].GetText();
     }
