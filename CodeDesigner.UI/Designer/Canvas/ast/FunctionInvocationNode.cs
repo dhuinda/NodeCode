@@ -15,7 +15,7 @@ public class FunctionInvocationNode : Node
         DrawObjects();
     }
     
-    protected override string NodeToString()
+    public string NodeToString()
     {
         return "Call " + (TextboxObject)NodeObjects[1].GetText();
     }

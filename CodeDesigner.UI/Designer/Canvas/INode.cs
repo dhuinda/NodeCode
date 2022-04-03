@@ -8,6 +8,6 @@ namespace CodeDesigner.UI.Designer.Canvas
 {
     public interface INode
     {
-        public Control BindedControl { get; set; }
+        void NodetoString();
     }
 }

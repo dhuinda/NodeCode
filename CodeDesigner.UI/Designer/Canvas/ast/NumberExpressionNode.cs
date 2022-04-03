@@ -13,7 +13,7 @@ public class NumberExpressionNode : Node
         DrawObjects();
     }
 
-    protected override string NodeToString()
+    public string NodeToString()
     {
         return (TextboxObject)NodeObjects[1].GetText();
     }
