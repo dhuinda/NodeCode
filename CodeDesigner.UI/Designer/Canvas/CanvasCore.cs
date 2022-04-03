@@ -39,24 +39,41 @@ namespace CodeDesigner.UI.Designer.Canvas
             }
             else
             {
-                if (tNode.NodeType == NodeType.VARIABLE_DECLARATION)
+                switch (tNode.NodeType)
                 {
-                    node = new VariableDeclarationNode();
-                }
-                else if (tNode.NodeType == NodeType.NUMBER_EXPRESSION)
-                {
+                    case NodeType.BINARY_EXPRESSION:
+                    node = new BinaryExpressionNode();
+                    break;
+                    case NodeType.BOOLEAN_EXPRESSION:
+                    node = new BooleanExpressionNode();
+                    break;
+                    case NodeType.FUNCTION_DEFINITION:
+                    node = new FunctionDefinitionNode();
+                    break;
+                    case NodeType.FUNCTION_INVOCATION:
+                    node = new FUNCTION_INVOCATION();
+                    break;
+                    case NodeType.NUMBER_EXPRESSION:
                     node = new NumberExpressionNode();
-                }
-                else if (tNode.NodeType == NodeType.FUNCTION_INVOCATION)
-                {
-                    node = new FunctionInvocationNode();
-                } else if (tNode.NodeType == NodeType.STRING_EXPRESSION)
-                {
-                    node = new StringExpressionNode();
-                }
-                else
-                {
+                    break;
+                    case NodeType.STRING_EXPRESSION:
+                    node = new STRING_EXPRESSION();
+                    break;
+                    case NodeType.VARIABLE_ASSIGNMENT:
+                    node = new VARIABLE_ASSIGNMENT();
+                    break;
+                    case NodeType.VARIABLE_DECLARATION:
+                    node = new VARIABLE_DECLARATION();
+                    break;
+                    case NodeType.VARIABLE_DEFINITION:
+                    node = new VARIABLE_DEFINITION();
+                    break;
+                    case NodeType.VARIABLE_EXPRESSION:
+                    node = new VariableExpressionNode();
+                    break
+                    default:
                     node = new Node();
+                    break;
                 }
             }
             node.SetCanvas(this);
