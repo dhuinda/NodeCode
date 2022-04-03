@@ -33,7 +33,6 @@ namespace CodeDesigner.UI.Designer.Canvas
                 node = new Node();
             }
             node.SetCanvas(this);
-            node.Width = 80;
 
             Nodes.Add(node);
 

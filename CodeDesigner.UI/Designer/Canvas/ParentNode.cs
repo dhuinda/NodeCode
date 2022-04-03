@@ -16,7 +16,6 @@ namespace CodeDesigner.UI.Designer.Canvas
     {
         public List<Node> Children;
 
-
         public ParentNode()
         {
             Children = new List<Node>();
@@ -103,18 +102,14 @@ namespace CodeDesigner.UI.Designer.Canvas
             child.Top = Top + heightFactor * 40;
             child.Left = Left + 30;
 
-            if (heightOffset != 0)
-                child.Top += heightOffset;
-
-            heightOffset += child.HeightFactor;
-
+          
             heightFactor++;
 
             if (child.CanHaveChildren())
             {
                 var parentChild = (ParentNode) child;
-                child.FormatNodes();
                 heightFactor += GetChildHeight(parentChild);
+                child.FormatNodes();
             }
         }
 
@@ -140,6 +135,7 @@ namespace CodeDesigner.UI.Designer.Canvas
 
 
         #region UI LOGIC
+
 
         protected override void DeleteButtonOnClick(object? sender, EventArgs e)
         {

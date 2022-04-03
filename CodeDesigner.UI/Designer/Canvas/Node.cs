@@ -1,4 +1,7 @@
 using System.Drawing.Drawing2D;
+using System.Security.Cryptography.X509Certificates;
+using CodeDesigner.Core;
+using CodeDesigner.UI.Designer.Canvas.NodeObject;
 using CodeDesigner.UI.Resources.Controls;
 
 namespace CodeDesigner.UI.Designer.Canvas;
@@ -11,6 +14,7 @@ public partial class Node : Panel
 
     public bool Intersecting = false;
     public bool NodeHasParent = false;
+    public List<NodeObject.NodeObject> NodeObjects;
 
     protected Point _lastPoint;
     protected CanvasCore _canvas;
@@ -80,6 +84,14 @@ public partial class Node : Panel
 
         cms.Width = 100;
 
+        NodeObjects = new List<NodeObject.NodeObject>();
+
+        NodeObjects.Add(new LabelObject("test"));
+        NodeObjects.Add(new LabelObject("test2"));
+        NodeObjects.Add(new ComboObject(new [] { "test", "test2", "test3"}));
+        NodeObjects.Add(new TextboxObject(50));
+
+        DrawObjects();
     }
 
     public virtual bool CanHaveChildren()
@@ -177,6 +189,8 @@ public partial class Node : Panel
     
     #region UI LOGIC
 
+
+
     protected virtual void DeleteButtonOnClick(object? sender, EventArgs e)
     {
         if (NodeHasParent)
@@ -247,12 +261,85 @@ public partial class Node : Panel
                 graphics.FillRoundedRectangle(brush, 0, 0, Width, Height, 10);
                 //graphics.FillRoundedRectangle(brush, 12, 12 + ((this.Height - 64) / 2), this.Width - 44, (this.Height - 64)/2, 10);
             }
+
+            
         }
         catch { }
 
         base.OnPaint(pe);
     }
-    
+
+    public void DrawObjects()
+    {
+        int offset = 5;
+        foreach (NodeObject.NodeObject n in NodeObjects)
+        {
+            if (n.GetType() == typeof(LabelObject))
+            {
+                LabelObject label = (LabelObject)n;
+                Label l = new();
+                l.BackColor = Color.Transparent;
+                l.ForeColor = Color.White;
+                l.Top = 9;
+                l.Text = label.Text;
+                l.Left = offset;
+                l.Width = TextRenderer.MeasureText(l.Text, l.Font).Width;
+
+                offset += TextRenderer.MeasureText(l.Text, l.Font).Width;
+
+                Controls.Add(l);
+                BindEvents(l);
+            } else if (n.GetType() == typeof(ComboObject))
+            {
+                ComboObject combo = (ComboObject)n;
+
+                ComboBox c = new();
+                c.Items.AddRange(combo.Options);
+                c.Top = 6;
+                c.Width = 70;
+                c.Left = offset + 5;
+
+                Controls.Add(c);
+
+                offset += c.Width + 5;
+                BindEvents(c);
+            } else if (n.GetType() == typeof(TextboxObject))
+            {
+                TextboxObject textbox = (TextboxObject)n;
+
+                TextBox t = new();
+                t.Width = textbox.Width;
+                t.Left = offset + 5;
+                t.Top = 6;
+                Controls.Add(t);
+
+                offset += t.Width + 5;
+
+                BindEvents(t);
+            }
+        }
+
+        Width = offset + 5;
+    }
+
+    public void BindEvents(Control control)
+    {
+        control.MouseDown += delegate(object? sender, MouseEventArgs args)
+        {
+            OnMouseDown(args);
+        };
+
+        control.MouseMove += delegate(object? sender, MouseEventArgs args)
+        {
+            OnMouseMove(args);
+        };
+
+        control.MouseUp += delegate(object? sender, MouseEventArgs args)
+        {
+            OnMouseUp(args);
+        };
+    }
+
     #endregion
     
 }
