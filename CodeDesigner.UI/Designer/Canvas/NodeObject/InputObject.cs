@@ -19,7 +19,7 @@
 
         public void CreatePreviewString()
         {
-            List<LabelObject> nodeObjects = new ());
+            List<LabelObject> nodeObjects = new ();
 
             string preview = "Nothing to Display";
 
@@ -27,7 +27,7 @@
             {
                 foreach (NodeObject obj in AttachedNode.NodeObjects)
                 {
-                    if (NodeObject.GetType() == typeof(LabelObject))
+                    if (obj.GetType() == typeof(LabelObject))
                     {
                         nodeObjects.Add((LabelObject)obj);
                     }
@@ -44,7 +44,7 @@
 
             Label label = new ();
             label.Text = preview;
-            label.ForeColor = Color.White();
+            label.ForeColor = Color.White;
 
             DropPanel.Controls.Add(label);
         }
