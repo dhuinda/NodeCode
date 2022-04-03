@@ -66,20 +66,29 @@ public class NodeConverter
 
                 var returnTypeObject = (TextboxObject) funDefNode.NodeObjects[3];
                 var returnType = ConvertStringToVariableType(returnTypeObject.GetText());
-                var funDef = new ASTFunctionDefinition(nameObject.GetText(), parameters, ConvertToAST(funDefNode.Children), returnType);
-                return funDef;
+                return new ASTFunctionDefinition(nameObject.GetText(), parameters, ConvertToAST(funDefNode.Children), returnType);
             }
             case NodeType.FUNCTION_INVOCATION:
             {
                 var funInvNode = (FunctionInvocationNode) node;
                 var funName = ((TextboxObject) funInvNode.NodeObjects[1]).GetText();
                 var args = new List<ASTNode>();
-                if (funInvNode.Controls.Count >= 5)
+                if (funInvNode.NodeObjects.Count >= 5)
                 {
-                    // for (var i = 4;)
+                    for (var i = 3; i < funInvNode.NodeObjects.Count - 1; i++)
+                    {
+                        var argNode = ((InputObject) funInvNode.NodeObjects[i]).AttachedNode;
+                        args.Add(ConvertToAST(argNode));
+                    }
                 }
 
-                return null;
+                return new ASTFunctionInvocation(funName, args);
+            }
+            case NodeType.STRING_EXPRESSION:
+            {
+                var stringExpNode = (StringExpressionNode) node;
+                var content = ((TextboxObject) stringExpNode.NodeObjects[1]).GetText();
+                return new ASTStringExpression(content);
             }
             default:
             {
