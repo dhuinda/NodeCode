@@ -10,6 +10,8 @@ public class FunctionDefinitionNode : ParentNode
         NodeType = NodeType.FUNCTION_DEFINITION;
         NodeObjects.Add(new LabelObject("define function"));
         NodeObjects.Add(new TextboxObject(50));
+        NodeObjects.Add(new LabelObject("with return type"));
+        NodeObjects.Add(new TextboxObject(50));
         NodeObjects.Add(new LabelObject("with paramaters"));
         NodeObjects.Add(new InputObject(50));
         DrawObjects();
