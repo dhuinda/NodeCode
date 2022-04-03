@@ -7,6 +7,7 @@
         public Node AttachedNode {get; set;}
 
         public Panel DropPanel { get; set; }
+        public Label DropLabel {get; set;}
 
         public InputObject(int width)
         {
@@ -22,6 +23,7 @@
             Label label = new ();
             label.Text = AttachedNode.NodeToString();
             label.ForeColor = Color.White;
+            DropLabel = label;
 
             DropPanel.Controls.Add(label);
         }
