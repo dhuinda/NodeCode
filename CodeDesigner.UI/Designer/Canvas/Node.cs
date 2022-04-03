@@ -299,6 +299,8 @@ public partial class Node : Panel
                 c.Width = 70;
                 c.Left = offset + 5;
 
+                n.BindedControl = c;
+
                 Controls.Add(c);
 
                 offset += c.Width + 5;
@@ -312,6 +314,8 @@ public partial class Node : Panel
                 t.Left = offset + 5;
                 t.Top = 6;
                 Controls.Add(t);
+
+                n.BindedControl = t;
 
                 offset += t.Width + 5;
 

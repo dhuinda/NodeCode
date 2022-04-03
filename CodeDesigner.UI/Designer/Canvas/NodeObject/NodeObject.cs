@@ -8,5 +8,6 @@ namespace CodeDesigner.UI.Designer.Canvas.NodeObject
 {
     public class NodeObject
     {
+        public Control BindedControl { get; set; }
     }
 }

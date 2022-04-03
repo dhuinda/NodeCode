@@ -9,9 +9,15 @@ namespace CodeDesigner.UI.Designer.Canvas.NodeObject
     public class TextboxObject : NodeObject
     {
         public int Width { get; set; }
+        public TextBox Box { get; set; }
         public TextboxObject(int width)
         {
             Width = width;
+        }
+
+        public string GetText(string s)
+        {
+            return Box.Text;
         }
     }
 }
