@@ -240,6 +240,7 @@ namespace CodeDesigner.UI.Windows
             this.pictureBoxButton1.Click += (sender, args) =>
             {
                 NodeConverter.CompileNodes(Core.Canvas.Nodes);
+                ConsoleHelper.StartProcess(null);
             };
             // 
             // Designer

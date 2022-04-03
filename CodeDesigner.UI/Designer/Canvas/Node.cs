@@ -295,6 +295,7 @@ public partial class Node : Panel, INode
                 c.Left = offset + 5;
 
                 n.BindedControl = c;
+                combo.Box = c;
 
                 Controls.Add(c);
 
