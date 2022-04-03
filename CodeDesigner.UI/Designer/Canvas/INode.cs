@@ -8,6 +8,6 @@ namespace CodeDesigner.UI.Designer.Canvas
 {
     public interface INode
     {
-        void NodetoString();
+        string NodeToString();
     }
 }

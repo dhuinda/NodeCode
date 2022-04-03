@@ -13,8 +13,8 @@ public class StringExpressionNode : Node
         DrawObjects();
     }
 
-    public string NodeToString()
+    public override string NodeToString()
     {
-        return (TextboxObject)NodeObjects[1].GetText();
+        return ((TextboxObject) NodeObjects[1]).GetText();
     }
 }

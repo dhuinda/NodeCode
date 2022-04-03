@@ -15,8 +15,8 @@ public class VariableDeclarationNode : Node
         DrawObjects();
     }
 
-    public string NodeToString()
+    public override string NodeToString()
     {
-        return (TextboxObject)NodeObjects[1].GetText() + " = " + (TextboxObject)NodeObjects[3].GetText();
+        return ((TextboxObject) NodeObjects[1]).GetText() + " = " + ((TextboxObject) NodeObjects[3]).GetText();
     }
 }

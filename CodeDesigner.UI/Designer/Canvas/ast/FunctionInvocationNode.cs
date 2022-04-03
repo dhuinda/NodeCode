@@ -14,8 +14,9 @@ public class FunctionInvocationNode : Node
         NodeObjects.Add(new InputObject(50));
         DrawObjects();
     }
-    
-    public string NodeToString()
+
+    public override string NodeToString()
     {
-        return "Call " + (TextboxObject)NodeObjects[1].GetText();
+        return "Call " + ((TextboxObject) NodeObjects[1]).GetText();
     }
+}

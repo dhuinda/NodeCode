@@ -12,6 +12,10 @@ public class NodeConverter
     public static void CompileNodes(List<Node> nodes)
     {
         var ast = ConvertToAST(nodes);
+        ast.Insert(0, new ASTPrototypeDeclaration("printf", new List<VariableType>
+        {
+            new(PrimitiveVariableType.STRING)
+        }, new VariableType(PrimitiveVariableType.VOID), true));
         CodeGenerator.Run(ast);
     }
 

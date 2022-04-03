@@ -146,12 +146,6 @@ namespace CodeDesigner.UI.Designer.Canvas
             base.DeleteButtonOnClick(sender, e);
         }
 
-        public string NodeToString()
-        {
-
-        }
-
-
         #endregion
     }
 }

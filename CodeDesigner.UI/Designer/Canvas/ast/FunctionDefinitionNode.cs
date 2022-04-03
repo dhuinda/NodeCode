@@ -17,8 +17,8 @@ public class FunctionDefinitionNode : ParentNode
         DrawObjects();
     }
 
-    public string NodeToString()
+    public override string NodeToString()
     {
-        return "Define " +  (TextboxObject)NodeObjects[1].GetText(); 
+        return "Define " +  ((TextboxObject) NodeObjects[1]).GetText(); 
     }
 }

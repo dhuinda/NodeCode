@@ -311,6 +311,7 @@ public partial class Node : Panel, INode
                 Controls.Add(t);
 
                 n.BindedControl = t;
+                textbox.Box = t;
 
                 offset += t.Width + 5;
 
@@ -347,11 +348,10 @@ public partial class Node : Panel, INode
         };
     }
 
-    public string NodeToString()
+    #endregion
+
+    public virtual string NodeToString()
     {
         return null;
     }
-
-    #endregion
-    
 }

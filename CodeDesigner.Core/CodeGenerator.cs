@@ -42,8 +42,9 @@ namespace CodeDesigner.Core
             }
             
             LLVM.DumpModule(module);
+            LLVM.PrintModuleToFile(module, "./output.ir", out var error);
             
-            if (LLVM.VerifyModule(module, LLVMVerifierFailureAction.LLVMPrintMessageAction, out var error).Value != 0)
+            if (LLVM.VerifyModule(module, LLVMVerifierFailureAction.LLVMPrintMessageAction, out error).Value != 0)
             {
                 Console.WriteLine("Failed to validate module: " + error);
                 return;
