@@ -87,13 +87,13 @@ public partial class Node : Panel
         return false;
     }
 
-    public virtual void MoveNodes(MouseEventArgs e, Point lastPoint)
+    public virtual void MoveNodes(MouseEventArgs e)
     {
-        Top += e.Y - lastPoint.Y;
-        Left += e.X - lastPoint.X;
+        Top += e.Y - _lastPoint.Y;
+        Left += e.X - _lastPoint.X;
 
-
-        _lastPoint = lastPoint;
+        // _lastPoint = e.Location;
+        FormatNodes();
     }
 
     public void SetColor(Color color)
@@ -213,6 +213,7 @@ public partial class Node : Panel
         _canvas.ReleaseOverlapping(this);
             
 
+        FormatNodes();
         base.OnMouseUp(e);
     }
 
@@ -226,11 +227,10 @@ public partial class Node : Panel
 
         if (e.Button == MouseButtons.Left)
         {
-            MoveNodes(e, _lastPoint);
+            MoveNodes(e);
         }
 
         _canvas.CheckOverlapping(this);
-
         base.OnMouseMove(e);
     }
 

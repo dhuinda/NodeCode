@@ -9,6 +9,7 @@ namespace CodeDesigner.Core
     
     public class CodeGenerator
     {
+        // todo: should probably add loops lol
         public static void Run(List<ASTNode> ast)
         {
 

@@ -19,11 +19,10 @@ namespace CodeDesigner.UI.Designer
 
         private readonly string[] _blockTypes =
         {
-            "LOGIC",
+            "CONTROL",
             "VARIABLES",
-            "LISTS",
-            "LOOPS",
-            "OUTPUT"
+            "CLASSES",
+            "EXPRESSIONS"
         };
 
         public DesignerCore(Windows.Designer form)
@@ -46,7 +45,7 @@ namespace CodeDesigner.UI.Designer
             if (_blockTypeIndex < 0)
                 _blockTypeIndex = 4;
             
-            if (_blockTypeIndex > 4)
+            if (_blockTypeIndex > 3)
                 _blockTypeIndex = 0;
 
             Form.BlockTypePanel.Content = _blockTypes[_blockTypeIndex];
@@ -60,27 +59,30 @@ namespace CodeDesigner.UI.Designer
             switch (_blockTypeIndex)
             {
                 case 0:
-                    AddLogicNodes();
+                    AddControlNodes();
                     break;
                 case 1:
                     AddVariableNodes();
                     break;
                 case 2:
-                    AddListNodes();
+                    AddClassNodes();
                     break;
                 case 3:
-                    AddLoopNodes();
-                    break;
-                case 4:
-                    AddOutputNodes();
+                    AddExpressionNodes();
                     break;
             }
         }
 
-        private void AddLogicNodes()
+        private void AddControlNodes()
         {
             DisposeNodes();
-            _nodes.Add(new ToolboxNode(NodeTypes.FUNCTION_DEFINITION, this));
+            _nodes.AddRange(new []
+            {
+                new ToolboxNode(NodeType.FUNCTION_DEFINITION, this),
+                new ToolboxNode(NodeType.FUNCTION_INVOCATION, this),
+                new ToolboxNode(NodeType.IF_STATEMENT, this),
+                new ToolboxNode(NodeType.RETURN, this)
+            });
             PlaceNodes();
         }
 
@@ -90,30 +92,41 @@ namespace CodeDesigner.UI.Designer
 
             _nodes.AddRange(new []
             {
-                new ToolboxNode(NodeTypes.NEW_VARIABLE, this),
-                new ToolboxNode(NodeTypes.NEW_VARIABLE, this),
-                new ToolboxNode(NodeTypes.NEW_VARIABLE, this),
-                new ToolboxNode(NodeTypes.NEW_VARIABLE, this)
+                new ToolboxNode(NodeType.VARIABLE_EXPRESSION, this),
+                new ToolboxNode(NodeType.VARIABLE_DECLARATION, this),
+                new ToolboxNode(NodeType.VARIABLE_DEFINITION, this),
+                new ToolboxNode(NodeType.VARIABLE_ASSIGNMENT, this)
             });
 
             PlaceNodes();
         }
 
-        private void AddListNodes()
+        private void AddClassNodes()
         {
             DisposeNodes();
+            // todo: need to add like tabs or something to separate things into classes
+            _nodes.AddRange(new []
+            {
+                new ToolboxNode(NodeType.CLASS_FIELD_STORE, this),
+                new ToolboxNode(NodeType.CLASS_FIELD_ACCESS, this),
+                new ToolboxNode(NodeType.CLASS_INSTANTIATION, this),
+                new ToolboxNode(NodeType.METHOD_INVOCATION, this)
+            });
             PlaceNodes();
         }
 
-        private void AddLoopNodes()
+        private void AddExpressionNodes()
         {
             DisposeNodes();
-            PlaceNodes();
-        }
-
-        private void AddOutputNodes()
-        {
-            DisposeNodes();
+            
+            _nodes.AddRange(new []
+            {
+                new ToolboxNode(NodeType.BINARY_EXPRESSION, this),
+                new ToolboxNode(NodeType.BOOLEAN_EXPRESSION, this),
+                new ToolboxNode(NodeType.NUMBER_EXPRESSION, this),
+                new ToolboxNode(NodeType.STRING_EXPRESSION, this)
+            });
+            
             PlaceNodes();
         }
 

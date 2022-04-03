@@ -24,7 +24,7 @@ namespace CodeDesigner.UI.Designer.Canvas
         public void GenerateNode(ToolboxNode tNode)
         {
             Node node;
-            if (tNode.NodeType == NodeTypes.FUNCTION_DEFINITION)
+            if (tNode.NodeType is NodeType.CLASS_DEFINITION or NodeType.FUNCTION_DEFINITION or NodeType.IF_STATEMENT)
             {
                 node = new ParentNode();
             }
@@ -46,7 +46,7 @@ namespace CodeDesigner.UI.Designer.Canvas
 
             for (int i = 0; i < Nodes.Count; i++)
             {
-                if (i == index)
+                if (i == index || (node.NodeHasParent && node.Parent == Nodes[i]) || (Nodes[i].NodeHasParent && Nodes[i].Parent == node))
                     continue;
 
                 Nodes[i].Intersecting = false;
@@ -69,7 +69,7 @@ namespace CodeDesigner.UI.Designer.Canvas
 
             for (int i = 0; i < Nodes.Count; i++)
             {
-                if (i == index)
+                if (i == index || (node.NodeHasParent && node.Parent == Nodes[i]) || (Nodes[i].NodeHasParent && Nodes[i].Parent == node))
                     continue;
 
                 node.Intersecting = false;
@@ -79,10 +79,23 @@ namespace CodeDesigner.UI.Designer.Canvas
                     Nodes[i].Intersecting = false;
                     node.Intersecting = false;
 
+                    if (Nodes[i].NodeHasParent)
+                    {
+                        Nodes[i].Parent.FormatNodes();
+                    }
                     if (Nodes[i].CanHaveChildren())
                     {
                         var parentNode = (ParentNode) Nodes[i];
                         parentNode.SetNodeAsChild(node);
+                    }
+                    else if (Nodes[i].NodeHasParent)
+                    {
+                        var idx = Nodes[i].Parent.Children.IndexOf(Nodes[i]);
+                        Nodes[i].Parent.Children.Insert(idx + 1, node);
+                        
+                        node.Parent = Nodes[i].Parent;
+                        node.NodeHasParent = true;
+                        Nodes[i].Parent.FormatNodes();
                     }
                     break;
                 }

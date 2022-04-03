@@ -12,7 +12,7 @@ using CodeDesigner.UI.Resources.Controls;
 
 namespace CodeDesigner.UI.Designer.Canvas
 {
-    public partial class ParentNode : Node
+    public class ParentNode : Node
     {
         public List<Node> Children;
 
@@ -27,12 +27,12 @@ namespace CodeDesigner.UI.Designer.Canvas
             return true;
         }
 
-        public override void MoveNodes(MouseEventArgs e, Point lastPoint)
+        public override void MoveNodes(MouseEventArgs e)
         {
-            base.MoveNodes(e, lastPoint);
+            base.MoveNodes(e);
             foreach (Node c in Children)
             {
-                c.MoveNodes(e, lastPoint);
+                c.MoveNodes(e);
             }
         }
 
@@ -104,7 +104,7 @@ namespace CodeDesigner.UI.Designer.Canvas
             child.Left = Left + 30;
 
             if (heightOffset != 0)
-                child.Top += (heightOffset * 40) - 40;
+                child.Top += heightOffset;
 
             heightOffset += child.HeightFactor;
 
@@ -113,6 +113,7 @@ namespace CodeDesigner.UI.Designer.Canvas
             if (child.CanHaveChildren())
             {
                 var parentChild = (ParentNode) child;
+                child.FormatNodes();
                 for (int i = 1; i < parentChild.Children.Count; i++)
                     heightFactor++;
             }
@@ -124,13 +125,13 @@ namespace CodeDesigner.UI.Designer.Canvas
 
         #region UI LOGIC
 
-        private void DeleteButtonOnClick(object? sender, EventArgs e)
+        protected override void DeleteButtonOnClick(object? sender, EventArgs e)
         {
             foreach (Node n in Children.ToArray())
             {
                 RemoveChildNode(n);
             }
-            Dispose();
+            base.DeleteButtonOnClick(sender, e);
         }
 
 

@@ -18,21 +18,21 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Node
 {
     public partial class ToolboxNode : InfoPanel
     {
-        public NodeTypes NodeType { get; set; }
+        public NodeType NodeType { get; set; }
 
         public DesignerCore _core;
 
         private readonly Font ContentFont = new("Montserrat ExtraBold", 8F, System.Drawing.FontStyle.Bold,
             System.Drawing.GraphicsUnit.Point);
 
-        public ToolboxNode(NodeTypes type, DesignerCore core)
+        public ToolboxNode(NodeType type, DesignerCore core)
         {
             InitializeComponent();
             _core = core;
             SetNodeType(type);
         }
 
-        public void SetNodeType(NodeTypes nodeType)
+        public void SetNodeType(NodeType nodeType)
         {
             NodeType = nodeType;
 
