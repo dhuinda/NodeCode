@@ -12,4 +12,9 @@ public class StringExpressionNode : Node
         NodeObjects.Add(new TextboxObject(150));
         DrawObjects();
     }
+
+    protected override string NodeToString()
+    {
+        return (TextboxObject)NodeObjects[1].GetText();
+    }
 }

@@ -13,6 +13,10 @@ public class VariableDeclarationNode : Node
         NodeObjects.Add(new LabelObject("equal to"));
         NodeObjects.Add(new InputObject(50));
         DrawObjects();
+    }
 
+    protected override string NodeToString()
+    {
+        return (TextboxObject)NodeObjects[1].GetText() + " = " + (TextboxObject)NodeObjects[3].GetText();
     }
 }
