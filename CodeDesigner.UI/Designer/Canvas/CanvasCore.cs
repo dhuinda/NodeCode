@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CodeDesigner.UI.Designer.Canvas.ast;
+using CodeDesigner.UI.Designer.Canvas.NodeObject;
 using CodeDesigner.UI.Designer.Toolbox;
 using CodeDesigner.UI.Windows.Resources.Controls.Node;
 
@@ -26,11 +28,33 @@ namespace CodeDesigner.UI.Designer.Canvas
             Node node;
             if (tNode.NodeType is NodeType.CLASS_DEFINITION or NodeType.FUNCTION_DEFINITION or NodeType.IF_STATEMENT)
             {
-                node = new ParentNode();
+                if (tNode.NodeType == NodeType.FUNCTION_DEFINITION)
+                {
+                    node = new FunctionDefinitionNode();
+                }
+                else
+                {
+                    node = new ParentNode();
+                }
             }
             else
             {
-                node = new Node();
+                if (tNode.NodeType == NodeType.VARIABLE_DECLARATION)
+                {
+                    node = new VariableDeclarationNode();
+                }
+                else if (tNode.NodeType == NodeType.NUMBER_EXPRESSION)
+                {
+                    node = new NumberExpressionNode();
+                }
+                else if (tNode.NodeType == NodeType.FUNCTION_INVOCATION)
+                {
+                    node = new FunctionInvocationNode();
+                }
+                else
+                {
+                    node = new Node();
+                }
             }
             node.SetCanvas(this);
 
@@ -62,7 +86,7 @@ namespace CodeDesigner.UI.Designer.Canvas
             }
         }
 
-        public void ReleaseOverlapping(Node node)
+        public void ReleaseOverlapping(Node node, MouseEventArgs e)
         {
             int index = Nodes.IndexOf(node);
 
@@ -75,18 +99,35 @@ namespace CodeDesigner.UI.Designer.Canvas
 
                 if (node.Bounds.IntersectsWith(Nodes[i].Bounds))
                 {
+                    Nodes[i].Intersecting = false;
+                    
                     if (Nodes[i].NodeObjects.Count > 0)
                     {
-                        foreach (Nodes.NodeObject obj in Nodes[i].NodeObjects)
+                        foreach (NodeObject.NodeObject obj in Nodes[i].NodeObjects)
                         {
                             if (obj.GetType() == typeof(InputObject))
                             {
+                                InputObject input = (InputObject) obj;
+                                Size size = input.DropPanel.Bounds.Size;
+                                Point point = new Point(Nodes[i].Left + input.DropPanel.Left,
+                                    Nodes[i].Top + input.DropPanel.Top);
+                                Rectangle rect = new Rectangle(point, size);
+                                Point mouseLoc = new Point(Nodes[i].Left + e.X, Nodes[i].Top + e.Y);
                                 
+                                if (node.Bounds.IntersectsWith(rect))
+                                {
+                                    if (input.DropPanel.BackColor == Color.DimGray)
+                                        continue;
+                                    input.AttachedNode = node;
+                                    input.DropPanel.BackColor = Color.DimGray;
+                                    node.Hide();
+                                    node.Location = new Point(0, 0);
+                                    return;
+                                }
                             }
                         }
                     }
-
-                    Nodes[i].Intersecting = false;
+                    
                     node.Intersecting = false;
 
                     if (Nodes[i].NodeHasParent)
