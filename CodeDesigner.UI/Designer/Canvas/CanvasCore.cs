@@ -119,7 +119,8 @@ namespace CodeDesigner.UI.Designer.Canvas
                                     if (input.DropPanel.BackColor == Color.DimGray)
                                         continue;
                                     input.AttachedNode = node;
-                                    input.DropPanel.BackColor = Color.DimGray;
+                                    input.DropPanel.BackColor = Color.Transparent;
+                                    input.CreatePreviewString();
                                     node.Hide();
                                     node.Location = new Point(0, 0);
                                     return;

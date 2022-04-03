@@ -17,6 +17,36 @@
             DropPanel.Height = 20;
         }
 
-        
+        public void CreatePreviewString()
+        {
+            List<LabelObject> nodeObjects = new ());
+
+            string preview = "Nothing to Display";
+
+            if (AttachedNode.NodeObjects.Count > 0)
+            {
+                foreach (NodeObject obj in AttachedNode.NodeObjects)
+                {
+                    if (NodeObject.GetType() == typeof(LabelObject))
+                    {
+                        nodeObjects.Add((LabelObject)obj);
+                    }
+                }
+
+                if (nodeObjects.Count > 1)
+                {
+                    preview = nodeObjects[0].Text + " " + nodeObjects[1].Text;
+                } else 
+                {
+                    preview = nodeObjects[0].Text;
+                }
+            }
+
+            Label label = new ();
+            label.Text = preview;
+            label.ForeColor = Color.White();
+
+            DropPanel.Controls.Add(label);
+        }
     }
 }
