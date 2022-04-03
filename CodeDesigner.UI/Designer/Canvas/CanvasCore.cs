@@ -126,6 +126,17 @@ namespace CodeDesigner.UI.Designer.Canvas
                                     input.CreatePreviewString();
                                     node.Hide();
                                     node.Location = new Point(0, 0);
+                                    if (Nodes[i].NodeType is NodeType.FUNCTION_DEFINITION
+                                        or NodeType.FUNCTION_INVOCATION)
+                                    {
+                                        var io = new InputObject(50);
+                                        Nodes[i].NodeObjects.Add(io);
+                                        var w = Nodes[i].Width;
+                                        Nodes[i].Width += 55;
+                                        Nodes[i].Controls.Add(io.DropPanel);
+                                        io.DropPanel.Left = w + 5;
+                                        io.DropPanel.Top = 6;
+                                    }
                                     return;
                                 }
                             }
