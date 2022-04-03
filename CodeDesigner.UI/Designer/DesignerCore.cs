@@ -31,6 +31,7 @@ namespace CodeDesigner.UI.Designer
             Form = form;
             _nodes = new List<ToolboxNode>();
             Canvas = new CanvasCore(this);
+            UpdateToolbox();
         }
 
         #region Toolbox
@@ -79,6 +80,8 @@ namespace CodeDesigner.UI.Designer
         private void AddLogicNodes()
         {
             DisposeNodes();
+            _nodes.Add(new ToolboxNode(NodeTypes.FUNCTION_DEFINITION, this));
+            PlaceNodes();
         }
 
         private void AddVariableNodes()

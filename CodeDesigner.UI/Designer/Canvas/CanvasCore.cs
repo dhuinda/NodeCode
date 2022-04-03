@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CodeDesigner.UI.Designer.Toolbox;
 using CodeDesigner.UI.Windows.Resources.Controls.Node;
 
 namespace CodeDesigner.UI.Designer.Canvas
@@ -22,7 +23,15 @@ namespace CodeDesigner.UI.Designer.Canvas
 
         public void GenerateNode(ToolboxNode tNode)
         {
-            Node node = new ();
+            Node node;
+            if (tNode.NodeType == NodeTypes.FUNCTION_DEFINITION)
+            {
+                node = new ParentNode();
+            }
+            else
+            {
+                node = new Node();
+            }
             node.SetCanvas(this);
             node.Width = 80;
 
@@ -70,7 +79,11 @@ namespace CodeDesigner.UI.Designer.Canvas
                     Nodes[i].Intersecting = false;
                     node.Intersecting = false;
 
-                    Nodes[i].SetNodeAsChild(node);
+                    if (Nodes[i].CanHaveChildren())
+                    {
+                        var parentNode = (ParentNode) Nodes[i];
+                        parentNode.SetNodeAsChild(node);
+                    }
                     break;
                 }
             }

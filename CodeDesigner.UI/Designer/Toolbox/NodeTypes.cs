@@ -8,6 +8,7 @@ namespace CodeDesigner.UI.Designer.Toolbox
 {
     public enum NodeTypes
     {
-        NEW_VARIABLE
+        NEW_VARIABLE,
+        FUNCTION_DEFINITION
     }
 }
