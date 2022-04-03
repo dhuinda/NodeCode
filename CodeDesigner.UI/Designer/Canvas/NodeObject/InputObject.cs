@@ -19,10 +19,8 @@
 
         public void CreatePreviewString()
         {
-            
-
             Label label = new ();
-            label.Text = preview;
+            label.Text = AttachedNode.NodeToString();
             label.ForeColor = Color.White;
 
             DropPanel.Controls.Add(label);

@@ -347,6 +347,11 @@ public partial class Node : Panel
         };
     }
 
+    public abstract string NodeToString()
+    {
+        return null;
+    }
+
     #endregion
     
 }
