@@ -50,6 +50,9 @@ namespace CodeDesigner.UI.Designer.Canvas
                 else if (tNode.NodeType == NodeType.FUNCTION_INVOCATION)
                 {
                     node = new FunctionInvocationNode();
+                } else if (tNode.NodeType == NodeType.STRING_EXPRESSION)
+                {
+                    node = new StringExpressionNode();
                 }
                 else
                 {

@@ -1,4 +1,6 @@
-﻿namespace CodeDesigner.UI.Windows
+﻿using CodeDesigner.UI.Designer.Canvas;
+
+namespace CodeDesigner.UI.Windows
 {
     partial class Designer
     {
@@ -235,6 +237,10 @@
             this.pictureBoxButton1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxButton1.TabIndex = 0;
             this.pictureBoxButton1.TabStop = false;
+            this.pictureBoxButton1.Click += (sender, args) =>
+            {
+                NodeConverter.CompileNodes(Core.Canvas.Nodes);
+            };
             // 
             // Designer
             // 
