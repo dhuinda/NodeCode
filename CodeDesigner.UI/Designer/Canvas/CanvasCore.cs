@@ -75,6 +75,17 @@ namespace CodeDesigner.UI.Designer.Canvas
 
                 if (node.Bounds.IntersectsWith(Nodes[i].Bounds))
                 {
+                    if (Nodes[i].NodeObjects.Count > 0)
+                    {
+                        foreach (Nodes.NodeObject obj in Nodes[i].NodeObjects)
+                        {
+                            if (obj.GetType() == typeof(InputObject))
+                            {
+                                
+                            }
+                        }
+                    }
+
                     Nodes[i].Intersecting = false;
                     node.Intersecting = false;
 
