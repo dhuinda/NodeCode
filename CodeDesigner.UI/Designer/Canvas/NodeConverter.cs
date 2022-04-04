@@ -47,7 +47,27 @@ public static class NodeConverter
         }
         return ast;
     }
-    
+
+    private static BinaryOperator ConvertToBinaryOperator(string s)
+    {
+            return s switch
+            {
+                "<" => BinaryOperator.LT,
+                ">" => BinaryOperator.GT,
+                "==" => BinaryOperator.EQ,
+                "!=" => BinaryOperator.NE,
+                "<=" => BinaryOperator.LE,
+                ">=" => BinaryOperator.GE,
+                "&&" => BinaryOperator.AND,
+                "||" => BinaryOperator.OR,
+                "+" => BinaryOperator.AND,
+                "-" => BinaryOperator.MINUS,
+                "*" => BinaryOperator.TIMES,
+                "/" => BinaryOperator.DIVIDE,
+                "%" => BinaryOperator.MODULO
+            };
+    }
+
     private static ASTNode ConvertToAST(Node node)
     {
         switch (node.NodeType)
@@ -98,6 +118,33 @@ public static class NodeConverter
                 var stringExpNode = (StringExpressionNode) node;
                 var content = ((TextboxObject) stringExpNode.NodeObjects[1]).GetText();
                 return new ASTStringExpression(content);
+            }
+            case NodeType.BOOLEAN_EXPRESSION:
+            {
+                var boolExpNode = (BooleanExpressionNode) node;
+                var val = ((ComboObject) boolExpNode.NodeObjects[0]).GetSelectedOption() == "True";
+                return new ASTBooleanExpression(val);
+            }
+            case NodeType.RETURN:
+            {
+                var retNode = (ReturnNode) node;
+                var val = ((InputObject) retNode.NodeObjects[1]);
+                return new ASTReturn(ConvertToAST(val.AttachedNode));
+            }
+            case NodeType.BINARY_EXPRESSION:
+            {
+                var binaryExpNode = (BinaryExpressionNode) node;
+                var left = ((InputObject) binaryExpNode.NodeObjects[0]).AttachedNode;
+                var op = ((ComboObject) binaryExpNode.NodeObjects[1]).GetSelectedOption();
+                var right = ((InputObject) binaryExpNode.NodeObjects[2]).AttachedNode;
+                return new ASTBinaryExpression(ConvertToBinaryOperator(op), ConvertToAST(left), ConvertToAST(right));
+            }
+            case NodeType.VARIABLE_ASSIGNMENT:
+            {
+                var varAssignNode = (VariableAssignmentNode) node;
+                var name = ((TextboxObject) varAssignNode.NodeObjects[1]).GetText();
+                var val = ((InputObject) varAssignNode.NodeObjects[3]).AttachedNode;
+                return new ASTVariableAssignment(name, ConvertToAST(val));
             }
             default:
             {

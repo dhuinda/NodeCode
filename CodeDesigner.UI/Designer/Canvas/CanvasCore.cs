@@ -26,52 +26,60 @@ namespace CodeDesigner.UI.Designer.Canvas
         public void GenerateNode(ToolboxNode tNode)
         {
             Node node;
-            if (tNode.NodeType is NodeType.CLASS_DEFINITION or NodeType.FUNCTION_DEFINITION or NodeType.IF_STATEMENT)
+            switch (tNode.NodeType)
             {
-                if (tNode.NodeType == NodeType.FUNCTION_DEFINITION)
+                case NodeType.BINARY_EXPRESSION:
                 {
-                    node = new FunctionDefinitionNode();
-                }
-                else
-                {
-                    node = new ParentNode();
-                }
-            }
-            else
-            {
-                switch (tNode.NodeType)
-                {
-                    case NodeType.BINARY_EXPRESSION:
                     node = new BinaryExpressionNode();
                     break;
-                    case NodeType.BOOLEAN_EXPRESSION:
+                }
+                case NodeType.BOOLEAN_EXPRESSION:
+                {
                     node = new BooleanExpressionNode();
                     break;
-                    case NodeType.FUNCTION_DEFINITION:
+                }
+                case NodeType.FUNCTION_DEFINITION:
+                {
                     node = new FunctionDefinitionNode();
                     break;
-                    case NodeType.FUNCTION_INVOCATION:
-                    node = new FUNCTION_INVOCATION();
+                }
+                case NodeType.FUNCTION_INVOCATION:
+                {
+                    node = new FunctionInvocationNode();
                     break;
-                    case NodeType.NUMBER_EXPRESSION:
+                }
+                case NodeType.NUMBER_EXPRESSION:
+                {
                     node = new NumberExpressionNode();
                     break;
-                    case NodeType.STRING_EXPRESSION:
-                    node = new STRING_EXPRESSION();
+                }
+                case NodeType.STRING_EXPRESSION:
+                {
+                    node = new StringExpressionNode();
                     break;
-                    case NodeType.VARIABLE_ASSIGNMENT:
-                    node = new VARIABLE_ASSIGNMENT();
+                }
+                case NodeType.VARIABLE_ASSIGNMENT:
+                {
+                    node = new VariableAssignmentNode();
                     break;
-                    case NodeType.VARIABLE_DECLARATION:
-                    node = new VARIABLE_DECLARATION();
+                }
+                case NodeType.VARIABLE_DECLARATION:
+                {
+                    node = new VariableDeclarationNode();
                     break;
-                    case NodeType.VARIABLE_DEFINITION:
-                    node = new VARIABLE_DEFINITION();
+                }
+                case NodeType.VARIABLE_DEFINITION:
+                {
+                    node = new VariableDefinitionNode();
                     break;
-                    case NodeType.VARIABLE_EXPRESSION:
+                }
+                case NodeType.VARIABLE_EXPRESSION:
+                {
                     node = new VariableExpressionNode();
-                    break
-                    default:
+                    break;
+                }
+                default:
+                {
                     node = new Node();
                     break;
                 }
