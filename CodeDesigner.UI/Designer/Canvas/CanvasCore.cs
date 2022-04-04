@@ -125,14 +125,14 @@ namespace CodeDesigner.UI.Designer.Canvas
                                     input.DropPanel.BackColor = Color.Transparent;
                                     input.CreatePreviewString();
                                     
-                                    int difference = TextRenderer.MeasureText(node.NodeToString(), input.DropLabel.Font) - input.DropPanel.Width;
+                                    var difference = TextRenderer.MeasureText(node.NodeToString(), input.DropLabel.Font).Width - input.DropPanel.Width;
                                     input.DropPanel.Width += difference; 
                                     Nodes[i].Width += difference;
 
                                     node.Hide();
                                     node.Location = new Point(0, 0);
                                     if (Nodes[i].NodeType is NodeType.FUNCTION_DEFINITION
-                                        or NodeType.FUNCTION_INVOCATION)
+                                        or NodeType.FUNCTION_INVOCATION) 
                                     {
                                         var io = new InputObject(50);
                                         Nodes[i].NodeObjects.Add(io);

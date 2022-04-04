@@ -1,4 +1,6 @@
-﻿using Accessibility;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Accessibility;
 using CodeDesigner.Core;
 using CodeDesigner.Core.ast;
 using CodeDesigner.UI.Designer.Canvas.ast;
@@ -7,8 +9,9 @@ using CodeDesigner.UI.Designer.Toolbox;
 
 namespace CodeDesigner.UI.Designer.Canvas;
 
-public class NodeConverter
+public static class NodeConverter
 {
+    
     public static void CompileNodes(List<Node> nodes)
     {
         var ast = ConvertToAST(nodes);
@@ -16,6 +19,7 @@ public class NodeConverter
         {
             new(PrimitiveVariableType.STRING)
         }, new VariableType(PrimitiveVariableType.VOID), true));
+        Console.WriteLine(ast.Count);
         CodeGenerator.Run(ast);
     }
 
@@ -39,7 +43,6 @@ public class NodeConverter
         {
             ast.Add(ConvertToAST(node));
         }
-
         return ast;
     }
     
