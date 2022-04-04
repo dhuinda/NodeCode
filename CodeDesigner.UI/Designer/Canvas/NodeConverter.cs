@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
-using Accessibility;
-using CodeDesigner.Core;
+﻿using CodeDesigner.Core;
 using CodeDesigner.Core.ast;
 using CodeDesigner.UI.Designer.Canvas.ast;
 using CodeDesigner.UI.Designer.Canvas.NodeObject;
@@ -14,12 +11,13 @@ public static class NodeConverter
     
     public static void CompileNodes(List<Node> nodes)
     {
-        var ast = ConvertToAST(nodes);
+        var ast = ConvertToAST(nodes, true);
         ast.Insert(0, new ASTPrototypeDeclaration("printf", new List<VariableType>
         {
             new(PrimitiveVariableType.STRING)
         }, new VariableType(PrimitiveVariableType.VOID), true));
-        Console.WriteLine(ast.Count);
+        Console.WriteLine(ast[0].GetType());
+        Console.WriteLine(ast[1].GetType());
         CodeGenerator.Run(ast);
     }
 
@@ -36,11 +34,15 @@ public static class NodeConverter
         };
     }
 
-    private static List<ASTNode> ConvertToAST(List<Node> nodes)
+    private static List<ASTNode> ConvertToAST(List<Node> nodes, bool isRoot)
     {
         var ast = new List<ASTNode>();
         foreach (var node in nodes)
         {
+            if (node.NodeHasParent && isRoot)
+            {
+                continue;
+            }
             ast.Add(ConvertToAST(node));
         }
         return ast;
@@ -73,7 +75,7 @@ public static class NodeConverter
 
                 var returnTypeObject = (TextboxObject) funDefNode.NodeObjects[3];
                 var returnType = ConvertStringToVariableType(returnTypeObject.GetText());
-                return new ASTFunctionDefinition(nameObject.GetText(), parameters, ConvertToAST(funDefNode.Children), returnType);
+                return new ASTFunctionDefinition(nameObject.GetText(), parameters, ConvertToAST(funDefNode.Children, false), returnType);
             }
             case NodeType.FUNCTION_INVOCATION:
             {

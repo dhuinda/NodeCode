@@ -119,12 +119,13 @@ namespace CodeDesigner.UI.Designer.Canvas
                                 
                                 if (node.Bounds.IntersectsWith(rect))
                                 {
+                                    node.NodeHasParent = true;
                                     if (input.DropPanel.BackColor == Color.DimGray)
                                         continue;
                                     input.AttachedNode = node;
                                     input.DropPanel.BackColor = Color.Transparent;
                                     input.CreatePreviewString();
-
+                                    
                                     var difference = TextRenderer.MeasureText(node.NodeToString(), input.DropLabel.Font).Width - input.DropPanel.Width;
                                     input.DropPanel.Width += difference; 
                                     input.DropLabel.Width += difference;

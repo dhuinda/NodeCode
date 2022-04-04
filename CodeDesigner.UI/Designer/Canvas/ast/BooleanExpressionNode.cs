@@ -5,7 +5,7 @@ namespace CodeDesigner.UI.Designer.Canvas.ast
 {
     public class BooleanExpressionNode : Node
     {
-        public FunctionDefinitionNode()
+        public BooleanExpressionNode()
         {
             NodeType = NodeType.BOOLEAN_EXPRESSION;
             

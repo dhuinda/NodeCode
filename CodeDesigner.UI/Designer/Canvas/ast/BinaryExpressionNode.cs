@@ -5,7 +5,7 @@ namespace CodeDesigner.UI.Designer.Canvas.ast
 {
     public class BinaryExpressionNode : Node
     {
-        public FunctionDefinitionNode()
+        public BinaryExpressionNode()
         {
             NodeType = NodeType.BINARY_EXPRESSION;
             NodeObjects.Add(new InputObject(50));

@@ -17,6 +17,6 @@ public class VariableAssignmentNode : Node
 
     public override string NodeToString()
     {
-        return $"Let {((TextboxObject)NodeObjects[1]).GetText()} = {((InputObject)NodeObjects[1]).NodeToString()}";
+        return $"Let {((TextboxObject)NodeObjects[1]).GetText()} = {((InputObject)NodeObjects[1]).AttachedNode.NodeToString()}";
     }
 }
