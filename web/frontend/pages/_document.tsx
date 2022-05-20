@@ -11,7 +11,7 @@ export default class MyDocument extends Document {
           {/* PWA primary color */}
           <meta name='theme-color' content={theme.colors.lightBlue} />
           <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' />
-          <link href='https://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' as='Fjalla One' />
+          <link href='https://fonts.googleapis.com/css?family=Teko' rel='stylesheet' as='Teko' />
         </Head>
         <body>
           <ColorModeScript initialColorMode={theme.config.initialColorMode} />
