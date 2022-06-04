@@ -2,8 +2,8 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+    Helvetica Neue, sans-serif;
 }
 
 a {
@@ -13,4 +13,50 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.moving-gradient {
+  background: linear-gradient(255.44deg, #41ab98 29.44%, #3d64c7 59.43%, #38739d 88.21%);
+  height: 65vh;
+  width: 100vw;
+  background-size: 200% 100%;
+  -webkit-animation: LoopGradient 10s ease infinite;
+  -moz-animation: LoopGradient 10s ease infinite;
+  animation: LoopGradient 10s ease infinite;
+}
+
+@-moz-keyframes LoopGradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 50% 50%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+@-webkit-keyframes LoopGradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 50% 50%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+@keyframes LoopGradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 50% 50%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
 }

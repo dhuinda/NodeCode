@@ -1,11 +1,37 @@
-import { FC } from 'react'
-import { Flex, Input, Text } from '@chakra-ui/react'
+import { FC, FormEvent, useState } from 'react'
+import { Box, Flex, Input, Text } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 
 const NavBar: FC = () => {
+  const [searchValue, setSearchValue] = useState('')
+  const router = useRouter()
+
+  const onSearch = (e: FormEvent) => {
+    e.preventDefault()
+    router.push(`/search?q=${encodeURIComponent(searchValue)}`)
+  }
+
   return (
-    <Flex alignItems='center' justifyContent='space-between'>
-      <Text fontFamily='Teko' fontSize='48px'>cdpm</Text>
-      <Input w='30vw' borderColor='grayBorder' _hover={{ borderColor: 'brightBlue'}} _selected={{ borderColor: 'brightBlue' }} _active={{ borderColor: 'brightBlue' }} />
+    <Flex pl='10vw' pr='25vw' alignItems='center' justifyContent='start'>
+      <Text fontFamily='Teko' fontSize='48px'>
+        cdpm
+      </Text>
+      {/* todo: move search bar somewhere else if on mobile */}
+      <form onSubmit={onSearch}>
+        <Input
+          ml='5vw'
+          w='55vw'
+          h='5vh'
+          borderColor='grayBorder'
+          _hover={{ borderColor: 'brightBlue' }}
+          _selected={{ borderColor: 'brightBlue' }}
+          _active={{ borderColor: 'brightBlue' }}
+          fontSize='18px'
+          placeholder='Search packages...'
+          value={searchValue}
+          onChange={e => setSearchValue(e.target.value)}
+        />
+      </form>
     </Flex>
   )
 }
