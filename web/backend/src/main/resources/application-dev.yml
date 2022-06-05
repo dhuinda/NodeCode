@@ -19,7 +19,7 @@ spring:
               - user:email
               - read:user
   application:
-    name: ChesSRS Development Server
+    name: Nodecode Development Server
   banner:
     location: classpath:static/banner-dev.txt
 logging:

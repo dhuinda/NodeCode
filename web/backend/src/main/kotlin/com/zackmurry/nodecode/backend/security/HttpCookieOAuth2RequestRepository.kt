@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 const val OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request"
-const val REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri "
+const val REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri"
 
 @Component
 class HttpCookieOAuth2RequestRepository : AuthorizationRequestRepository<OAuth2AuthorizationRequest> {

@@ -44,12 +44,4 @@ class UserService(private val userDao: UserDao) : UserDetailsService {
         return userDao.deleteByUsername(username)
     }
 
-    fun updateEaseFactor(easeFactor: Float) {
-        userDao.updateEaseFactor(getUserId(), easeFactor)
-    }
-
-    fun updateScalingFactor(scalingFactor: Float) {
-        userDao.updateScalingFactor(getUserId(), scalingFactor)
-    }
-
 }

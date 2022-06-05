@@ -10,7 +10,7 @@ interface Props {
 
 const PackagePreview: FC<Props> = ({ name, version, shortDescription }) => {
   return (
-    <Link href={`${name}-v${version}`} passHref>
+    <Link href={`/${name}-v${version}`} passHref>
       <a>
         <Flex mt='10px' mr={{ sm: '0px', xl: '100px' }} border='2px solid #6e97b4' p='15px' w='100%' borderRadius='5px'>
           <Img src='/blue_cube.png' w='56px' h='56px'></Img>

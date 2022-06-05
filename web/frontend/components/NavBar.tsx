@@ -1,6 +1,8 @@
 import { FC, FormEvent, useState } from 'react'
 import { Box, Flex, Input, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import NavBarProfile from './NavBarProfile'
+import Link from 'next/link'
 
 const NavBar: FC = () => {
   const [searchValue, setSearchValue] = useState('')
@@ -12,10 +14,14 @@ const NavBar: FC = () => {
   }
 
   return (
-    <Flex pl='10vw' pr='25vw' alignItems='center' justifyContent='start'>
-      <Text fontFamily='Teko' fontSize='48px'>
-        cdpm
-      </Text>
+    <Flex pl='10vw' pr='10vw' w='100%' alignItems='center' justifyContent='space-between'>
+      <Link href='/'>
+        <a>
+          <Text fontFamily='Teko' fontSize='48px'>
+            cdpm
+          </Text>
+        </a>
+      </Link>
       {/* todo: move search bar somewhere else if on mobile */}
       <form onSubmit={onSearch}>
         <Input
@@ -32,6 +38,7 @@ const NavBar: FC = () => {
           onChange={e => setSearchValue(e.target.value)}
         />
       </form>
+      <NavBarProfile />
     </Flex>
   )
 }

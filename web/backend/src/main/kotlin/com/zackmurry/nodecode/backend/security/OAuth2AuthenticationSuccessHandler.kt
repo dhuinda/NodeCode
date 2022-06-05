@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletResponse
 
 private val logger = LoggerFactory.getLogger(OAuth2AuthenticationSuccessHandler::class.java)
 
-const val JWT_COOKIE_NAME = "jwt"
-
 @Component
 class OAuth2AuthenticationSuccessHandler(private val httpCookieOAuth2RequestRepository: HttpCookieOAuth2RequestRepository) :
     SimpleUrlAuthenticationSuccessHandler() {
