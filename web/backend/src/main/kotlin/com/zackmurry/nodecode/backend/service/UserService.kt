@@ -3,7 +3,9 @@ package com.zackmurry.nodecode.backend.service
 import com.zackmurry.nodecode.backend.dao.UserDao
 import com.zackmurry.nodecode.backend.entity.NodecodeUser
 import com.zackmurry.nodecode.backend.exception.NotFoundException
+import com.zackmurry.nodecode.backend.model.UserResponse
 import com.zackmurry.nodecode.backend.security.UserPrincipal
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -41,7 +43,12 @@ class UserService(private val userDao: UserDao) : UserDetailsService {
     }
 
     fun deleteByUsername(username: String) {
-        return userDao.deleteByUsername(username)
+        userDao.deleteByUsername(username)
+    }
+
+    fun getUserResponse(id: UUID): UserResponse {
+        val user = userDao.findByIdOrNull(id) ?: throw NotFoundException()
+        return UserResponse(user.id, user.username)
     }
 
 }

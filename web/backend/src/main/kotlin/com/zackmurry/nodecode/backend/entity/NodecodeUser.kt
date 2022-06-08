@@ -6,7 +6,7 @@ import javax.persistence.Id
 
 @Entity
 data class NodecodeUser(
-    var username: String? = null,
-    @Id var id: UUID? = null,
-    var provider: String? = null
+    var username: String,
+    @Id var id: UUID,
+    var provider: String
 )
