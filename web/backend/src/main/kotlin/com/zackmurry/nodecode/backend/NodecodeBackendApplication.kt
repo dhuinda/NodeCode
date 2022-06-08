@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class NodecodeBackendApplication
 
 fun main(args: Array<String>) {
-	runApplication<NodecodeBackendApplication>(*args)
+    runApplication<NodecodeBackendApplication>(*args)
 }

@@ -24,8 +24,8 @@ class UserPrincipal(
             }
             val grantedAuthorities = Collections.singletonList(SimpleGrantedAuthority("ROLE_USER"))
             return UserPrincipal(
-                user.username!!,
-                user.id!!,
+                user.username,
+                user.id,
                 grantedAuthorities,
                 HashMap(),
             )

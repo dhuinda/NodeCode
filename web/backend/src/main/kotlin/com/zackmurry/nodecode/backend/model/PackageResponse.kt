@@ -14,7 +14,16 @@ data class PackageResponse(
 ) {
     companion object {
         fun from(pkg: Package, author: UserResponse, versions: List<PackageVersionResponse>): PackageResponse {
-            return PackageResponse(pkg.name, author, pkg.description, pkg.lastUpdated.time, pkg.documentationUrl, pkg.repositoryUrl, pkg.downloads, versions)
+            return PackageResponse(
+                pkg.name,
+                author,
+                pkg.description,
+                pkg.lastUpdated.time,
+                pkg.documentationUrl,
+                pkg.repositoryUrl,
+                pkg.downloads,
+                versions
+            )
         }
     }
 }
