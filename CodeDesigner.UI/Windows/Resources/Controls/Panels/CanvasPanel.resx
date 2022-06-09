@@ -117,29 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Save_35px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Windows\Resources\Icons\Save_35px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Exit_35px_RED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Windows\Resources\Icons\Exit_35px_RED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="More Than_35px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Windows\Resources\Icons\More Than_35px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Play_35px_GREEN" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Windows\Resources\Icons\Play_35px_GREEN.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Settings_35px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Windows\Resources\Icons\Settings_35px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Less Than_35px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Windows\Resources\Icons\Less Than_35px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="NewPlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Windows\Resources\Icons\NewPlay.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="template" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\windows\resources\icons\template.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
 </root>

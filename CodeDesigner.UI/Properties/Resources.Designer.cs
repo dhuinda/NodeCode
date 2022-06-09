@@ -93,6 +93,16 @@ namespace CodeDesigner.UI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap NewPlay {
+            get {
+                object obj = ResourceManager.GetObject("NewPlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Play_35px_GREEN {
             get {
                 object obj = ResourceManager.GetObject("Play_35px_GREEN", resourceCulture);
@@ -116,6 +126,16 @@ namespace CodeDesigner.UI.Properties {
         internal static System.Drawing.Bitmap Settings_35px {
             get {
                 object obj = ResourceManager.GetObject("Settings_35px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap template {
+            get {
+                object obj = ResourceManager.GetObject("template", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

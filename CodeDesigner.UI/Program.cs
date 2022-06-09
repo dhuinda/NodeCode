@@ -2,8 +2,10 @@ using CodeDesigner.UI.Windows;
 
 namespace CodeRunner.UI
 {
-    internal static class Program
+    public static class Program
     {
+        public static Dashboard dash;
+        public static ProjectManager pm;
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -13,7 +15,7 @@ namespace CodeRunner.UI
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new Designer());
+            Application.Run(pm = new ProjectManager());
         }
     }
 }
