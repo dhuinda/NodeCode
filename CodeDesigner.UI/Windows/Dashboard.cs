@@ -59,6 +59,12 @@ namespace CodeDesigner.UI.Windows
 
             if (block != null)
             {
+                if (e.Button == MouseButtons.Right)
+                {
+                    Canvas.DeleteBlock(block);
+                    return;
+                }
+                
                 if (Canvas.IsPointInPolygon(block.OutputPolygon, e.Location))
                 {
                     block.Connecting = true;

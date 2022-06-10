@@ -89,6 +89,12 @@ namespace CodeDesigner.UI.Node.Canvas
             return null;
         }
 
+        public static void DeleteBlock(BlockBase block)
+        {
+            Blocks.Remove(block);
+            CanvasControl.Refresh();
+        }
+
         public static bool IsPointInPolygon(PointF[] polygon, PointF testPoint)
         {
             bool result = false;
