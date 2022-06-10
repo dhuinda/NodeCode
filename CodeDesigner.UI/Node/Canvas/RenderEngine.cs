@@ -12,12 +12,16 @@ namespace CodeDesigner.UI.Node.Canvas
     public static class RenderEngine
     {
         public static PointF LastOffset = new (0, 0);
+        public static PointF MouseLocation;
+        public static BlockBase ConnectingBlock;
 
         public static void DrawBlocks(Graphics g, PointF offset, Size view)
         {
             float zoom = Program.dash.DesignerCanvas.ZoomFactor;
 
-            foreach (BlockBase block in Canvas.Blocks)
+            DrawConnectionLines(ConnectingBlock, g);
+
+            foreach (BlockBase? block in Canvas.Blocks)
             {
                 block.Coordinates.X += (offset.X - LastOffset.X) / zoom;
                 block.Coordinates.Y += (offset.Y - LastOffset.Y) / zoom;
@@ -33,7 +37,7 @@ namespace CodeDesigner.UI.Node.Canvas
             LastOffset = offset;
         }
 
-        public static void DrawIO(BlockBase block, Graphics g, PointF offset, float zoom)
+        public static void DrawIO(BlockBase? block, Graphics g, PointF offset, float zoom)
         {
             Color outputColor = block.Connecting ? Color.LightGray : Color.White;
             
@@ -47,6 +51,20 @@ namespace CodeDesigner.UI.Node.Canvas
             block.OutputPolygon = outputPoints;
 
             g.FillPolygon(new SolidBrush(outputColor), outputPoints);
+        }
+
+        public static void DrawConnectionLines(BlockBase block, Graphics g)
+        {
+            if (!Canvas.Connecting)
+                return;
+
+            PointF[] points = new PointF[4];
+            points[0] = block.OutputPolygon[2];
+            points[1] = new PointF(block.OutputPolygon[2].X + 70, block.OutputPolygon[2].Y);
+            points[2] = new PointF(MouseLocation.X - 70, MouseLocation.Y);
+            points[3] = MouseLocation;
+
+            g.DrawBezier(new Pen(Color.Gray), points[0], points[1], points[2], points[3]);
         }
     }
 }

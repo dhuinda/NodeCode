@@ -14,14 +14,16 @@ namespace CodeDesigner.UI.Node.Canvas
     {
         public static CanvasPanel CanvasControl;
         public static PointF MousePosition;
-        public static List<BlockBase> Blocks = new();
+        public static List<BlockBase?> Blocks = new();
+        public static bool Connecting;
+        public static BlockBase ConnectingBlock;
 
         public static void Initialize(CanvasPanel panel)
         {
             CanvasControl = panel;
         }
 
-        public static void AddNode(BlockBase block)
+        public static void AddNode(BlockBase? block)
         {
             Blocks.Add(block);
             CanvasControl.Refresh();
@@ -29,18 +31,14 @@ namespace CodeDesigner.UI.Node.Canvas
 
         public static void Pan(PointF delta)
         {
-            if (IsPointInBlock(delta) != null)
-                
-            foreach (BlockBase block in Blocks)
+            BlockBase? block = IsPointInBlock(delta);
+
+            if (block != null)
             {
-                RectangleF rect = new (block.Coordinates.X * CanvasControl.ZoomFactor, block.Coordinates.Y * CanvasControl.ZoomFactor, block.Properties.Width * CanvasControl.ZoomFactor, block.Properties.Height * CanvasControl.ZoomFactor);
-
-                if (!rect.Contains(delta)) continue;
-
                 MoveBlock(block, delta);
                 return;
             }
-            
+
             float offsetX = (delta.X - MousePosition.X);
             float offsetY = (delta.Y - MousePosition.Y);
 
@@ -67,7 +65,7 @@ namespace CodeDesigner.UI.Node.Canvas
             CanvasControl.Refresh();
         }
 
-        public static void MoveBlock(BlockBase block, PointF delta)
+        public static void MoveBlock(BlockBase? block, PointF delta)
         {
             block.Coordinates.X += (delta.X - MousePosition.X) / CanvasControl.ZoomFactor;
             block.Coordinates.Y += (delta.Y - MousePosition.Y) / CanvasControl.ZoomFactor;
@@ -77,9 +75,9 @@ namespace CodeDesigner.UI.Node.Canvas
             CanvasControl.Refresh();
         }
 
-        public static BlockBase IsPointInBlock(PointF testPoint)
+        public static BlockBase? IsPointInBlock(PointF testPoint)
         {
-            foreach (BlockBase block in Blocks)
+            foreach (BlockBase? block in Blocks)
             {
                 RectangleF rect = new (block.Coordinates.X * CanvasControl.ZoomFactor, block.Coordinates.Y * CanvasControl.ZoomFactor, block.Properties.Width * CanvasControl.ZoomFactor, block.Properties.Height * CanvasControl.ZoomFactor);
 

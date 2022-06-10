@@ -55,20 +55,50 @@ namespace CodeDesigner.UI.Windows
         {
             Canvas.MousePosition = e.Location;
 
+            BlockBase? block = Canvas.IsPointInBlock(e.Location);
+
+            if (block != null)
+            {
+                if (Canvas.IsPointInPolygon(block.OutputPolygon, e.Location))
+                {
+                    block.Connecting = true;
+                    Canvas.Connecting = true;
+                    Canvas.ConnectingBlock = block;
+                    RenderEngine.MouseLocation = e.Location;
+                    RenderEngine.ConnectingBlock = block;
+                    DesignerCanvas.Refresh();
+                    return;
+                }
+            }
             
             _mouseDown = true;
         }
         private void DesignerCanvas_MouseUp(object sender, MouseEventArgs e)
         {
             Canvas.MousePosition = e.Location;
+            
+            if (Canvas.Connecting)
+            {
+                Canvas.ConnectingBlock.Connecting = false;
+                Canvas.Connecting = false;
+                DesignerCanvas.Refresh();
+            }
+            
             _mouseDown = false;
         }
         
         private void DesignerCanvas_MouseMove(object sender, MouseEventArgs e)
         {
 
+            if (Canvas.Connecting)
+            {
+                RenderEngine.MouseLocation = e.Location;
+                DesignerCanvas.Refresh();
+                return;
+            }
+            
             if (!_mouseDown)
-                return;            
+                return;
 
             Canvas.Pan(e.Location);
         }
@@ -83,7 +113,7 @@ namespace CodeDesigner.UI.Windows
             properties.FillColor = Color.FromArgb(85,85,85);
             properties.SecondaryColor = Color.FromArgb(69,69,69);
             properties.BorderColor = Color.FromArgb(69,69,69);
-            BlockBase blockbase = new (properties);
+            BlockBase? blockbase = new (properties);
             Canvas.AddNode(blockbase);
         }
 
