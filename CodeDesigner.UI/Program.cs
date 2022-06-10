@@ -8,6 +8,9 @@ namespace CodeRunner.UI
         [DllImport( "kernel32.dll" )]
         static extern bool AttachConsole( int dwProcessId );
         private const int ATTACH_PARENT_PROCESS = -1;
+
+        public static Dashboard dash;
+        public static ProjectManager pm;
         
         /// <summary>
         ///  The main entry point for the application.
