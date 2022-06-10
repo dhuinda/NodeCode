@@ -8,5 +8,6 @@ import javax.persistence.Id
 data class NodecodeUser(
     var username: String,
     @Id var id: UUID,
-    var provider: String
+    var provider: String,
+    var avatarUrl: String
 )

@@ -62,7 +62,8 @@ class OAuth2UserService(private val userService: UserService) : DefaultOAuth2Use
         val user = NodecodeUser(
             username,
             UUID.randomUUID(),
-            oAuth2UserRequest.clientRegistration.registrationId.uppercase()
+            oAuth2UserRequest.clientRegistration.registrationId.uppercase(),
+            oAuth2UserInfo.getAvatarUrl()
         )
         userService.createUser(user)
         return user

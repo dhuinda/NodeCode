@@ -15,19 +15,18 @@ class UserPrincipal(
     private var id: UUID,
     private var authorities: MutableCollection<out GrantedAuthority>,
     private var attributes: MutableMap<String, Any>,
+    private var avatarUrl: String
 ) : OAuth2User, UserDetails {
 
     companion object {
         fun create(user: NodecodeUser): UserPrincipal {
-            if (user.username == null || user.id == null) {
-                throw InternalServerException()
-            }
             val grantedAuthorities = Collections.singletonList(SimpleGrantedAuthority("ROLE_USER"))
             return UserPrincipal(
                 user.username,
                 user.id,
                 grantedAuthorities,
                 HashMap(),
+                user.avatarUrl
             )
         }
 
@@ -78,6 +77,10 @@ class UserPrincipal(
         return this.id
     }
 
+    fun getAvatarUrl(): String {
+        return avatarUrl
+    }
+
     fun toResponse(): UserPrincipalResponse {
         return UserPrincipalResponse(
             username,
@@ -88,7 +91,8 @@ class UserPrincipal(
             isAccountNonLocked,
             isAccountNonExpired,
             isCredentialsNonExpired,
-            name
+            name,
+            avatarUrl
         )
     }
 

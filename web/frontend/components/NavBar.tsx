@@ -14,7 +14,7 @@ const NavBar: FC = () => {
   }
 
   return (
-    <Flex pl='10vw' pr='10vw' w='100%' alignItems='center' justifyContent='space-between'>
+    <Flex pl='10vw' pr='10vw' w='100%' alignItems='center' justifyContent='space-between' bgColor='#f5f5f5'>
       <Link href='/'>
         <a>
           <Text fontFamily='Teko' fontSize='48px'>

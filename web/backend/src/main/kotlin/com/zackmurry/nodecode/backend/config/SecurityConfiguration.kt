@@ -29,6 +29,7 @@ class SecurityConfiguration(
             }
             authorizeRequests {
                 authorize("/", permitAll)
+                authorize("/api/v1/users/name/*/avatar_url", permitAll)
                 authorize(anyRequest, authenticated)
             }
             oauth2Login {
