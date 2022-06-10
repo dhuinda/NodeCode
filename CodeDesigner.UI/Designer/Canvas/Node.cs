@@ -2,19 +2,21 @@ using System.Drawing.Drawing2D;
 using System.Security.Cryptography.X509Certificates;
 using CodeDesigner.Core;
 using CodeDesigner.UI.Designer.Canvas.NodeObject;
+using CodeDesigner.UI.Designer.Toolbox;
 using CodeDesigner.UI.Resources.Controls;
 
 namespace CodeDesigner.UI.Designer.Canvas;
 
-public partial class Node : Panel
+public partial class Node : Panel, INode
 {
 
+    public NodeType NodeType = NodeType.DEFAULT;
     public ParentNode Parent;
     public int HeightFactor = 1;
 
     public bool Intersecting = false;
     public bool NodeHasParent = false;
-    public List<NodeObject.NodeObject> NodeObjects;
+    public List<NodeObject.NodeObject> NodeObjects = new();
 
     protected Point _lastPoint;
     protected CanvasCore _canvas;
@@ -83,13 +85,6 @@ public partial class Node : Panel
         ContextMenuStrip = cms;
 
         cms.Width = 100;
-
-        NodeObjects = new List<NodeObject.NodeObject>();
-
-        NodeObjects.Add(new LabelObject("test"));
-        NodeObjects.Add(new LabelObject("test2"));
-        NodeObjects.Add(new ComboObject(new [] { "test", "test2", "test3"}));
-        NodeObjects.Add(new TextboxObject(50));
 
         DrawObjects();
     }
@@ -224,7 +219,7 @@ public partial class Node : Panel
         if (!Intersecting)
             SetColor(Color.FromArgb(24, 29, 39));
 
-        _canvas.ReleaseOverlapping(this);
+        _canvas.ReleaseOverlapping(this, e);
             
 
         FormatNodes();
@@ -300,6 +295,7 @@ public partial class Node : Panel
                 c.Left = offset + 5;
 
                 n.BindedControl = c;
+                combo.Box = c;
 
                 Controls.Add(c);
 
@@ -316,10 +312,19 @@ public partial class Node : Panel
                 Controls.Add(t);
 
                 n.BindedControl = t;
+                textbox.Box = t;
 
                 offset += t.Width + 5;
 
                 BindEvents(t);
+            } else if (n.GetType() == typeof(InputObject))
+            {
+                InputObject io = (InputObject) n;
+                io.DropPanel.Left = offset + 5;
+                io.DropPanel.Top = 5;
+                offset += io.DropPanel.Width + 5;
+                
+               Controls.Add(io.DropPanel);
             }
         }
 
@@ -345,5 +350,9 @@ public partial class Node : Panel
     }
 
     #endregion
-    
+
+    public virtual string NodeToString()
+    {
+        return null;
+    }
 }

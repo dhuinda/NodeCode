@@ -8,6 +8,7 @@ namespace CodeDesigner.UI.Designer.Toolbox
 {
     public enum NodeType
     {
+        DEFAULT,
         BINARY_EXPRESSION,
         BOOLEAN_EXPRESSION,
         CLASS_DEFINITION,

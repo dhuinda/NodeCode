@@ -75,6 +75,7 @@ namespace CodeDesigner.Core
                 Console.Error.WriteLine("Failed to emit relocatable object file: " + error);
                 return;
             }
+            LLVM.PrintModuleToFile(module, "./output.ir", out error);
             
             LLVM.DisposeBuilder(builder);
             LLVM.DisposeModule(module);

@@ -146,7 +146,6 @@ namespace CodeDesigner.UI.Designer.Canvas
             base.DeleteButtonOnClick(sender, e);
         }
 
-
         #endregion
     }
 }

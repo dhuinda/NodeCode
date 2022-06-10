@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CodeDesigner.UI.Designer.Canvas.ast;
+using CodeDesigner.UI.Designer.Canvas.NodeObject;
 using CodeDesigner.UI.Designer.Toolbox;
 using CodeDesigner.UI.Windows.Resources.Controls.Node;
 
@@ -24,13 +26,63 @@ namespace CodeDesigner.UI.Designer.Canvas
         public void GenerateNode(ToolboxNode tNode)
         {
             Node node;
-            if (tNode.NodeType is NodeType.CLASS_DEFINITION or NodeType.FUNCTION_DEFINITION or NodeType.IF_STATEMENT)
+            switch (tNode.NodeType)
             {
-                node = new ParentNode();
-            }
-            else
-            {
-                node = new Node();
+                case NodeType.BINARY_EXPRESSION:
+                {
+                    node = new BinaryExpressionNode();
+                    break;
+                }
+                case NodeType.BOOLEAN_EXPRESSION:
+                {
+                    node = new BooleanExpressionNode();
+                    break;
+                }
+                case NodeType.FUNCTION_DEFINITION:
+                {
+                    node = new FunctionDefinitionNode();
+                    break;
+                }
+                case NodeType.FUNCTION_INVOCATION:
+                {
+                    node = new FunctionInvocationNode();
+                    break;
+                }
+                case NodeType.NUMBER_EXPRESSION:
+                {
+                    node = new NumberExpressionNode();
+                    break;
+                }
+                case NodeType.STRING_EXPRESSION:
+                {
+                    node = new StringExpressionNode();
+                    break;
+                }
+                case NodeType.VARIABLE_ASSIGNMENT:
+                {
+                    node = new VariableAssignmentNode();
+                    break;
+                }
+                case NodeType.VARIABLE_DECLARATION:
+                {
+                    node = new VariableDeclarationNode();
+                    break;
+                }
+                case NodeType.VARIABLE_DEFINITION:
+                {
+                    node = new VariableDefinitionNode();
+                    break;
+                }
+                case NodeType.VARIABLE_EXPRESSION:
+                {
+                    node = new VariableExpressionNode();
+                    break;
+                }
+                default:
+                {
+                    node = new Node();
+                    break;
+                }
             }
             node.SetCanvas(this);
 
@@ -62,7 +114,7 @@ namespace CodeDesigner.UI.Designer.Canvas
             }
         }
 
-        public void ReleaseOverlapping(Node node)
+        public void ReleaseOverlapping(Node node, MouseEventArgs e)
         {
             int index = Nodes.IndexOf(node);
 
@@ -76,6 +128,53 @@ namespace CodeDesigner.UI.Designer.Canvas
                 if (node.Bounds.IntersectsWith(Nodes[i].Bounds))
                 {
                     Nodes[i].Intersecting = false;
+                    
+                    if (Nodes[i].NodeObjects.Count > 0)
+                    {
+                        foreach (NodeObject.NodeObject obj in Nodes[i].NodeObjects)
+                        {
+                            if (obj.GetType() == typeof(InputObject))
+                            {
+                                InputObject input = (InputObject) obj;
+                                Size size = input.DropPanel.Bounds.Size;
+                                Point point = new Point(Nodes[i].Left + input.DropPanel.Left,
+                                    Nodes[i].Top + input.DropPanel.Top);
+                                Rectangle rect = new Rectangle(point, size);
+                                Point mouseLoc = new Point(Nodes[i].Left + e.X, Nodes[i].Top + e.Y);
+                                
+                                if (node.Bounds.IntersectsWith(rect))
+                                {
+                                    node.NodeHasParent = true;
+                                    if (input.DropPanel.BackColor == Color.DimGray)
+                                        continue;
+                                    input.AttachedNode = node;
+                                    input.DropPanel.BackColor = Color.Transparent;
+                                    input.CreatePreviewString();
+                                    
+                                    var difference = TextRenderer.MeasureText(node.NodeToString(), input.DropLabel.Font).Width - input.DropPanel.Width;
+                                    input.DropPanel.Width += difference; 
+                                    input.DropLabel.Width += difference;
+                                    Nodes[i].Width += difference;
+
+                                    node.Hide();
+                                    node.Location = new Point(0, 0);
+                                    if (Nodes[i].NodeType is NodeType.FUNCTION_DEFINITION
+                                        or NodeType.FUNCTION_INVOCATION) 
+                                    {
+                                        var io = new InputObject(50);
+                                        Nodes[i].NodeObjects.Add(io);
+                                        var w = Nodes[i].Width;
+                                        Nodes[i].Width += 60;
+                                        Nodes[i].Controls.Add(io.DropPanel);
+                                        io.DropPanel.Left = w + 5;
+                                        io.DropPanel.Top = 6;
+                                    }
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    
                     node.Intersecting = false;
 
                     if (Nodes[i].NodeHasParent)

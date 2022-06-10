@@ -15,7 +15,7 @@ namespace CodeDesigner.UI.Designer.Canvas.NodeObject
             Width = width;
         }
 
-        public string GetText(string s)
+        public string GetText()
         {
             return Box.Text;
         }
