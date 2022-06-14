@@ -5,7 +5,9 @@ CREATE TABLE IF NOT EXISTS nodecode_user
     id         UUID        NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
     username   VARCHAR(20) NOT NULL,
     provider   VARCHAR(32) NOT NULL,
-    avatar_url TEXT        NOT NULL DEFAULT 'https://avatars.githubusercontent.com/u/54601764?v=4'
+    avatar_url TEXT        NOT NULL DEFAULT 'https://avatars.githubusercontent.com/u/54601764?v=4',
+    time_created BIGINT NOT NULL,
+    num_packages INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS package

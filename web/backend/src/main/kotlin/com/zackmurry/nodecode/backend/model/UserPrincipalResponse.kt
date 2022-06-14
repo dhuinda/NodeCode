@@ -14,7 +14,9 @@ class UserPrincipalResponse(
     val accountNonExpired: Boolean,
     val credentialsNonExpired: Boolean,
     val name: String,
-    val avatarUrl: String
+    val avatarUrl: String,
+    var timeCreated: Long,
+    var numPackages: Int
 ) {
     val id = uuid.toString()
 }

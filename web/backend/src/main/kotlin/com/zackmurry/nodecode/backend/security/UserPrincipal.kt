@@ -14,7 +14,9 @@ class UserPrincipal(
     private var id: UUID,
     private var authorities: MutableCollection<out GrantedAuthority>,
     private var attributes: MutableMap<String, Any>,
-    private var avatarUrl: String
+    private var avatarUrl: String,
+    private var timeCreated: Long,
+    private var numPackages: Int
 ) : OAuth2User, UserDetails {
 
     companion object {
@@ -25,7 +27,9 @@ class UserPrincipal(
                 user.id,
                 grantedAuthorities,
                 HashMap(),
-                user.avatarUrl
+                user.avatarUrl,
+                user.timeCreated,
+                user.numPackages
             )
         }
 
@@ -91,7 +95,9 @@ class UserPrincipal(
             isAccountNonExpired,
             isCredentialsNonExpired,
             name,
-            avatarUrl
+            avatarUrl,
+            timeCreated,
+            numPackages
         )
     }
 

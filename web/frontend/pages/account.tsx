@@ -127,7 +127,7 @@ const AccountPage: NextPage = () => {
         <Box>
           {packages != null &&
             packages.map(p => (
-              <PackagePreview name={p.name} version={p.latestVersion} description={p.description} key={p.name} />
+              <PackagePreview packageName={p.name} version={p.latestVersion} description={p.description} key={p.name} />
             ))}
         </Box>
       </GridItem>

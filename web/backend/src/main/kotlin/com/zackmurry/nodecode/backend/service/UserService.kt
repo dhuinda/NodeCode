@@ -48,7 +48,9 @@ class UserService(private val userDao: UserDao) : UserDetailsService {
 
     fun getUserResponse(id: UUID): UserResponse {
         val user = userDao.findByIdOrNull(id) ?: throw NotFoundException()
-        return UserResponse(user.id, user.username)
+        return UserResponse(user.id, user.username, user.avatarUrl, user.timeCreated, user.numPackages)
     }
+
+    fun incrementNumPackages(userId: UUID) = userDao.incrementNumPackagesByUserId(userId)
 
 }

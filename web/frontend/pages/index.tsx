@@ -22,23 +22,23 @@ const Home: NextPage = () => {
         <Box>
           <Heading>Popular Packages</Heading>
           <Box pr='50px'>
-            <PackagePreview name='linked-list' version='0.1.0' description='A simple linked list implementation' />
-            <PackagePreview name='linked-list' version='0.1.0' description='A simple linked list implementation' />
-            <PackagePreview name='linked-list' version='0.1.0' description='A simple linked list implementation' />
-            <PackagePreview name='linked-list' version='0.1.0' description='A simple linked list implementation' />
-            <PackagePreview name='linked-list' version='0.1.0' description='A simple linked list implementation' />
-            <PackagePreview name='linked-list' version='0.1.0' description='A simple linked list implementation' />
+            <PackagePreview packageName='linked-list' version='0.1.0' description='A simple linked list implementation' />
+            <PackagePreview packageName='linked-list' version='0.1.0' description='A simple linked list implementation' />
+            <PackagePreview packageName='linked-list' version='0.1.0' description='A simple linked list implementation' />
+            <PackagePreview packageName='linked-list' version='0.1.0' description='A simple linked list implementation' />
+            <PackagePreview packageName='linked-list' version='0.1.0' description='A simple linked list implementation' />
+            <PackagePreview packageName='linked-list' version='0.1.0' description='A simple linked list implementation' />
           </Box>
         </Box>
         <Box>
           <Heading>New Packages</Heading>
           <Box>
-            <PackagePreview name='hashmap' version='0.1.0' description='A simple hash map implementation' />
-            <PackagePreview name='hashmap' version='0.1.0' description='A simple hash map implementation' />
-            <PackagePreview name='hashmap' version='0.1.0' description='A simple hash map implementation' />
-            <PackagePreview name='hashmap' version='0.1.0' description='A simple hash map implementation' />
-            <PackagePreview name='hashmap' version='0.1.0' description='A simple hash map implementation' />
-            <PackagePreview name='hashmap' version='0.1.0' description='A simple hash map implementation' />
+            <PackagePreview packageName='hashmap' version='0.1.0' description='A simple hash map implementation' />
+            <PackagePreview packageName='hashmap' version='0.1.0' description='A simple hash map implementation' />
+            <PackagePreview packageName='hashmap' version='0.1.0' description='A simple hash map implementation' />
+            <PackagePreview packageName='hashmap' version='0.1.0' description='A simple hash map implementation' />
+            <PackagePreview packageName='hashmap' version='0.1.0' description='A simple hash map implementation' />
+            <PackagePreview packageName='hashmap' version='0.1.0' description='A simple hash map implementation' />
           </Box>
         </Box>
       </SimpleGrid>

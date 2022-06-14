@@ -1,6 +1,28 @@
-import { Box, CircularProgress, Divider, Flex, Heading, useToast } from '@chakra-ui/react'
+import { DownloadIcon, ExternalLinkIcon } from '@chakra-ui/icons'
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  Icon,
+  Img,
+  Link as ChakraLink,
+  Text,
+  useToast
+} from '@chakra-ui/react'
+import VersionPreview from 'components/VersionPreview'
 import { GetServerSideProps, NextPage } from 'next'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { GoBook, GoRepo } from 'react-icons/go'
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en'
+
+TimeAgo.addDefaultLocale(en)
+const timeAgo = new TimeAgo('en-US')
 
 interface Props {
   packageName: string
@@ -9,6 +31,9 @@ interface Props {
 interface UserResponse {
   id: string
   username: string
+  avatarUrl: string
+  timeCreated: number
+  numPackages: number
 }
 
 interface PackageVersionResponse {
@@ -28,6 +53,21 @@ interface PackageResponse {
   isOwnedByUser: boolean
   versions: PackageVersionResponse[] // sorted: most recent is index 0
 }
+
+const monthNames = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+]
 
 const PackagePage: NextPage<Props> = ({ packageName }) => {
   const [pkg, setPkg] = useState<PackageResponse | null>(null)
@@ -61,12 +101,108 @@ const PackagePage: NextPage<Props> = ({ packageName }) => {
     )
   }
 
+  const accountCreatedTime = new Date(pkg.author.timeCreated)
+  const deltaT = timeAgo.format(new Date(pkg.lastUpdated), 'twitter')
+
   return (
     <Box p='3.5vh 10vw'>
       <Heading as='h1'>
         {packageName} {pkg.latestVersion !== null ? pkg.latestVersion : '(no versions available)'}
       </Heading>
-      <Divider color='#d5d5d5' opacity='1' borderColor='rgba(0,0,0,0.1)' m='25px 0' />
+      <Divider color='#d5d5d5' opacity='1' borderColor='rgba(0,0,0,0.1)' my='25px' />
+      <Grid templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}>
+        <GridItem colSpan={{ base: 1, md: 2 }}>
+          <Text fontSize='16px'>{pkg.description}</Text>
+          {/* todo: ago */}
+          <Text fontStyle='italic' color='gray.500' mt='5px'>
+            Last updated {deltaT} ago
+          </Text>
+          <Flex mt='15px' alignItems='center'>
+            <DownloadIcon fontSize='18px' />
+            <Text fontSize='16px' ml='15px'>
+              {pkg.downloads} download
+              {pkg.downloads !== 1 ? 's' : ''}
+            </Text>
+          </Flex>
+          {pkg.repositoryUrl && (
+            <Flex mt='10px' alignItems='center'>
+              <Icon aria-label='Repository URL' as={GoRepo} fontSize='18px' />
+              <ChakraLink fontSize='16px' ml='15px' href={pkg.repositoryUrl} isExternal>
+                Repository
+              </ChakraLink>
+              <ExternalLinkIcon fontSize='14px' pb='2px' mx='4px' />
+            </Flex>
+          )}
+          {pkg.documentationUrl && (
+            <Flex mt='10px' alignItems='center'>
+              <Icon as={GoBook} fontSize='18px' />
+              <ChakraLink fontSize='16px' ml='15px' href={pkg.documentationUrl} isExternal>
+                Documentation
+              </ChakraLink>
+              <ExternalLinkIcon fontSize='14px' pb='2px' mx='4px' />
+            </Flex>
+          )}
+          <Box mt='35px'>
+            <Heading fontSize='22px'>Versions</Heading>
+            <Divider color='#d5d5d5' opacity='1' borderColor='rgba(0,0,0,0.1)' mt='10px' mb='20px' />
+            <Box>
+              {pkg.versions.map(v => (
+                <VersionPreview
+                  packageName={packageName}
+                  version={v.version}
+                  uploadedTime={v.timePublished}
+                  isSmall
+                  key={v.version}
+                />
+              ))}
+            </Box>
+          </Box>
+        </GridItem>
+        <GridItem mt={{ base: '35px', lg: '0px' }}>
+          <Link href={`/@/${pkg.author.username}`} passHref>
+            <a>
+              <Grid
+                templateColumns={{
+                  base: 'repeat(1, 1fr)',
+                  md: 'repeat(3, 1fr)',
+                  lg: 'repeat(1, 1fr)',
+                  xl: 'repeat(3, 1fr)'
+                }}
+              >
+                <GridItem p='3px'>
+                  <Img
+                    src={pkg.author.avatarUrl}
+                    borderRadius='25%'
+                    // w={{ base: '125px', sm: '120px', md: '120px', lg: '100px', xl: '125px' }}
+                    w='100%'
+                    maxW='125px'
+                  />
+                </GridItem>
+                <GridItem colSpan={{ base: 1, md: 2, lg: 1, xl: 2 }} p='8px 3px'>
+                  <Flex flexDir='column' justifyContent='space-between' h='100%'>
+                    <Box>
+                      <Heading fontSize='22px' fontWeight='normal'>
+                        {pkg.author.username}
+                      </Heading>
+                      <Text fontWeight='light' color='gray.400'>
+                        AUTHOR
+                      </Text>
+                      <Text mt='5px' color='gray.700'>
+                        {pkg.author.numPackages} package{pkg.author.numPackages !== 1 ? 's' : ''} created
+                      </Text>
+                    </Box>
+                    <Box pb='5px'>
+                      <Text fontStyle='italic' color='gray.500'>
+                        Creator since {monthNames[accountCreatedTime.getMonth()]} {accountCreatedTime.getFullYear()}
+                      </Text>
+                    </Box>
+                  </Flex>
+                </GridItem>
+              </Grid>
+            </a>
+          </Link>
+        </GridItem>
+      </Grid>
     </Box>
   )
 }

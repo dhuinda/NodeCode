@@ -5,9 +5,15 @@ import com.zackmurry.nodecode.backend.entity.PackageVersion
 import com.zackmurry.nodecode.backend.exception.BadRequestException
 import com.zackmurry.nodecode.backend.exception.ConflictException
 import com.zackmurry.nodecode.backend.exception.InternalServerException
+import com.zackmurry.nodecode.backend.exception.NotFoundException
 import com.zackmurry.nodecode.backend.model.PackageVersionResponse
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.core.io.ByteArrayResource
+import org.springframework.core.io.Resource
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.util.StringUtils
 import org.springframework.web.multipart.MultipartFile
@@ -20,6 +26,7 @@ import java.nio.file.StandardCopyOption
 import java.sql.Timestamp
 import java.time.Instant
 import javax.annotation.PostConstruct
+import kotlin.io.path.exists
 
 private val logger = LoggerFactory.getLogger(PackageVersionService::class.java)
 private val SEM_VER_REGEX = Regex("[0-9]+\\.[0-9]+\\.[0-9]+")
@@ -53,6 +60,7 @@ class PackageVersionService(
         return Paths.get("${uploadDirectory}${File.separator}${StringUtils.cleanPath(fileName)}")
     }
 
+    // todo: find dependencies and show them in the package screen
     fun addVersionToPackage(name: String, version: String, file: MultipartFile) {
         if (file.originalFilename == null || !file.originalFilename!!.endsWith(".nodecode")) {
             throw BadRequestException()
@@ -75,6 +83,29 @@ class PackageVersionService(
             Files.copy(file.inputStream, copyLocation, StandardCopyOption.REPLACE_EXISTING)
         } catch (e: IOException) {
             logger.error("Exception occurred while uploading {}", pkgVerId, e)
+        }
+    }
+
+    fun getRawPackageFile(name: String, version: String): ResponseEntity<ByteArrayResource> {
+        val packageEntity = packageVersionDao.findById("${name}_v${version}").orElseThrow { NotFoundException() }
+        val packagePath = resolvePathForPackage(name, version)
+        if (!packagePath.exists()) {
+            logger.error("Package {} version {} found in database but not in filesystem", name, version)
+            throw InternalServerException()
+        }
+        try {
+            val content = Files.readAllBytes(packagePath)
+            val resource = ByteArrayResource(content)
+            val headers = HttpHeaders()
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=${name}_v${version}.nodecode")
+            return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(packagePath.toFile().length())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            throw InternalServerException()
         }
     }
 }

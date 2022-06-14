@@ -57,6 +57,7 @@ class PackageService(
                 null
             )
         )
+        userService.incrementNumPackages(userId)
     }
 
     fun existsByName(name: String) = packageDao.existsById(name)
@@ -72,5 +73,7 @@ class PackageService(
         val userId = (SecurityContextHolder.getContext().authentication.principal as UserPrincipal).getId()
         return packageDao.findAllByAuthorIdOrderByLastUpdatedDesc(userId).map { PackagePreviewResponse.from(it) }
     }
+
+    fun incrementPackageDownloads(name: String) = packageDao.incrementDownloadsById(name)
 
 }

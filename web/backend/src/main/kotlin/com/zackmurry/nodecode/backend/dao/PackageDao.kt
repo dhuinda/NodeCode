@@ -20,4 +20,8 @@ interface PackageDao : JpaRepository<Package, String> {
     @Query("UPDATE package SET latest_version = :latestVersion, last_updated = :time WHERE name = :id", nativeQuery = true)
     fun updateLatestVersionById(id: String, latestVersion: String, time: Long = System.currentTimeMillis())
 
+    @Modifying
+    @Query("UPDATE package SET downloads = downloads + 1 WHERE name = :id", nativeQuery = true)
+    fun incrementDownloadsById(id: String): Any
+
 }
