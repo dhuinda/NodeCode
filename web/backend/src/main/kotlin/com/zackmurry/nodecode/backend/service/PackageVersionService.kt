@@ -22,7 +22,7 @@ import java.time.Instant
 import javax.annotation.PostConstruct
 
 private val logger = LoggerFactory.getLogger(PackageVersionService::class.java)
-private val semVerRegex = Regex("[0-9]+\\.[0-9]+\\.[0-9]+")
+private val SEM_VER_REGEX = Regex("[0-9]+\\.[0-9]+\\.[0-9]+")
 
 @Service
 class PackageVersionService(
@@ -57,7 +57,7 @@ class PackageVersionService(
         if (file.originalFilename == null || !file.originalFilename!!.endsWith(".nodecode")) {
             throw BadRequestException()
         }
-        if (!semVerRegex.matches(version)) {
+        if (!SEM_VER_REGEX.matches(version)) {
             throw BadRequestException()
         }
         val pkgVerId = "${name}_v${version}"

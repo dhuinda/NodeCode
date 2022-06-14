@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service
 import java.sql.Timestamp
 import java.time.Instant
 
+private val PACKAGE_NAME_REGEX = Regex("[a-z|0-9]+(-[a-z|0-9]+)*")
 
 @Service
 class PackageService(
@@ -30,13 +31,13 @@ class PackageService(
     }
 
     fun createPackage(request: PackageCreateRequest) {
-        if (request.name.length > 32 || request.description.length > 500 || (request.documentationUrl != null && request.documentationUrl!!.length > 5000)) {
+        if (request.name.length > 32 || request.name.length < 3 || request.description.length > 200 || (request.documentationUrl != null && request.documentationUrl!!.length > 5000) || (request.repositoryUrl != null && request.repositoryUrl!!.length > 5000)) {
             throw BadRequestException()
         }
-        if (request.name.contains("_") || request.name.contains(" ")) {
+        if (!PACKAGE_NAME_REGEX.matches(request.name)) {
             throw BadRequestException()
         }
-        if (packageDao.findByIdOrNull(request.name) == null) {
+        if (packageDao.findByIdOrNull(request.name) != null) {
             throw ConflictException()
         }
         val userId = (SecurityContextHolder.getContext().authentication.principal as UserPrincipal).getId()

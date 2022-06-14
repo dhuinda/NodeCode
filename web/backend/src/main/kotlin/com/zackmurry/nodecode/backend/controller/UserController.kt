@@ -31,7 +31,7 @@ class UserController(private val userService: UserService) {
         return (SecurityContextHolder.getContext().authentication.principal as UserPrincipal).toResponse()
     }
 
-    @CacheControl(maxAge = 60*60)
+    @CacheControl(maxAge = 60 * 60)
     @GetMapping("/name/{name}/avatar_url")
     fun getAvatarUrlByUser(@PathVariable name: String): String {
         return userService.getUserByUsername(name)?.avatarUrl ?: throw NotFoundException()

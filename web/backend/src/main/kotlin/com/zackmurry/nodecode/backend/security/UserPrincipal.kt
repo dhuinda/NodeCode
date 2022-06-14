@@ -1,7 +1,6 @@
 package com.zackmurry.nodecode.backend.security
 
 import com.zackmurry.nodecode.backend.entity.NodecodeUser
-import com.zackmurry.nodecode.backend.exception.InternalServerException
 import com.zackmurry.nodecode.backend.model.UserPrincipalResponse
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority

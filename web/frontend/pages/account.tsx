@@ -93,7 +93,7 @@ const AccountPage: NextPage = () => {
         <Flex justifyContent='space-between'>
           <Heading>Packages</Heading>
           <Tooltip label='Create package'>
-            <IconButton aria-label='Create package' icon={<AddIcon />} size='lg' />
+            <IconButton aria-label='Create package' icon={<AddIcon />} size='lg' onClick={() => router.push('/create')} />
           </Tooltip>
         </Flex>
         <Box>

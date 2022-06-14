@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS package
 (
     name              VARCHAR(32)  NOT NULL PRIMARY KEY, -- ex: linked-list
     author_id         UUID         NOT NULL REFERENCES nodecode_user ON DELETE CASCADE,
-    description       VARCHAR(500) NOT NULL DEFAULT '',
+    description       VARCHAR(200) NOT NULL DEFAULT '',
     last_updated      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     documentation_url TEXT,
     repository_url    TEXT,

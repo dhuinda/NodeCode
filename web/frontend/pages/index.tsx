@@ -43,6 +43,7 @@ const Home: NextPage = () => {
         </Box>
       </SimpleGrid>
     </Box>
+    // todo: add footer w/ github, statement that it's for TSA, creators, download link, etc
   )
 }
 
