@@ -1,6 +1,4 @@
-import { Icon, IconButton, Text } from '@chakra-ui/react'
-import Cookies from 'js-cookie'
-import Link from 'next/link'
+import { IconButton, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { FC, useEffect, useState } from 'react'
 import { FiUser } from 'react-icons/fi'
@@ -30,11 +28,9 @@ const NavBarProfile: FC = () => {
     return <IconButton onClick={() => router.push('/account')} fontSize={24} aria-label='Account' icon={<FiUser />} />
   }
   return (
-    <Link href='/api/v1/oauth2/code/github'>
-      <a>
-        <Text fontSize='12pt'>Sign in</Text>
-      </a>
-    </Link>
+    <a href='/api/v1/oauth2/code/github'>
+      <Text fontSize='12pt'>Sign in</Text>
+    </a>
   )
 }
 

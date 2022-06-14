@@ -11,34 +11,23 @@ import {
   Grid,
   GridItem,
   IconButton,
-  Tooltip
+  Tooltip,
+  useDisclosure
 } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import PackagePreview from 'components/PackagePreview'
 import { AddIcon } from '@chakra-ui/icons'
-
-export interface UserPrincipalResponse {
-  username: string
-  id: string
-  enabled: boolean
-  accountNonLocked: boolean
-  accountNonExpired: boolean
-  credentialsNonExpired: boolean
-  name: string
-  avatarUrl: string
-}
-
-export interface PackagePreviewResponse {
-  name: string
-  description: string
-  latestVersion?: string
-}
+import { UserPrincipalResponse } from 'types/user'
+import { PackagePreviewResponse } from 'types/package'
+import ConfirmationModal from 'components/ConfirmationModal'
 
 const AccountPage: NextPage = () => {
   const [account, setAccount] = useState<UserPrincipalResponse | null>(null)
   const [packages, setPackages] = useState<PackagePreviewResponse[] | null>(null)
+
+  const { isOpen: isDeleteModalOpen, onOpen: onOpenDeleteModal, onClose: onCloseDeleteModal } = useDisclosure()
   const router = useRouter()
   const toast = useToast()
   const isDesktopView = useBreakpointValue({ base: false, lg: true })
@@ -100,6 +89,22 @@ const AccountPage: NextPage = () => {
     )
   }
 
+  const handleDeleteAccount = async () => {
+    console.log('delete')
+    const response = await fetch('/api/v1/users/user', { method: 'DELETE' })
+    if (response.ok) {
+      router.push('/')
+    } else {
+      toast({
+        title: 'Error',
+        description: `Error deleting account: ${response.status}`,
+        status: 'error',
+        duration: 7000,
+        isClosable: true
+      })
+    }
+  }
+
   const { avatarUrl, name } = account
 
   return (
@@ -111,7 +116,7 @@ const AccountPage: NextPage = () => {
             {name}
           </Heading>
           {isDesktopView && <Divider color='#d5d5d5' opacity='1' borderColor='rgba(0,0,0,0.1)' m='25px 0' />}
-          <Button variant='outline' colorScheme='red' mt='5px'>
+          <Button variant='outline' colorScheme='red' mt='5px' onClick={onOpenDeleteModal}>
             Delete Account
           </Button>
         </Box>
@@ -131,6 +136,13 @@ const AccountPage: NextPage = () => {
             ))}
         </Box>
       </GridItem>
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        title='Delete Account'
+        description='Are you sure you would like to delete your account?'
+        onClose={onCloseDeleteModal}
+        onConfirm={handleDeleteAccount}
+      />
     </Grid>
   )
 }

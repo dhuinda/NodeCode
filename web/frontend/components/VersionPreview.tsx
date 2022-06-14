@@ -4,7 +4,6 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import { GoFileCode } from 'react-icons/go'
 
-TimeAgo.addDefaultLocale(en)
 const timeAgo = new TimeAgo('en-US')
 
 interface Props {

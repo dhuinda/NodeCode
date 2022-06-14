@@ -8,10 +8,7 @@ import com.zackmurry.nodecode.backend.service.PackageService
 import com.zackmurry.nodecode.backend.service.UserService
 import net.rossillo.spring.web.mvc.CacheControl
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -34,6 +31,12 @@ class UserController(private val userService: UserService, private val packageSe
     @GetMapping("/user")
     fun getAccount(): UserPrincipalResponse {
         return (SecurityContextHolder.getContext().authentication.principal as UserPrincipal).toResponse()
+    }
+
+    @DeleteMapping("/user")
+    fun deleteAccount() {
+        val username = (SecurityContextHolder.getContext().authentication.principal as UserPrincipal).username
+        userService.deleteByUsername(username)
     }
 
     @GetMapping("/user/packages")

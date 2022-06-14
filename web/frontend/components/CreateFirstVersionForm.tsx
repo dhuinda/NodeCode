@@ -10,7 +10,7 @@ interface Props {
   packageName: string
 }
 
-const SEM_VER_REGEX = new RegExp(/[0-9]+\.[0-9]+\.[0-9]+/)
+export const SEM_VER_REGEX = new RegExp(/[0-9]+\.[0-9]+\.[0-9]+/)
 
 const CreateFirstVersionForm: FC<Props> = ({ onSubmit, packageName }) => {
   const [version, setVersion] = useState('')
@@ -84,7 +84,7 @@ const CreateFirstVersionForm: FC<Props> = ({ onSubmit, packageName }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <FormControl isRequired>
+      <FormControl isRequired isInvalid={Boolean(versionError)}>
         <FormLabel htmlFor='version'>Package version</FormLabel>
         <StyledInput id='version' value={version} onChange={e => setVersion(e.target.value)} />
         {!versionError ? (
@@ -99,7 +99,7 @@ const CreateFirstVersionForm: FC<Props> = ({ onSubmit, packageName }) => {
           <FormErrorMessage>{versionError}</FormErrorMessage>
         )}
       </FormControl>
-      <FormControl isRequired>
+      <FormControl isRequired isInvalid={Boolean(fileError)}>
         <FormLabel htmlFor='file' mt='15px'>
           Version save file
         </FormLabel>

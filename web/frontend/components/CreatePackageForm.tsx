@@ -18,18 +18,18 @@ interface Props {
   onSubmit: (name: string) => void
 }
 
-const HTTPS_LENGTH = 'https://'.length
+export const HTTPS_LENGTH = 'https://'.length
 const PACKAGE_NAME_REGEX = new RegExp(/[a-z|0-9]+(-[a-z|0-9]+)*/)
 
 const CreatePackageForm: FC<Props> = ({ onSubmit }) => {
   const [packageName, setPackageName] = useState('')
-  const [packageNameError, setPackageNameError] = useState<string | null>(null)
-  const [packageDescription, setPackageDescription] = useState('')
-  const [packageDescriptionError, setPackageDescriptionError] = useState<string | null>(null)
+  const [packageNameError, setPackageNameError] = useState('')
+  const [description, setDescription] = useState('')
+  const [descriptionError, setDescriptionError] = useState('')
   const [repositoryUrl, setRepositoryUrl] = useState('')
-  const [repositoryError, setRepositoryError] = useState<string | null>(null)
+  const [repositoryError, setRepositoryError] = useState('')
   const [documentationUrl, setDocumentationUrl] = useState('')
-  const [documentationError, setDocumentationError] = useState<string | null>(null)
+  const [documentationError, setDocumentationError] = useState('')
 
   const router = useRouter()
   const toast = useToast()
@@ -38,7 +38,7 @@ const CreatePackageForm: FC<Props> = ({ onSubmit }) => {
     e.preventDefault()
     let isError = false
     setPackageNameError(null)
-    setPackageDescriptionError(null)
+    setDescriptionError(null)
     setRepositoryError(null)
     setDocumentationError(null)
     if (packageName.length > 32) {
@@ -52,11 +52,11 @@ const CreatePackageForm: FC<Props> = ({ onSubmit }) => {
         'Package name must only contain letters and numbers separated by dashes (of the form /[a-z|0-9]+(-[a-z|0-9]+)*/)'
       )
     }
-    if (packageDescription.length > 200) {
-      setPackageDescriptionError('Package description needs to be at most 200 characters.')
+    if (description.length > 200) {
+      setDescriptionError('Package description needs to be at most 200 characters.')
       isError = true
-    } else if (packageDescription.length === 0) {
-      setPackageDescriptionError('Package description cannot be empty.')
+    } else if (description.length === 0) {
+      setDescriptionError('Package description cannot be empty.')
       isError = true
     }
     if (repositoryUrl.length + HTTPS_LENGTH > 5000) {
@@ -77,7 +77,7 @@ const CreatePackageForm: FC<Props> = ({ onSubmit }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: packageName,
-          description: packageDescription,
+          description: description,
           documentationUrl: documentationUrl ? 'https://' + documentationUrl : undefined,
           repositoryUrl: repositoryUrl ? 'https://' + repositoryUrl : undefined
         })
@@ -117,7 +117,7 @@ const CreatePackageForm: FC<Props> = ({ onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <FormControl isRequired>
+      <FormControl isRequired isInvalid={Boolean(packageNameError)}>
         <FormLabel htmlFor='name'>Package name</FormLabel>
         <StyledInput id='name' value={packageName} onChange={e => setPackageName(e.target.value)} />
         {!packageNameError ? (
@@ -129,22 +129,23 @@ const CreatePackageForm: FC<Props> = ({ onSubmit }) => {
           <FormErrorMessage>{packageNameError}</FormErrorMessage>
         )}
       </FormControl>
-      <FormControl isRequired>
+
+      <FormControl isRequired isInvalid={Boolean(descriptionError)}>
         <FormLabel htmlFor='description' mt='15px'>
           Package description
         </FormLabel>
-        <StyledInput id='description' value={packageDescription} onChange={e => setPackageDescription(e.target.value)} />
-        {!packageNameError ? (
+        <StyledInput id='description' value={description} onChange={e => setDescription(e.target.value)} />
+        {!descriptionError ? (
           <FormHelperText>Enter a brief (&lt;200 characters) description of your package.</FormHelperText>
         ) : (
-          <FormErrorMessage>{packageDescriptionError}</FormErrorMessage>
+          <FormErrorMessage>{descriptionError}</FormErrorMessage>
         )}
         <Text color='gray' fontSize='11px'>
-          {packageDescription.length} character{packageDescription.length !== 1 ? 's' : ''}
+          {description.length} character{description.length !== 1 ? 's' : ''}
         </Text>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={Boolean(repositoryError)}>
         <FormLabel htmlFor='repository' mt='15px'>
           Repository URL
         </FormLabel>
@@ -164,7 +165,7 @@ const CreatePackageForm: FC<Props> = ({ onSubmit }) => {
         )}
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={Boolean(documentationError)}>
         <FormLabel htmlFor='documentation' mt='15px'>
           Documentation URL
         </FormLabel>
@@ -183,6 +184,7 @@ const CreatePackageForm: FC<Props> = ({ onSubmit }) => {
           <FormErrorMessage>{documentationError}</FormErrorMessage>
         )}
       </FormControl>
+
       <StyledButton type='submit' colorScheme='teal' bgColor='tealHero' mt='10px'>
         Create
       </StyledButton>

@@ -5,10 +5,13 @@ import com.zackmurry.nodecode.backend.security.OAuth2AuthenticationFailureHandle
 import com.zackmurry.nodecode.backend.security.OAuth2AuthenticationSuccessHandler
 import com.zackmurry.nodecode.backend.service.OAuth2UserService
 import org.springframework.context.annotation.Bean
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.web.servlet.invoke
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.security.web.util.matcher.RequestMatcher
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
@@ -31,8 +34,9 @@ class SecurityConfiguration(
                 authorize("/", permitAll)
                 authorize("/api/v1/users/name/*/avatar_url", permitAll)
                 authorize("/api/v1/users/username", permitAll)
-                authorize("/api/v1/packages/name/*", permitAll)
+                authorize(AntPathRequestMatcher("/api/v1/packages/name/*", HttpMethod.GET.name), permitAll)
                 authorize("/api/v1/packages/name/*/versions/*/raw", permitAll)
+                authorize("/api/v1/packages/trending", permitAll)
                 authorize(anyRequest, authenticated)
             }
             oauth2Login {
@@ -57,7 +61,10 @@ class SecurityConfiguration(
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val source = UrlBasedCorsConfigurationSource()
-        source.registerCorsConfiguration("/**", CorsConfiguration().applyPermitDefaultValues())
+        val config = CorsConfiguration().applyPermitDefaultValues()
+        config.addAllowedMethod(HttpMethod.PUT)
+        config.addAllowedMethod(HttpMethod.DELETE)
+        source.registerCorsConfiguration("/**", config)
         return source
     }
 

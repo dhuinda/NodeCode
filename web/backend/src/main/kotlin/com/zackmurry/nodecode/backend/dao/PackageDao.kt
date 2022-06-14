@@ -12,6 +12,10 @@ interface PackageDao : JpaRepository<Package, String> {
 
     fun findAllByAuthorIdOrderByLastUpdatedDesc(authorId: UUID): List<Package>
 
+    fun findTop5ByOrderByLastUpdated(): List<Package>
+
+    fun findTop5ByOrderByDownloads(): List<Package>
+
     @Modifying
     @Query("UPDATE package SET last_updated = :time WHERE name = :id", nativeQuery = true)
     fun updateLastUpdatedById(id: String, time: Long = System.currentTimeMillis())
@@ -23,5 +27,9 @@ interface PackageDao : JpaRepository<Package, String> {
     @Modifying
     @Query("UPDATE package SET downloads = downloads + 1 WHERE name = :id", nativeQuery = true)
     fun incrementDownloadsById(id: String): Any
+
+    @Modifying
+    @Query("UPDATE package SET description = :description, documentation_url = :documentationUrl, repository_url = :repositoryUrl WHERE name = :id", nativeQuery = true)
+    fun updatePackageById(id: String, description: String, documentationUrl: String?, repositoryUrl: String?)
 
 }

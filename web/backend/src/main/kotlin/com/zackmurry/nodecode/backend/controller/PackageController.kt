@@ -2,10 +2,11 @@ package com.zackmurry.nodecode.backend.controller
 
 import com.zackmurry.nodecode.backend.exception.BadRequestException
 import com.zackmurry.nodecode.backend.model.PackageCreateRequest
+import com.zackmurry.nodecode.backend.model.PackageUpdateRequest
+import com.zackmurry.nodecode.backend.model.TrendingPackagesResponse
 import com.zackmurry.nodecode.backend.service.PackageService
 import com.zackmurry.nodecode.backend.service.PackageVersionService
 import org.springframework.core.io.ByteArrayResource
-import org.springframework.core.io.Resource
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
@@ -38,6 +39,18 @@ class PackageController(val packageService: PackageService, val packageVersionSe
         val response = packageVersionService.getRawPackageFile(name, version)
         packageService.incrementPackageDownloads(name) // Only increment downloads if no error
         return response
+    }
+
+    @PutMapping("/name/{name}")
+    fun updatePackageDetails(@PathVariable name: String, @RequestBody request: PackageUpdateRequest) {
+        packageService.updatePackageDetails(name, request)
+    }
+
+    @GetMapping("/trending")
+    fun getTrendingPackages(): TrendingPackagesResponse {
+        val popular = packageService.getPopularPackages()
+        val latest = packageService.getNewPackages()
+        return TrendingPackagesResponse(popular, latest)
     }
 
 }

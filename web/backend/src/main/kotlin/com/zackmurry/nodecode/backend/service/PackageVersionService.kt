@@ -87,7 +87,7 @@ class PackageVersionService(
     }
 
     fun getRawPackageFile(name: String, version: String): ResponseEntity<ByteArrayResource> {
-        val packageEntity = packageVersionDao.findById("${name}_v${version}").orElseThrow { NotFoundException() }
+        packageVersionDao.findById("${name}_v${version}").orElseThrow { NotFoundException() }
         val packagePath = resolvePathForPackage(name, version)
         if (!packagePath.exists()) {
             logger.error("Package {} version {} found in database but not in filesystem", name, version)

@@ -4,10 +4,12 @@ import com.zackmurry.nodecode.backend.dao.PackageDao
 import com.zackmurry.nodecode.backend.entity.Package
 import com.zackmurry.nodecode.backend.exception.BadRequestException
 import com.zackmurry.nodecode.backend.exception.ConflictException
+import com.zackmurry.nodecode.backend.exception.ForbiddenException
 import com.zackmurry.nodecode.backend.exception.NotFoundException
 import com.zackmurry.nodecode.backend.model.PackageCreateRequest
 import com.zackmurry.nodecode.backend.model.PackagePreviewResponse
 import com.zackmurry.nodecode.backend.model.PackageResponse
+import com.zackmurry.nodecode.backend.model.PackageUpdateRequest
 import com.zackmurry.nodecode.backend.security.UserPrincipal
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
@@ -75,5 +77,22 @@ class PackageService(
     }
 
     fun incrementPackageDownloads(name: String) = packageDao.incrementDownloadsById(name)
+
+    fun updatePackageDetails(name: String, request: PackageUpdateRequest) {
+        val pkg = packageDao.findById(name).orElseThrow { NotFoundException() }
+        val userId = (SecurityContextHolder.getContext().authentication.principal as UserPrincipal).getId()
+        if (pkg.authorId != userId) {
+            throw ForbiddenException()
+        }
+        packageDao.updatePackageById(name, request.description, request.documentationUrl, request.repositoryUrl)
+    }
+
+    fun getPopularPackages(): List<PackagePreviewResponse> {
+        return packageDao.findTop5ByOrderByDownloads().map { PackagePreviewResponse.from(it) }
+    }
+
+    fun getNewPackages(): List<PackagePreviewResponse> {
+        return packageDao.findTop5ByOrderByLastUpdated().map { PackagePreviewResponse.from(it)}
+    }
 
 }

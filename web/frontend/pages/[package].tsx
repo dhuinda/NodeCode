@@ -1,4 +1,4 @@
-import { DownloadIcon, ExternalLinkIcon } from '@chakra-ui/icons'
+import { AddIcon, DownloadIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 import {
   Box,
   CircularProgress,
@@ -8,50 +8,28 @@ import {
   GridItem,
   Heading,
   Icon,
+  IconButton,
   Img,
   Link as ChakraLink,
   Text,
+  useDisclosure,
   useToast
 } from '@chakra-ui/react'
 import VersionPreview from 'components/VersionPreview'
 import { GetServerSideProps, NextPage } from 'next'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { GoBook, GoRepo } from 'react-icons/go'
+import { ImWrench } from 'react-icons/im'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
+import AddPackageVersionModal from 'components/AddPackageVersionModal'
+import { PackageResponse } from 'types/package'
+import PackageSettingsModal from 'components/PackageSettingsModal'
 
-TimeAgo.addDefaultLocale(en)
 const timeAgo = new TimeAgo('en-US')
 
 interface Props {
   packageName: string
-}
-
-interface UserResponse {
-  id: string
-  username: string
-  avatarUrl: string
-  timeCreated: number
-  numPackages: number
-}
-
-interface PackageVersionResponse {
-  version: string
-  timePublished: number
-}
-
-interface PackageResponse {
-  name: string
-  author: UserResponse
-  description: string
-  lastUpdated: number
-  documentationUrl?: string
-  repositoryUrl?: string
-  downloads: number
-  latestVersion?: string
-  isOwnedByUser: boolean
-  versions: PackageVersionResponse[] // sorted: most recent is index 0
 }
 
 const monthNames = [
@@ -71,6 +49,8 @@ const monthNames = [
 
 const PackagePage: NextPage<Props> = ({ packageName }) => {
   const [pkg, setPkg] = useState<PackageResponse | null>(null)
+  const { isOpen: isVersionModalOpen, onOpen: onOpenVersionModal, onClose: onCloseVersionModal } = useDisclosure()
+  const { isOpen: isSettingsModalOpen, onOpen: onOpenSettingsModal, onClose: onCloseSettingsModal } = useDisclosure()
 
   const toast = useToast()
 
@@ -106,14 +86,18 @@ const PackagePage: NextPage<Props> = ({ packageName }) => {
 
   return (
     <Box p='3.5vh 10vw'>
-      <Heading as='h1'>
-        {packageName} {pkg.latestVersion !== null ? pkg.latestVersion : '(no versions available)'}
-      </Heading>
+      <Flex justifyContent='space-between' alignItems='center'>
+        <Heading as='h1'>
+          {packageName} {pkg.latestVersion !== null ? pkg.latestVersion : '(no versions available)'}
+        </Heading>
+        {pkg.isOwnedByUser && (
+          <IconButton size='lg' aria-label='Edit' icon={<ImWrench fontSize='24px' />} onClick={onOpenSettingsModal} />
+        )}
+      </Flex>
       <Divider color='#d5d5d5' opacity='1' borderColor='rgba(0,0,0,0.1)' my='25px' />
       <Grid templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}>
         <GridItem colSpan={{ base: 1, md: 2 }}>
           <Text fontSize='16px'>{pkg.description}</Text>
-          {/* todo: ago */}
           <Text fontStyle='italic' color='gray.500' mt='5px'>
             Last updated {deltaT} ago
           </Text>
@@ -143,7 +127,13 @@ const PackagePage: NextPage<Props> = ({ packageName }) => {
             </Flex>
           )}
           <Box mt='35px'>
-            <Heading fontSize='22px'>Versions</Heading>
+            <Flex justifyContent='space-between' alignItems='center'>
+              <Heading fontSize='22px'>Versions</Heading>
+              {pkg.isOwnedByUser && (
+                <IconButton aria-label='Add' size='lg' icon={<AddIcon />} onClick={onOpenVersionModal} />
+              )}
+            </Flex>
+
             <Divider color='#d5d5d5' opacity='1' borderColor='rgba(0,0,0,0.1)' mt='10px' mb='20px' />
             <Box>
               {pkg.versions.map(v => (
@@ -158,61 +148,51 @@ const PackagePage: NextPage<Props> = ({ packageName }) => {
             </Box>
           </Box>
         </GridItem>
-        <GridItem mt={{ base: '35px', lg: '0px' }}>
-          <Link href={`/@/${pkg.author.username}`} passHref>
-            <a>
-              <Grid
-                templateColumns={{
-                  base: 'repeat(1, 1fr)',
-                  md: 'repeat(3, 1fr)',
-                  lg: 'repeat(1, 1fr)',
-                  xl: 'repeat(3, 1fr)'
-                }}
-              >
-                <GridItem p='3px'>
-                  <Img
-                    src={pkg.author.avatarUrl}
-                    borderRadius='25%'
-                    // w={{ base: '125px', sm: '120px', md: '120px', lg: '100px', xl: '125px' }}
-                    w='100%'
-                    maxW='125px'
-                  />
-                </GridItem>
-                <GridItem colSpan={{ base: 1, md: 2, lg: 1, xl: 2 }} p='8px 3px'>
-                  <Flex flexDir='column' justifyContent='space-between' h='100%'>
-                    <Box>
-                      <Heading fontSize='22px' fontWeight='normal'>
-                        {pkg.author.username}
-                      </Heading>
-                      <Text fontWeight='light' color='gray.400'>
-                        AUTHOR
-                      </Text>
-                      <Text mt='5px' color='gray.700'>
-                        {pkg.author.numPackages} package{pkg.author.numPackages !== 1 ? 's' : ''} created
-                      </Text>
-                    </Box>
-                    <Box pb='5px'>
-                      <Text fontStyle='italic' color='gray.500'>
-                        Creator since {monthNames[accountCreatedTime.getMonth()]} {accountCreatedTime.getFullYear()}
-                      </Text>
-                    </Box>
-                  </Flex>
-                </GridItem>
-              </Grid>
-            </a>
-          </Link>
+        <GridItem mt={{ base: '35px', lg: '0px' }} pl={{ base: '0px', lg: '10px' }}>
+          <Grid
+            templateColumns={{
+              base: 'repeat(1, 1fr)',
+              md: 'repeat(3, 1fr)',
+              lg: 'repeat(1, 1fr)',
+              xl: 'repeat(3, 1fr)'
+            }}
+          >
+            <GridItem p='3px'>
+              <Img src={pkg.author.avatarUrl} borderRadius='25%' w='100%' maxW='125px' />
+            </GridItem>
+            <GridItem colSpan={{ base: 1, md: 2, lg: 1, xl: 2 }} p='8px 3px'>
+              <Flex flexDir='column' justifyContent='space-between' h='100%'>
+                <Box>
+                  <Heading fontSize='22px' fontWeight='normal'>
+                    {pkg.author.username}
+                  </Heading>
+                  <Text fontWeight='light' color='gray.400'>
+                    AUTHOR
+                  </Text>
+                  <Text mt='5px' color='gray.700'>
+                    {pkg.author.numPackages} package{pkg.author.numPackages !== 1 ? 's' : ''} created
+                  </Text>
+                </Box>
+                <Box pb='5px'>
+                  <Text fontStyle='italic' color='gray.500'>
+                    Creator since {monthNames[accountCreatedTime.getMonth()]} {accountCreatedTime.getFullYear()}
+                  </Text>
+                </Box>
+              </Flex>
+            </GridItem>
+          </Grid>
         </GridItem>
       </Grid>
+      <AddPackageVersionModal isOpen={isVersionModalOpen} onClose={onCloseVersionModal} packageName={packageName} />
+      <PackageSettingsModal isOpen={isSettingsModalOpen} onClose={onCloseSettingsModal} pkg={pkg} />
     </Box>
   )
 }
 
 export default PackagePage
 
-export const getServerSideProps: GetServerSideProps<Props> = async ({ query }) => {
-  return {
-    props: {
-      packageName: typeof query.package === 'string' ? query.package : query.package[0]
-    }
+export const getServerSideProps: GetServerSideProps<Props> = async ({ query }) => ({
+  props: {
+    packageName: typeof query.package === 'string' ? query.package : query.package[0]
   }
-}
+})

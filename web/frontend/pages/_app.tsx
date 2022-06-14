@@ -1,11 +1,16 @@
-import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { ChakraProvider } from '@chakra-ui/react'
 import Head from 'next/head'
+import { NextPage } from 'next'
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en'
 import theme from 'lib/theme'
 import NavBar from 'components/NavBar'
+import 'styles/globals.css'
 
-function MyApp({ Component, pageProps }: AppProps) {
+TimeAgo.addLocale(en)
+
+const MyApp: NextPage<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
       <Head>
