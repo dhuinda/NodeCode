@@ -1,5 +1,4 @@
 import {
-  Button,
   Code,
   FormControl,
   FormErrorMessage,
@@ -90,7 +89,7 @@ const CreatePackageForm: FC<Props> = ({ onSubmit }) => {
       } else {
         toast({
           title: 'Error',
-          description: `Error creating package: ${response.statusText} (${response.status})`,
+          description: `Error creating package: ${response.status}`,
           status: 'error',
           duration: 9000,
           isClosable: true

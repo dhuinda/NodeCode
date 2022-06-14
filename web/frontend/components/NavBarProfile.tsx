@@ -11,7 +11,7 @@ const NavBarProfile: FC = () => {
 
   const updateLoginStatus = async () => {
     try {
-      const username = await fetch('/api/v1/users/username')
+      const username = await fetch('/api/v1/users/username', { redirect: 'manual' })
       if (await username.text()) {
         setLoggedIn(true)
       } else {

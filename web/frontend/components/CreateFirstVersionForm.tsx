@@ -56,7 +56,7 @@ const CreateFirstVersionForm: FC<Props> = ({ onSubmit, packageName }) => {
     formData.append('file', file)
     console.log('try')
     try {
-      const response = await fetch(`/api/v1/packages/${packageName}/versions/${version}`, {
+      const response = await fetch(`/api/v1/packages/name/${packageName}/versions/${version}`, {
         method: 'POST',
         body: formData
       })

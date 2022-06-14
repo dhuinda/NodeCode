@@ -9,5 +9,5 @@ data class PackageVersion(
     @Id val id: String,
     val packageName: String,
     val version: String,
-    val timePublished: Timestamp
+    val timePublished: Long
 )

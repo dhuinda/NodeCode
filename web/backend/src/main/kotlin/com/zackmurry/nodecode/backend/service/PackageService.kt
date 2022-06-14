@@ -6,13 +6,12 @@ import com.zackmurry.nodecode.backend.exception.BadRequestException
 import com.zackmurry.nodecode.backend.exception.ConflictException
 import com.zackmurry.nodecode.backend.exception.NotFoundException
 import com.zackmurry.nodecode.backend.model.PackageCreateRequest
+import com.zackmurry.nodecode.backend.model.PackagePreviewResponse
 import com.zackmurry.nodecode.backend.model.PackageResponse
 import com.zackmurry.nodecode.backend.security.UserPrincipal
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
-import java.sql.Timestamp
-import java.time.Instant
 
 private val PACKAGE_NAME_REGEX = Regex("[a-z|0-9]+(-[a-z|0-9]+)*")
 
@@ -27,7 +26,12 @@ class PackageService(
         val pkg = packageDao.findByIdOrNull(name) ?: throw NotFoundException()
         val author = userService.getUserResponse(pkg.authorId)
         val pkgVersions = packageVersionService.getPackageVersionsByPackage(name)
-        return PackageResponse.from(pkg, author, pkgVersions)
+        var isOwnedByUser = false
+        val principal = SecurityContextHolder.getContext().authentication.principal
+        if (principal.toString() != "anonymousUser" && (principal as UserPrincipal).getId() == author.id) {
+            isOwnedByUser = true
+        }
+        return PackageResponse.from(pkg, author, pkgVersions, isOwnedByUser)
     }
 
     fun createPackage(request: PackageCreateRequest) {
@@ -46,14 +50,27 @@ class PackageService(
                 request.name,
                 userId,
                 request.description,
-                Timestamp.from(Instant.now()),
+                System.currentTimeMillis(),
                 request.documentationUrl,
                 request.repositoryUrl,
-                0
+                0,
+                null
             )
         )
     }
 
     fun existsByName(name: String) = packageDao.existsById(name)
+
+    fun updateLatestVersion(name: String, version: String) {
+        packageDao.updateLatestVersionById(name, version)
+    }
+
+    /**
+     * Sorted by most recently updated
+     */
+    fun getPackagesByUser(name: String): List<PackagePreviewResponse> {
+        val userId = (SecurityContextHolder.getContext().authentication.principal as UserPrincipal).getId()
+        return packageDao.findAllByAuthorIdOrderByLastUpdatedDesc(userId).map { PackagePreviewResponse.from(it) }
+    }
 
 }

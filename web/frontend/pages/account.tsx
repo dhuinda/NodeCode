@@ -30,34 +30,62 @@ export interface UserPrincipalResponse {
   avatarUrl: string
 }
 
+export interface PackagePreviewResponse {
+  name: string
+  description: string
+  latestVersion?: string
+}
+
 const AccountPage: NextPage = () => {
   const [account, setAccount] = useState<UserPrincipalResponse | null>(null)
+  const [packages, setPackages] = useState<PackagePreviewResponse[] | null>(null)
   const router = useRouter()
   const toast = useToast()
   const isDesktopView = useBreakpointValue({ base: false, lg: true })
 
   const getAccount = async () => {
-    const response = await fetch('/api/v1/users/user').catch(e => console.log(e))
-    if (!response) {
+    const accountPromise = fetch('/api/v1/users/user')
+    const packagesPromise = fetch('/api/v1/users/user/packages')
+    let accountResponse: Response | null, packagesResponse: Response | null
+    try {
+      ;[accountResponse, packagesResponse] = await Promise.all([accountPromise, packagesPromise])
+    } catch {
+      router.push('/api/v1/oauth2/code/github')
+    }
+    if (!accountResponse) {
       router.push('/api/v1/oauth2/code/github')
       return
     }
-    if (!response.ok) {
-      if (response.status === 403) {
+    if (!accountResponse.ok) {
+      if (accountResponse.status === 403) {
         router.push('/api/v1/oauth2/code/github')
       } else {
         toast({
           title: 'Error',
-          description: `Error fetching account data: ${response.statusText}`,
+          description: `Error fetching account data: ${accountResponse.status}`,
           status: 'error',
           duration: 9000,
           isClosable: true
         })
+        return
       }
     }
-    const json = await response.json()
-    console.log(json)
-    setAccount(json)
+    if (!packagesResponse || !packagesResponse.ok) {
+      toast({
+        title: 'Error',
+        description: `Error fetching packages: ${packagesResponse.status}`,
+        status: 'error',
+        duration: 4000,
+        isClosable: true
+      })
+      const accountJson = await accountResponse.json()
+      setAccount(accountJson)
+      return
+    }
+
+    const [accountJson, packagesJson] = await Promise.all([accountResponse.json(), packagesResponse.json()])
+    setPackages(packagesJson)
+    setAccount(accountJson)
   }
 
   useEffect(() => {
@@ -97,17 +125,10 @@ const AccountPage: NextPage = () => {
           </Tooltip>
         </Flex>
         <Box>
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
+          {packages != null &&
+            packages.map(p => (
+              <PackagePreview name={p.name} version={p.latestVersion} description={p.description} key={p.name} />
+            ))}
         </Box>
       </GridItem>
     </Grid>

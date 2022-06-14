@@ -13,10 +13,11 @@ CREATE TABLE IF NOT EXISTS package
     name              VARCHAR(32)  NOT NULL PRIMARY KEY, -- ex: linked-list
     author_id         UUID         NOT NULL REFERENCES nodecode_user ON DELETE CASCADE,
     description       VARCHAR(200) NOT NULL DEFAULT '',
-    last_updated      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_updated      BIGINT    NOT NULL,
     documentation_url TEXT,
     repository_url    TEXT,
-    downloads         INTEGER      NOT NULL DEFAULT 0
+    downloads         INTEGER      NOT NULL DEFAULT 0,
+    latest_version    VARCHAR(16)
 );
 
 CREATE TABLE IF NOT EXISTS package_version
@@ -24,7 +25,7 @@ CREATE TABLE IF NOT EXISTS package_version
     id             VARCHAR(50) NOT NULL PRIMARY KEY, -- ex: linked-list_v0.1.0
     package_name   VARCHAR(32) NOT NULL REFERENCES package ON DELETE CASCADE,
     version        VARCHAR(16) NOT NULL DEFAULT '0.1.0',
-    time_published TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
+    time_published BIGINT   NOT NULL
 );
 
 CREATE INDEX package_version_package_name_index ON package_version (package_name);

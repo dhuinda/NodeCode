@@ -10,8 +10,9 @@ data class Package(
     @Id var name: String,
     var authorId: UUID,
     var description: String,
-    var lastUpdated: Timestamp,
+    var lastUpdated: Long,
     var documentationUrl: String?,
     var repositoryUrl: String?,
-    var downloads: Int
+    var downloads: Int,
+    var latestVersion: String?
 )

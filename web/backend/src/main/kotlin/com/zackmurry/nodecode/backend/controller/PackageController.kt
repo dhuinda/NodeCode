@@ -11,13 +11,13 @@ import org.springframework.web.multipart.MultipartFile
 @RestController
 class PackageController(val packageService: PackageService, val packageVersionService: PackageVersionService) {
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     fun getPackageDetails(@PathVariable name: String) = packageService.getPackageDetails(name)
 
     @PostMapping
     fun createPackage(@RequestBody request: PackageCreateRequest) = packageService.createPackage(request)
 
-    @PostMapping("/{name}/versions/{version}")
+    @PostMapping("/name/{name}/versions/{version}")
     fun addVersionToPackage(
         @PathVariable name: String,
         @PathVariable version: String,
@@ -27,6 +27,7 @@ class PackageController(val packageService: PackageService, val packageVersionSe
             throw BadRequestException()
         }
         packageVersionService.addVersionToPackage(name, version, file)
+        packageService.updateLatestVersion(name, version)
     }
 
 }

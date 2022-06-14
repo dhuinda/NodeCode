@@ -44,7 +44,7 @@ class PackageVersionService(
     fun getPackageVersionsByPackage(packageName: String): List<PackageVersionResponse> {
         val pkgVersions = packageVersionDao.findAllByPackageNameOrderByTimePublishedDesc(packageName)
         return pkgVersions.map {
-            PackageVersionResponse(it.version, it.timePublished.toString())
+            PackageVersionResponse(it.version, it.timePublished)
         }
     }
 
@@ -64,7 +64,7 @@ class PackageVersionService(
         if (packageVersionDao.existsById(pkgVerId)) {
             throw ConflictException()
         }
-        val packageVersion = PackageVersion(pkgVerId, name, version, Timestamp.from(Instant.now()))
+        val packageVersion = PackageVersion(pkgVerId, name, version, System.currentTimeMillis())
         packageVersionDao.save(packageVersion)
         try {
             val copyLocation = resolvePathForPackage(name, version)
