@@ -108,9 +108,4 @@
     <ProjectReference Include="..\CodeDesigner.Core\CodeDesigner.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Node\Blocks\Inputs\" />
-    <Folder Include="Node\Blocks\Outputs\" />
-  </ItemGroup>
-
 </Project>

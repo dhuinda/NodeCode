@@ -10,7 +10,7 @@ namespace CodeDesigner.UI.Node.Blocks
     public struct BlockProperties
     {
         public string Name { get; set; }
-        public string Type { get; set; }
+        public Parameter.ParameterType OutputType { get; set; }
         public float Width { get; set; }
         public float Height { get; set; }
         public Color BorderColor { get; set; }

@@ -99,6 +99,8 @@ namespace CodeDesigner.UI.Windows
             if (Canvas.Connecting)
             {
                 RenderEngine.MouseLocation = e.Location;
+
+                
                 DesignerCanvas.Refresh();
                 return;
             }
@@ -113,6 +115,7 @@ namespace CodeDesigner.UI.Windows
         {
             BlockProperties properties = new BlockProperties();
             properties.Height = 100;
+            properties.OutputType = Parameter.ParameterType.Object;
             properties.Width = 300;
             properties.TextColor = Color.White;
             properties.Name = "Test Node";

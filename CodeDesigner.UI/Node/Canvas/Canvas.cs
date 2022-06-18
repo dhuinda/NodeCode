@@ -89,6 +89,11 @@ namespace CodeDesigner.UI.Node.Canvas
             return null;
         }
 
+        public static void IsPointInParam()
+        {
+
+        }
+
         public static void DeleteBlock(BlockBase block)
         {
             Blocks.Remove(block);

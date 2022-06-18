@@ -19,6 +19,7 @@ namespace CodeDesigner.UI.Node.Blocks
         public PointF Coordinates;
 
         public PointF[] OutputPolygon;
+        
         public bool Connecting;
 
         public BlockBase(BlockProperties properties)

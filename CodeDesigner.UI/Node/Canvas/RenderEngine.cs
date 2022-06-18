@@ -51,7 +51,7 @@ namespace CodeDesigner.UI.Node.Canvas
 
             block.OutputPolygon = outputPoints;
             
-            g.FillPolygon(new SolidBrush(outputColor), outputPoints);
+            g.FillPolygon(new SolidBrush(GetParameterColor(block.Properties.OutputType)), outputPoints);
 
             float y = 25;
             
@@ -59,18 +59,18 @@ namespace CodeDesigner.UI.Node.Canvas
             {
                 parameter.Coordinates = new PointF((block.Coordinates.X + 5) * zoom, (block.Coordinates.Y + y) * zoom);
                 if (parameter.Connected)
-                    g.FillEllipse(new SolidBrush(GetParameterColor(parameter)), parameter.Coordinates.X, parameter.Coordinates.Y, 8 * zoom, 8 * zoom);
+                    g.FillEllipse(new SolidBrush(GetParameterColor(parameter.Type)), parameter.Coordinates.X, parameter.Coordinates.Y, 8 * zoom, 8 * zoom);
                 else 
-                    g.DrawEllipse(new Pen(GetParameterColor(parameter)), parameter.Coordinates.X, parameter.Coordinates.Y, 8 * zoom, 8 * zoom);
+                    g.DrawEllipse(new Pen(GetParameterColor(parameter.Type)), parameter.Coordinates.X, parameter.Coordinates.Y, 8 * zoom, 8 * zoom);
 
                 g.DrawString("(" + parameter.Type + ") " + parameter.Name, new Font("Gilroy-Bold", 5.5f * zoom, FontStyle.Regular, GraphicsUnit.Point), new SolidBrush(Color.White), parameter.Coordinates.X + (12 * zoom), parameter.Coordinates.Y);
                 y += 16;
             }
         }
         
-        public static Color GetParameterColor(Parameter param)
+        public static Color GetParameterColor(Parameter.ParameterType type)
         {
-            switch (param.Type)
+            switch (type)
             {
                 case Parameter.ParameterType.Int:
                     return Color.LightYellow;
