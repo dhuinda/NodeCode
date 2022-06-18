@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
+using System.IO.Packaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,8 +50,44 @@ namespace CodeDesigner.UI.Node.Canvas
             outputPoints[4] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + block.Properties.Height - 10) * zoom);
 
             block.OutputPolygon = outputPoints;
-
+            
             g.FillPolygon(new SolidBrush(outputColor), outputPoints);
+
+            float y = 25;
+            
+            foreach (Parameter parameter in block.Parameters)
+            {
+                parameter.Coordinates = new PointF((block.Coordinates.X + 5) * zoom, (block.Coordinates.Y + y) * zoom);
+                if (parameter.Connected)
+                    g.FillEllipse(new SolidBrush(GetParameterColor(parameter)), parameter.Coordinates.X, parameter.Coordinates.Y, 8 * zoom, 8 * zoom);
+                else 
+                    g.DrawEllipse(new Pen(GetParameterColor(parameter)), parameter.Coordinates.X, parameter.Coordinates.Y, 8 * zoom, 8 * zoom);
+
+                g.DrawString("(" + parameter.Type + ") " + parameter.Name, new Font("Gilroy-Bold", 5.5f * zoom, FontStyle.Regular, GraphicsUnit.Point), new SolidBrush(Color.White), parameter.Coordinates.X + (12 * zoom), parameter.Coordinates.Y);
+                y += 16;
+            }
+        }
+        
+        public static Color GetParameterColor(Parameter param)
+        {
+            switch (param.Type)
+            {
+                case Parameter.ParameterType.Int:
+                    return Color.LightYellow;
+                case Parameter.ParameterType.Float:
+                    return Color.LightSlateGray;
+                case Parameter.ParameterType.String:
+                    return Color.LightSeaGreen;
+                case Parameter.ParameterType.Bool:
+                    return Color.LightGreen;
+                case Parameter.ParameterType.Double:
+                    return Color.LightCoral;
+                case Parameter.ParameterType.Object:
+                    return Color.LightBlue;
+                default:
+                    return Color.LightBlue;
+
+            }
         }
 
         public static void DrawConnectionLines(BlockBase block, Graphics g)

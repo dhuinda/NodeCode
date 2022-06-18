@@ -120,6 +120,18 @@ namespace CodeDesigner.UI.Windows
             properties.SecondaryColor = Color.FromArgb(69,69,69);
             properties.BorderColor = Color.FromArgb(69,69,69);
             BlockBase? blockbase = new (properties);
+            blockbase.Parameters.Add(new Parameter()
+            {
+                Type = Parameter.ParameterType.Object,
+                Connected = true,
+                Name = "Random Variable 1"
+            });
+            blockbase.Parameters.Add(new Parameter()
+            {
+                Type = Parameter.ParameterType.String,
+                Connected = false,
+                Name = "Random Variable 2"
+            });
             Canvas.AddNode(blockbase);
         }
 

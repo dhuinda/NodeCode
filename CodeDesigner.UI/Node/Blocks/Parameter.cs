@@ -12,6 +12,9 @@ namespace CodeDesigner.UI.Node.Blocks
         public ParameterType Type { get; set; }
         public object Value { get; set; }
         public BlockBase Block { get; set; }
+        public PointF Coordinates { get; set; }
+        public string Name { get; set; }
+        public bool Connected { get; set; }
 
         public enum ParameterType
         {
