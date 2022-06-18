@@ -16,6 +16,8 @@ namespace CodeDesigner.UI.Node.Canvas
         public static PointF MousePosition;
         public static List<BlockBase?> Blocks = new();
         public static bool Connecting;
+        public static bool IsOverParameter;
+        public static Parameter? OverParameter;
         public static BlockBase ConnectingBlock;
 
         public static void Initialize(CanvasPanel panel)
@@ -83,15 +85,34 @@ namespace CodeDesigner.UI.Node.Canvas
 
                 if (!rect.Contains(testPoint)) continue;
 
+                if (Connecting && block != ConnectingBlock)
+                {
+                    OverParameter = PointInParameter(block, testPoint);
+                    IsOverParameter = true;
+                }
+                
                 return block;
             }
 
             return null;
         }
 
-        public static void IsPointInParam()
+        public static Parameter? PointInParameter(BlockBase block, PointF testPoint)
         {
+            foreach (Parameter? param in block.Parameters)
+            {
+                RectangleF rect = new(param.Coordinates.X * CanvasControl.ZoomFactor, param.Coordinates.Y * CanvasControl.ZoomFactor, 8 * CanvasControl.ZoomFactor, 8 * CanvasControl.ZoomFactor);
+                if (!rect.Contains(testPoint)) continue;
+                return param;
+            }
 
+            return null;
+        }
+
+        public static void ConnectParameter(BlockBase connectingBlock, Parameter parameter)
+        {
+            parameter.Block = connectingBlock;
+            parameter.Connected = true;
         }
 
         public static void DeleteBlock(BlockBase block)

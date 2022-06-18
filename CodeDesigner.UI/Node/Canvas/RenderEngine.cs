@@ -33,6 +33,7 @@ namespace CodeDesigner.UI.Node.Canvas
                 g.DrawString(block.Properties.Name, new Font("Gilroy-Bold", 9f * zoom, FontStyle.Regular, GraphicsUnit.Point), new SolidBrush(block.Properties.TextColor), (block.Coordinates.X * zoom) + (5 * zoom), (block.Coordinates.Y * zoom) + (3.2f * zoom));
 
                 DrawIO(block, g, offset, zoom);
+                DrawWires(block, g);
             }
 
             LastOffset = offset;
@@ -55,7 +56,7 @@ namespace CodeDesigner.UI.Node.Canvas
 
             float y = 25;
             
-            foreach (Parameter parameter in block.Parameters)
+            foreach (Parameter? parameter in block.Parameters)
             {
                 parameter.Coordinates = new PointF((block.Coordinates.X + 5) * zoom, (block.Coordinates.Y + y) * zoom);
                 if (parameter.Connected)
@@ -90,6 +91,32 @@ namespace CodeDesigner.UI.Node.Canvas
             }
         }
 
+        //Draws the wires from block to parameters
+        public static void DrawWires(BlockBase block, Graphics g)
+        {
+            foreach (Parameter parameter in block.Parameters)
+            {
+                if (parameter is { Connected: true })
+                {
+                    try
+                    {
+                        PointF[] points = new PointF[4];
+                        points[0] = parameter.Block.OutputPolygon[2];
+                        points[1] = new PointF(parameter.Block.OutputPolygon[2].X + 70,
+                            parameter.Block.OutputPolygon[2].Y);
+                        points[2] = new PointF(parameter.Coordinates.X - 70, parameter.Coordinates.Y);
+                        points[3] = parameter.Coordinates;
+                        g.DrawBezier(new Pen(Color.Gray), points[0], points[1], points[2], points[3]);
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+        }
+
+        //Draws the connecting line between one block and the mouse point for connecting the block to other blocks
         public static void DrawConnectionLines(BlockBase block, Graphics g)
         {
             if (!Canvas.Connecting)

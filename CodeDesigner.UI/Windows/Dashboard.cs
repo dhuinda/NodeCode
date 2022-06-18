@@ -85,6 +85,11 @@ namespace CodeDesigner.UI.Windows
             
             if (Canvas.Connecting)
             {
+                if (Canvas.IsOverParameter)
+                {
+                    Canvas.IsOverParameter = false;
+                    Canvas.ConnectParameter(Canvas.ConnectingBlock, Canvas.OverParameter);
+                }
                 Canvas.ConnectingBlock.Connecting = false;
                 Canvas.Connecting = false;
                 DesignerCanvas.Refresh();
@@ -99,7 +104,7 @@ namespace CodeDesigner.UI.Windows
             if (Canvas.Connecting)
             {
                 RenderEngine.MouseLocation = e.Location;
-
+                Canvas.IsPointInBlock(e.Location);
                 
                 DesignerCanvas.Refresh();
                 return;
@@ -126,7 +131,7 @@ namespace CodeDesigner.UI.Windows
             blockbase.Parameters.Add(new Parameter()
             {
                 Type = Parameter.ParameterType.Object,
-                Connected = true,
+                Connected = false,
                 Name = "Random Variable 1"
             });
             blockbase.Parameters.Add(new Parameter()
