@@ -11,6 +11,9 @@ namespace CodeDesigner.UI.Node.Blocks.Nodes
     {
         public BinaryOperator Operator;
 
+        public object Left;
+        public object Right;
+
         public BinaryExpression(BinaryOperator binaryOperator)
         {
             Operator = binaryOperator;
