@@ -9,5 +9,7 @@ data class NodecodeUser(
     var username: String,
     @Id var id: UUID,
     var provider: String,
-    var avatarUrl: String
+    var avatarUrl: String,
+    var timeCreated: Long,
+    var numPackages: Int
 )

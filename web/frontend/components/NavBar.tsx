@@ -1,5 +1,5 @@
 import { FC, FormEvent, useState } from 'react'
-import { Box, Flex, Input, Text } from '@chakra-ui/react'
+import { Flex, Input, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import NavBarProfile from './NavBarProfile'
 import Link from 'next/link'
@@ -18,7 +18,7 @@ const NavBar: FC = () => {
       <Link href='/'>
         <a>
           <Text fontFamily='Teko' fontSize='48px'>
-            cdpm
+            ncpm
           </Text>
         </a>
       </Link>

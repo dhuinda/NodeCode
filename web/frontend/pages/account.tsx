@@ -11,53 +11,70 @@ import {
   Grid,
   GridItem,
   IconButton,
-  Tooltip
+  Tooltip,
+  useDisclosure
 } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import PackagePreview from 'components/PackagePreview'
 import { AddIcon } from '@chakra-ui/icons'
-
-export interface UserPrincipalResponse {
-  username: string
-  id: string
-  enabled: boolean
-  accountNonLocked: boolean
-  accountNonExpired: boolean
-  credentialsNonExpired: boolean
-  name: string
-  avatarUrl: string
-}
+import { UserPrincipalResponse } from 'types/user'
+import { PackagePreviewResponse } from 'types/package'
+import ConfirmationModal from 'components/ConfirmationModal'
 
 const AccountPage: NextPage = () => {
   const [account, setAccount] = useState<UserPrincipalResponse | null>(null)
+  const [packages, setPackages] = useState<PackagePreviewResponse[] | null>(null)
+
+  const { isOpen: isDeleteModalOpen, onOpen: onOpenDeleteModal, onClose: onCloseDeleteModal } = useDisclosure()
   const router = useRouter()
   const toast = useToast()
   const isDesktopView = useBreakpointValue({ base: false, lg: true })
 
   const getAccount = async () => {
-    const response = await fetch('/api/v1/users/user').catch(e => console.log(e))
-    if (!response) {
+    const accountPromise = fetch('/api/v1/users/user')
+    const packagesPromise = fetch('/api/v1/users/user/packages')
+    let accountResponse: Response | null, packagesResponse: Response | null
+    try {
+      ;[accountResponse, packagesResponse] = await Promise.all([accountPromise, packagesPromise])
+    } catch {
+      router.push('/api/v1/oauth2/code/github')
+    }
+    if (!accountResponse) {
       router.push('/api/v1/oauth2/code/github')
       return
     }
-    if (!response.ok) {
-      if (response.status === 403) {
+    if (!accountResponse.ok) {
+      if (accountResponse.status === 403) {
         router.push('/api/v1/oauth2/code/github')
       } else {
         toast({
           title: 'Error',
-          description: `Error fetching account data: ${response.statusText}`,
+          description: `Error fetching account data: ${accountResponse.status}`,
           status: 'error',
           duration: 9000,
           isClosable: true
         })
+        return
       }
     }
-    const json = await response.json()
-    console.log(json)
-    setAccount(json)
+    if (!packagesResponse || !packagesResponse.ok) {
+      toast({
+        title: 'Error',
+        description: `Error fetching packages: ${packagesResponse.status}`,
+        status: 'error',
+        duration: 4000,
+        isClosable: true
+      })
+      const accountJson = await accountResponse.json()
+      setAccount(accountJson)
+      return
+    }
+
+    const [accountJson, packagesJson] = await Promise.all([accountResponse.json(), packagesResponse.json()])
+    setPackages(packagesJson)
+    setAccount(accountJson)
   }
 
   useEffect(() => {
@@ -72,6 +89,22 @@ const AccountPage: NextPage = () => {
     )
   }
 
+  const handleDeleteAccount = async () => {
+    console.log('delete')
+    const response = await fetch('/api/v1/users/user', { method: 'DELETE' })
+    if (response.ok) {
+      router.push('/')
+    } else {
+      toast({
+        title: 'Error',
+        description: `Error deleting account: ${response.status}`,
+        status: 'error',
+        duration: 7000,
+        isClosable: true
+      })
+    }
+  }
+
   const { avatarUrl, name } = account
 
   return (
@@ -83,7 +116,7 @@ const AccountPage: NextPage = () => {
             {name}
           </Heading>
           {isDesktopView && <Divider color='#d5d5d5' opacity='1' borderColor='rgba(0,0,0,0.1)' m='25px 0' />}
-          <Button variant='outline' colorScheme='red' mt='5px'>
+          <Button variant='outline' colorScheme='red' mt='5px' onClick={onOpenDeleteModal}>
             Delete Account
           </Button>
         </Box>
@@ -93,23 +126,23 @@ const AccountPage: NextPage = () => {
         <Flex justifyContent='space-between'>
           <Heading>Packages</Heading>
           <Tooltip label='Create package'>
-            <IconButton aria-label='Create package' icon={<AddIcon />} size='lg' />
+            <IconButton aria-label='Create package' icon={<AddIcon />} size='lg' onClick={() => router.push('/create')} />
           </Tooltip>
         </Flex>
         <Box>
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
-          <PackagePreview shortDescription='Test' version='0.1.0' name='r-tree' isSmall />
+          {packages != null &&
+            packages.map(p => (
+              <PackagePreview packageName={p.name} version={p.latestVersion} description={p.description} key={p.name} />
+            ))}
         </Box>
       </GridItem>
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        title='Delete Account'
+        description='Are you sure you would like to delete your account?'
+        onClose={onCloseDeleteModal}
+        onConfirm={handleDeleteAccount}
+      />
     </Grid>
   )
 }

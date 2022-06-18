@@ -1,10 +1,15 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import { Box, Flex, Heading, SimpleGrid } from '@chakra-ui/react'
+import type { GetStaticProps, NextPage } from 'next'
+import { Box, Heading, SimpleGrid } from '@chakra-ui/react'
 import PackagePreview from 'components/PackagePreview'
+import Footer from 'components/Footer'
+import { PackagePreviewResponse } from 'types/package'
 
-const Home: NextPage = () => {
+interface Props {
+  popularPackages: PackagePreviewResponse[]
+  newPackages: PackagePreviewResponse[]
+}
+
+const Home: NextPage<Props> = ({ popularPackages, newPackages }) => {
   return (
     <Box>
       <Box className='moving-gradient' p={{ base: '5vh 10vw', xl: '15vh 10vw' }}>
@@ -13,7 +18,7 @@ const Home: NextPage = () => {
           Simplify your code
         </Heading>
         <Heading color='white' fontStyle='normal' fontSize='18pt' mt='3vh'>
-          Use Code Designer Package Manager to reduce the amount of code in your project.
+          Use Nodecode Package Manager to reduce the amount of code in your project.
         </Heading>
       </Box>
 
@@ -22,28 +27,43 @@ const Home: NextPage = () => {
         <Box>
           <Heading>Popular Packages</Heading>
           <Box pr='50px'>
-            <PackagePreview name='linked-list' version='0.1.0' shortDescription='A simple linked list implementation' />
-            <PackagePreview name='linked-list' version='0.1.0' shortDescription='A simple linked list implementation' />
-            <PackagePreview name='linked-list' version='0.1.0' shortDescription='A simple linked list implementation' />
-            <PackagePreview name='linked-list' version='0.1.0' shortDescription='A simple linked list implementation' />
-            <PackagePreview name='linked-list' version='0.1.0' shortDescription='A simple linked list implementation' />
-            <PackagePreview name='linked-list' version='0.1.0' shortDescription='A simple linked list implementation' />
+            {popularPackages !== null &&
+              popularPackages.map(p => (
+                <PackagePreview packageName={p.name} version={p.latestVersion} description={p.description} key={p.name} />
+              ))}
           </Box>
         </Box>
         <Box>
           <Heading>New Packages</Heading>
           <Box>
-            <PackagePreview name='hashmap' version='0.1.0' shortDescription='A simple hash map implementation' />
-            <PackagePreview name='hashmap' version='0.1.0' shortDescription='A simple hash map implementation' />
-            <PackagePreview name='hashmap' version='0.1.0' shortDescription='A simple hash map implementation' />
-            <PackagePreview name='hashmap' version='0.1.0' shortDescription='A simple hash map implementation' />
-            <PackagePreview name='hashmap' version='0.1.0' shortDescription='A simple hash map implementation' />
-            <PackagePreview name='hashmap' version='0.1.0' shortDescription='A simple hash map implementation' />
+            {newPackages !== null &&
+              newPackages.map(p => (
+                <PackagePreview packageName={p.name} version={p.latestVersion} description={p.description} key={p.name} />
+              ))}
           </Box>
         </Box>
       </SimpleGrid>
+
+      <Footer />
     </Box>
+    // todo: add footer w/ github, statement that it's for TSA, creators, download link, etc
   )
 }
 
 export default Home
+
+export const getStaticProps: GetStaticProps<Props> = async () => {
+  console.log('getStaticProps')
+  const domain = process.env.NODE_ENV === 'production' ? 'https://ncpm.zackmurry.com' : 'http://localhost'
+  // const domain = 'http://localhost'
+  const response = await fetch(`${domain}/api/v1/packages/trending`)
+  const json = await response.json()
+
+  return {
+    props: {
+      popularPackages: json.popular,
+      newPackages: json.latest
+    },
+    revalidate: 60
+  }
+}

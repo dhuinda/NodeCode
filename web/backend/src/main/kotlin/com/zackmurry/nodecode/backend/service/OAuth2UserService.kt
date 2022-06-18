@@ -63,7 +63,9 @@ class OAuth2UserService(private val userService: UserService) : DefaultOAuth2Use
             username,
             UUID.randomUUID(),
             oAuth2UserRequest.clientRegistration.registrationId.uppercase(),
-            oAuth2UserInfo.getAvatarUrl()
+            oAuth2UserInfo.getAvatarUrl(),
+            System.currentTimeMillis(),
+            0
         )
         userService.createUser(user)
         return user

@@ -5,5 +5,8 @@ import java.util.*
 
 data class UserResponse(
     var id: UUID,
-    var username: String
+    var username: String,
+    var avatarUrl: String,
+    var timeCreated: Long,
+    var numPackages: Int
 )
