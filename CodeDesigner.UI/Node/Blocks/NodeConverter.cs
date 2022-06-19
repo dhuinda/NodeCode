@@ -31,14 +31,31 @@ public class NodeConverter
     {
         switch (node.NodeType)
         {
+            case NodeType.BINARY_EXPRESSION:
+            {
+                var binExpNode = (BinaryExpression) node;
+                Console.WriteLine("typeOf Left" + binExpNode.Left.GetType().Name);
+                // todo
+                break;
+            }
+            case NodeType.BOOLEAN_EXPRESSION:
+            {
+                var boolExpNode = (BooleanExpression) node;
+                pc.Add(new ASTBooleanExpression(boolExpNode.Value));
+                break;
+            }
             case NodeType.FUNCTION_DEFINITION:
             {
                 Console.WriteLine("bruhhuh");
                 var funDefNode = (FunctionDefinition) node;
-                var parameters = funDefNode.Parameters;
                 var astParams = new List<ASTVariableDefinition>();
-                foreach (var p in parameters)
+                foreach (var p in funDefNode.Parameters)
                 {
+                    if (p == null)
+                    {
+                        throw new Exception("Unexpected null parameter in definition of function " + funDefNode.Name +
+                                            ": either remove the parameter or assign it a value");
+                    }
                     astParams.Add(new (p.Name, GetVariableType(p.Type, p.ObjectType)));
                 }
 
@@ -55,10 +72,14 @@ public class NodeConverter
             case NodeType.FUNCTION_INVOCATION:
             {
                 var funInvNode = (FunctionInvocation) node;
-                var args = funInvNode.Parameters;
                 var astArgs = new List<ASTNode>();
-                foreach (var arg in args)
+                foreach (var arg in funInvNode.Parameters)
                 {
+                    if (arg == null)
+                    {
+                        throw new Exception("Unexpected null parameter in invocation of function " + funInvNode.Name +
+                                        ": either remove the parameter or assign it a value");
+                    }
                     astArgs.Add(GetASTNodeFromParam(arg));
                 }
                 pc.Add(new ASTFunctionInvocation(funInvNode.Name, astArgs));
@@ -67,6 +88,30 @@ public class NodeConverter
                     Console.WriteLine("printf next block not null");
                     AnalyzeNode(funInvNode.NextBlock, pc);
                 }
+                break;
+            }
+            case NodeType.NUMBER_EXPRESSION:
+            {
+                var numExpNode = (NumberExpression) node;
+                pc.Add(new ASTNumberExpression(numExpNode.Value, numExpNode.IsFloatingPoint ? PrimitiveVariableType.DOUBLE : PrimitiveVariableType.INTEGER));
+                break;
+            }
+            case NodeType.PROTOTYPE_DECLARATION:
+            {
+                var protoNode = (PrototypeDeclaration) node;
+                var astParams = new List<VariableType>();
+                foreach (var p in protoNode.Parameters)
+                {
+                    if (p == null)
+                    {
+                        throw new Exception("Unexpected null parameter in definition of prototype " + protoNode.Name +
+                                            ": either remove the parameter or assign it a value");
+                    }
+                    astParams.Add(GetVariableType(p.Type, p.ObjectType));
+                }
+
+                var returnType = GetVariableType(protoNode.ReturnType, protoNode.ObjectReturnType);
+                pc.Add(new ASTPrototypeDeclaration(protoNode.Name, astParams, returnType, false));
                 break;
             }
             case NodeType.STRING_EXPRESSION:
@@ -85,6 +130,11 @@ public class NodeConverter
                 } else if (returnExp.Parameters.Count == 1)
                 {
                     var val = returnExp.Parameters[0];
+                    if (val == null)
+                    {
+                        throw new Exception(
+                            "Unexpected null parameter of return: either remove the parameter or assign it a value.");
+                    }
                     pc.Add(new ASTReturn(GetASTNodeFromParam(val)));
                 }
                 else
@@ -92,6 +142,40 @@ public class NodeConverter
                     throw new Exception("Return statements should have at most one parameter!");
                 }
 
+                break;
+            }
+            case NodeType.VARIABLE_ASSIGNMENT:
+            {
+                var varAssignNode = (VariableAssignment) node;
+                if (varAssignNode.Parameters.Count != 1)
+                {
+                    throw new Exception("Expected variable assignment to have one parameter but instead it has " + varAssignNode.Parameters.Count);
+                }
+
+                pc.Add(new ASTVariableAssignment(varAssignNode.Name, GetASTNodeFromParam(varAssignNode.Parameters[0] ?? throw new Exception("Unexpected null parameter in variable assignment"))));
+                break;
+            }
+            case NodeType.VARIABLE_DECLARATION:
+            {
+                var varDeclNode = (VariableDeclaration) node;
+                if (varDeclNode.Parameters.Count != 1)
+                {
+                    throw new Exception("Expected variable assignment to have one parameter but instead it has " + varDeclNode.Parameters.Count);
+                }
+                pc.Add(new ASTVariableDeclaration(varDeclNode.Name, GetVariableType(varDeclNode.Type, varDeclNode.ObjectType), GetASTNodeFromParam(varDeclNode.Parameters[0] ?? throw new Exception("Unexpected null parameter in variable assignment"))));
+                break;
+            }
+            case NodeType.VARIABLE_DEFINITION:
+            {
+                var varDefNode = (VariableDefinition) node;
+                pc.Add(new ASTVariableDefinition(varDefNode.Name,
+                    GetVariableType(varDefNode.Type, varDefNode.ObjectType)));
+                break;
+            }
+            case NodeType.VARIABLE_EXPRESSION:
+            {
+                var varExpNode = (VariableExpression) node;
+                pc.Add(new ASTVariableExpression(varExpNode.Name));
                 break;
             }
         }
