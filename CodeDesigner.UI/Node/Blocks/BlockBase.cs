@@ -13,6 +13,7 @@ namespace CodeDesigner.UI.Node.Blocks
         public BlockBase OutputBlock; //This is the block that this block is invoking after completion.
 
         public List<Parameter?> Parameters;
+        public List<Parameter> ConnectedParameters;
 
         public BlockProperties Properties;
 
@@ -27,6 +28,7 @@ namespace CodeDesigner.UI.Node.Blocks
             Coordinates = new Point(0, 0);
             Properties = properties;
             Parameters = new List<Parameter?>();
+            ConnectedParameters = new List<Parameter>();
         }
 
         public BlockBase(BlockProperties properties, PointF coordinates)
@@ -34,11 +36,13 @@ namespace CodeDesigner.UI.Node.Blocks
             Coordinates = coordinates;
             Properties = properties;
             Parameters = new List<Parameter?>();
+            ConnectedParameters = new List<Parameter>();
         }
 
         public BlockBase()
         {
             Parameters = new List<Parameter?>();
+            ConnectedParameters = new List<Parameter>();
         }
     }
 }

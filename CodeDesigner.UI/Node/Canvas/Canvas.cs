@@ -109,8 +109,10 @@ namespace CodeDesigner.UI.Node.Canvas
             return null;
         }
 
-        public static void ConnectParameter(BlockBase connectingBlock, Parameter parameter)
+        public static void ConnectParameter(BlockBase connectingBlock, Parameter? parameter)
         {
+            if (parameter == null)
+                return;
             parameter.Block = connectingBlock;
             parameter.Connected = true;
         }

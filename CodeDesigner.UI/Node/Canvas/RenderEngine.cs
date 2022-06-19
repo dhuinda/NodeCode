@@ -33,7 +33,7 @@ namespace CodeDesigner.UI.Node.Canvas
                 g.DrawString(block.Properties.Name, new Font("Gilroy-Bold", 9f * zoom, FontStyle.Regular, GraphicsUnit.Point), new SolidBrush(block.Properties.TextColor), (block.Coordinates.X * zoom) + (5 * zoom), (block.Coordinates.Y * zoom) + (3.2f * zoom));
 
                 DrawIO(block, g, offset, zoom);
-                DrawWires(block, g);
+                DrawWires(block, g, zoom);
             }
 
             LastOffset = offset;
@@ -92,7 +92,7 @@ namespace CodeDesigner.UI.Node.Canvas
         }
 
         //Draws the wires from block to parameters
-        public static void DrawWires(BlockBase block, Graphics g)
+        public static void DrawWires(BlockBase block, Graphics g, float zoom)
         {
             foreach (Parameter parameter in block.Parameters)
             {
@@ -104,8 +104,8 @@ namespace CodeDesigner.UI.Node.Canvas
                         points[0] = parameter.Block.OutputPolygon[2];
                         points[1] = new PointF(parameter.Block.OutputPolygon[2].X + 70,
                             parameter.Block.OutputPolygon[2].Y);
-                        points[2] = new PointF(parameter.Coordinates.X - 70, parameter.Coordinates.Y);
-                        points[3] = parameter.Coordinates;
+                        points[2] = new PointF(parameter.Coordinates.X - 70, parameter.Coordinates.Y + (4 * zoom));
+                        points[3] = new PointF(parameter.Coordinates.X, parameter.Coordinates.Y + (4 * zoom));
                         g.DrawBezier(new Pen(Color.Gray), points[0], points[1], points[2], points[3]);
                     }
                     catch
