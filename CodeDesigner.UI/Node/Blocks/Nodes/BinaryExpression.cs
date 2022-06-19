@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CodeDesigner.UI.Designer.Toolbox;
 using CodeDesigner.UI.Node.Blocks.Types;
 
 namespace CodeDesigner.UI.Node.Blocks.Nodes
@@ -43,6 +44,7 @@ namespace CodeDesigner.UI.Node.Blocks.Nodes
             });
 
             Properties = properties;
+            NodeType = NodeType.BINARY_EXPRESSION;
         }
     }
 }

@@ -1,4 +1,6 @@
 using System.Runtime.InteropServices;
+using CodeDesigner.UI.Node.Blocks;
+using CodeDesigner.UI.Node.Blocks.Nodes;
 using CodeDesigner.UI.Windows;
 
 namespace CodeRunner.UI
@@ -23,6 +25,19 @@ namespace CodeRunner.UI
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(pm = new ProjectManager());
+
+            var blocks = new List<BlockBase>();
+            var mainDef = new FunctionDefinition("main", Parameter.ParameterType.Void);
+            var printfCall = new FunctionInvocation("extern.printf");
+            printfCall.Parameters.Add(new Parameter()
+            {
+                Type = Parameter.ParameterType.String,
+                RawValue = "Hello, world!\n"
+            });
+            mainDef.NextBlock = printfCall;
+            printfCall.NextBlock = new ReturnExpression();
+            blocks.Add(mainDef);
+            NodeConverter.CompileNodes(blocks);
         }
     }
 }

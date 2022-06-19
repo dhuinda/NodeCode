@@ -6,7 +6,7 @@ public class ASTReturn : ASTNode
 {
     public ASTNode? Expression; // null means void
 
-    public ASTReturn(ASTNode? expression)
+    public ASTReturn(ASTNode? expression = null)
     {
         Expression = expression;
     }

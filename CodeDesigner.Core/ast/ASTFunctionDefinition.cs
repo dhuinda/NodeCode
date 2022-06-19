@@ -68,13 +68,13 @@ public class ASTFunctionDefinition : ASTNode
             node.Codegen(data);
         }
         
-        if (ReturnType.IsPrimitive && ReturnType.PrimitiveType == PrimitiveVariableType.VOID && (fullName != "__main_designer" || isAlreadyDefined))
-        {
-            LLVM.BuildRetVoid(data.Builder);
-        } else if (Body.Count != 0 && Body[^1].GetType().Name != "ASTReturn")
-        {
-            LLVM.BuildRetVoid(data.Builder);
-        }
+        // if (ReturnType.IsPrimitive && ReturnType.PrimitiveType == PrimitiveVariableType.VOID && (fullName != "__main_designer" || isAlreadyDefined))
+        // {
+        //     LLVM.BuildRetVoid(data.Builder);
+        // } else if (Body.Count != 0 && Body[^1].GetType().Name != "ASTReturn")
+        // {
+        //     LLVM.BuildRetVoid(data.Builder);
+        // }
         data.NamedValues.Clear();
         data.Func = null;
         return func;

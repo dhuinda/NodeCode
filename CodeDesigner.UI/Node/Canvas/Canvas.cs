@@ -111,7 +111,7 @@ namespace CodeDesigner.UI.Node.Canvas
 
         public static void ConnectParameter(BlockBase connectingBlock, Parameter parameter)
         {
-            parameter.Block = connectingBlock;
+            parameter.ReferenceValue = connectingBlock;
             parameter.Connected = true;
         }
 
