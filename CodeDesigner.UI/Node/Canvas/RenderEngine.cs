@@ -99,19 +99,15 @@ namespace CodeDesigner.UI.Node.Canvas
                     try
                     {
                         PointF[] points = new PointF[4];
-                        points[0] = parameter.Block.OutputPolygon[2];
-                        points[1] = new PointF(parameter.Block.OutputPolygon[2].X + 70,
-                            parameter.Block.OutputPolygon[2].Y);
+                        points[0] = parameter.ReferenceValue.OutputPolygon[2];
+                        points[1] = new PointF(parameter.ReferenceValue.OutputPolygon[2].X + 70,
+                            parameter.ReferenceValue.OutputPolygon[2].Y);
                         points[2] = new PointF(parameter.Coordinates.X - 70, parameter.Coordinates.Y + (4 * zoom));
                         points[3] = new PointF(parameter.Coordinates.X, parameter.Coordinates.Y + (4 * zoom));
                         g.DrawBezier(new Pen(Color.Gray), points[0], points[1], points[2], points[3]);
                     }
-                    catch
-                    {
+                    catch { }
 
-                        }
-                        
-                    }
                 }
             }
         }

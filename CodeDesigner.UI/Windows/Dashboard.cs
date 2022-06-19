@@ -151,5 +151,10 @@ namespace CodeDesigner.UI.Windows
             label1.ForeColor = Color.FromArgb(69, 69, 69);
             ProjectUtil.Save(Canvas.Blocks, Map.Name, bitmap );
         }
+
+        private void Dashboard_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Environment.Exit(0);
+        }
     }
 }

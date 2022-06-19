@@ -47,5 +47,16 @@ namespace CodeDesigner.UI.Node.Blocks
             Parameters = new List<Parameter?>();
             ConnectedParameters = new List<Parameter>();
         }
+
+        public void DestroyConnections()
+        {
+            foreach (Parameter p in ConnectedParameters)
+            {
+                p.Connected = false;
+                p.ReferenceValue = null;
+            }
+
+            ConnectedParameters.Clear();
+        }
     }
 }

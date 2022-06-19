@@ -571,6 +571,7 @@
             this.Controls.Add(this.panel1);
             this.Name = "Dashboard";
             this.Text = "Dashboard";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Dashboard_FormClosed);
             this.panel1.ResumeLayout(false);
             this.neoPanel3.ResumeLayout(false);
             this.neoPanel3.PerformLayout();

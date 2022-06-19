@@ -111,12 +111,17 @@ namespace CodeDesigner.UI.Node.Canvas
 
         public static void ConnectParameter(BlockBase connectingBlock, Parameter? parameter)
         {
-            parameter.ReferenceValue = connectingBlock;
-            parameter.Connected = true;
+            if (parameter != null)
+            {
+                connectingBlock.ConnectedParameters.Add(parameter);
+                parameter.ReferenceValue = connectingBlock;
+                parameter.Connected = true;
+            }
         }
 
         public static void DeleteBlock(BlockBase block)
         {
+            block.DestroyConnections();
             Blocks.Remove(block);
             CanvasControl.Refresh();
         }
