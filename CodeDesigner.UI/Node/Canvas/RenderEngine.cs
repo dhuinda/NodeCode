@@ -75,14 +75,12 @@ namespace CodeDesigner.UI.Node.Canvas
             {
                 case Parameter.ParameterType.Int:
                     return Color.LightYellow;
-                case Parameter.ParameterType.Float:
+                case Parameter.ParameterType.Double:
                     return Color.LightSlateGray;
                 case Parameter.ParameterType.String:
                     return Color.LightSeaGreen;
                 case Parameter.ParameterType.Bool:
                     return Color.LightGreen;
-                case Parameter.ParameterType.Double:
-                    return Color.LightCoral;
                 case Parameter.ParameterType.Object:
                     return Color.LightBlue;
                 default:
@@ -111,6 +109,8 @@ namespace CodeDesigner.UI.Node.Canvas
                     catch
                     {
 
+                        }
+                        
                     }
                 }
             }

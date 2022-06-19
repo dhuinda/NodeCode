@@ -10,8 +10,11 @@ namespace CodeDesigner.UI.Node.Blocks
     public class Parameter
     {
         public ParameterType Type { get; set; }
-        public object Value { get; set; }
-        public BlockBase Block { get; set; }
+        
+        // Either RawValue or Reference value must be null
+        public string? RawValue { get; set; } // A string representing a primitive literal; ex: "1", "false", "hi", "1.2" (coalesced via Type)
+        public BlockBase? ReferenceValue { get; set; } // The type of this is based on Type
+        
         public PointF Coordinates { get; set; }
         public string Name { get; set; }
         public bool Connected { get; set; }
@@ -20,10 +23,12 @@ namespace CodeDesigner.UI.Node.Blocks
         {
             String,
             Bool,
-            Float,
             Double,
             Int,
-            Object
+            Object,
+            Void
         }
+
+        public string? ObjectType;
     }
 }
