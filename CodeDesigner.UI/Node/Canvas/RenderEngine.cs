@@ -41,8 +41,6 @@ namespace CodeDesigner.UI.Node.Canvas
 
         public static void DrawIO(BlockBase? block, Graphics g, PointF offset, float zoom)
         {
-            Color outputColor = block.Connecting ? Color.LightGray : Color.White;
-            
             PointF[] outputPoints = new PointF[5];
             outputPoints[0] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + block.Properties.Height - 22) * zoom);
             outputPoints[1] = new PointF((block.Coordinates.X + block.Properties.Width - 13) * zoom, (block.Coordinates.Y + block.Properties.Height - 22) * zoom);

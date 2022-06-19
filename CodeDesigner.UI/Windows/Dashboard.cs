@@ -64,6 +64,19 @@ namespace CodeDesigner.UI.Windows
                     Canvas.DeleteBlock(block);
                     return;
                 }
+
+                if (e.Button == MouseButtons.Left)
+                {
+                    Parameter? p = Canvas.PointInParameter(block, e.Location);
+
+                    if (p != null)
+                    {
+                        p.Connected = false;
+                        p.ReferenceValue = null;
+                        DesignerCanvas.Refresh();
+                        return;
+                    }
+                }
                 
                 if (Canvas.IsPointInPolygon(block.OutputPolygon, e.Location))
                 {
@@ -114,33 +127,6 @@ namespace CodeDesigner.UI.Windows
                 return;
 
             Canvas.Pan(e.Location);
-        }
-
-        private void TestNodeBtn_Click(object sender, EventArgs e)
-        {
-            BlockProperties properties = new BlockProperties();
-            properties.Height = 100;
-            properties.OutputType = Parameter.ParameterType.Object;
-            properties.Width = 300;
-            properties.TextColor = Color.White;
-            properties.Name = "Test Node";
-            properties.FillColor = Color.FromArgb(85,85,85);
-            properties.SecondaryColor = Color.FromArgb(69,69,69);
-            properties.BorderColor = Color.FromArgb(69,69,69);
-            BlockBase? blockbase = new (properties);
-            blockbase.Parameters.Add(new Parameter()
-            {
-                Type = Parameter.ParameterType.Object,
-                Connected = false,
-                Name = "Random Variable 1"
-            });
-            blockbase.Parameters.Add(new Parameter()
-            {
-                Type = Parameter.ParameterType.String,
-                Connected = false,
-                Name = "Random Variable 2"
-            });
-            Canvas.AddNode(blockbase);
         }
 
         private void SaveBtn_Click(object sender, EventArgs e)
