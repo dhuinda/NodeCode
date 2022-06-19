@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Accessibility;
 using CodeDesigner.UI.Node.Blocks;
+using CodeDesigner.UI.Node.Blocks.Nodes;
 using CodeDesigner.UI.Windows.Resources.Controls.Panels;
 
 namespace CodeDesigner.UI.Node.Canvas
@@ -23,6 +24,7 @@ namespace CodeDesigner.UI.Node.Canvas
         public static void Initialize(CanvasPanel panel)
         {
             CanvasControl = panel;
+
         }
 
         public static void AddNode(BlockBase? block)

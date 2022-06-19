@@ -43,7 +43,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel13 = new System.Windows.Forms.Panel();
-            this.TestNodeBtn = new System.Windows.Forms.Button();
+            this.corePanel1 = new CodeDesigner.UI.Windows.Resources.Controls.Panels.CorePanel();
             this.label5 = new System.Windows.Forms.Label();
             this.panel11 = new System.Windows.Forms.Panel();
             this.neoPanel2 = new CodeDesigner.UI.Windows.Resources.Controls.Panels.NeoPanel();
@@ -260,21 +260,19 @@
             // 
             // panel13
             // 
-            this.panel13.Controls.Add(this.TestNodeBtn);
+            this.panel13.Controls.Add(this.corePanel1);
             this.panel13.Location = new System.Drawing.Point(10, 45);
             this.panel13.Name = "panel13";
             this.panel13.Size = new System.Drawing.Size(266, 433);
             this.panel13.TabIndex = 11;
             // 
-            // TestNodeBtn
+            // corePanel1
             // 
-            this.TestNodeBtn.Location = new System.Drawing.Point(94, 117);
-            this.TestNodeBtn.Name = "TestNodeBtn";
-            this.TestNodeBtn.Size = new System.Drawing.Size(75, 23);
-            this.TestNodeBtn.TabIndex = 0;
-            this.TestNodeBtn.Text = "Add Test Node";
-            this.TestNodeBtn.UseVisualStyleBackColor = true;
-            this.TestNodeBtn.Click += new System.EventHandler(this.TestNodeBtn_Click);
+            this.corePanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.corePanel1.Location = new System.Drawing.Point(0, 0);
+            this.corePanel1.Name = "corePanel1";
+            this.corePanel1.Size = new System.Drawing.Size(266, 433);
+            this.corePanel1.TabIndex = 0;
             // 
             // label5
             // 
@@ -620,7 +618,6 @@
         public Resources.Controls.Panels.CanvasPanel DesignerCanvas;
         private Label label5;
         private Panel panel13;
-        private Button TestNodeBtn;
         private Resources.Controls.Panels.NeoPanel neoPanel4;
         private Button button1;
         private Label label6;
@@ -632,5 +629,6 @@
         private Button button7;
         private Button button8;
         private Panel panel8;
+        private Resources.Controls.Panels.CorePanel corePanel1;
     }
 }
