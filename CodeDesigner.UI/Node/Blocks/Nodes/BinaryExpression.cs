@@ -10,14 +10,14 @@ namespace CodeDesigner.UI.Node.Blocks.Nodes;
 
 public class BinaryExpression : BlockBase
 {
-    public BinaryOperator Operator;
+    public BinOp Operator;
 
     public string? Left;
     public string? Right;
 
-    public BinaryExpression(BinaryOperator binaryOperator)
+    public BinaryExpression(BinOp binOp)
     {
-        Operator = binaryOperator;
+        Operator = binOp;
 
             BlockProperties properties = new BlockProperties
             {
@@ -33,13 +33,13 @@ public class BinaryExpression : BlockBase
 
         Parameters.Add(new Parameter
         {
-            Name = "Input 1",
+            Name = "Left Input",
             Type = Parameter.ParameterType.Object
         });
 
         Parameters.Add(new Parameter
         {
-            Name = "Input 2",
+            Name = "Right Input",
             Type = Parameter.ParameterType.Object
         });
 

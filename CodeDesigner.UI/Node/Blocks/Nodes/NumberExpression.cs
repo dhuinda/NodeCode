@@ -6,12 +6,10 @@ namespace CodeDesigner.UI.Node.Blocks.Nodes;
 public class NumberExpression : BlockBase
 {
     public string Value;
-    public bool IsFloatingPoint;
     
-    public NumberExpression(string value, bool isFloatingPoint)
+    public NumberExpression(string value)
     {
         Value = value;
-        IsFloatingPoint = isFloatingPoint;
 
         BlockProperties properties = new BlockProperties
         {
