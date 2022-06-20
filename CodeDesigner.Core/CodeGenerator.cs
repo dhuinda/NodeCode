@@ -9,9 +9,9 @@ namespace CodeDesigner.Core
     
     public class CodeGenerator
     {
-        // todo: should probably add loops lol
         // todo: support mutation operators (through binary operator UI node, but not through binary operator compiler node)
         // todo: support logical not
+        // todo: better variable scopes
         public static void Run(List<ASTNode> ast)
         {
 

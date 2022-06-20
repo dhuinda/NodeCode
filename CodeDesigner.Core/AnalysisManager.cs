@@ -171,6 +171,17 @@ public class AnalysisManager
                 Traverse(varDecl.Value);
                 break;
             }
+            case "ASTWhileLoop":
+            {
+                var whileLoop = (ASTWhileLoop) node;
+                Traverse(whileLoop.Condition);
+                foreach (var n in whileLoop.Body)
+                {
+                    Traverse(n);
+                }
+
+                break;
+            }
         }
     }
 
