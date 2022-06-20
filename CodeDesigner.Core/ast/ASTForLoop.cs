@@ -26,7 +26,7 @@ public class ASTForLoop : ASTNode
 
         Initializer?.Codegen(data);
         var loopBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "forbody");
-        var mergeBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "mergewhile");
+        var mergeBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "mergefor");
         if (Condition != null)
         {
             var initialCondition = Condition.Codegen(data);

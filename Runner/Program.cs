@@ -15,7 +15,8 @@ ast.Add(new ASTFunctionDefinition("main", new List<ASTVariableDefinition>(), new
         {
             new ASTFunctionInvocation("extern.printf", new List<ASTNode>
             {
-                new ASTStringExpression("Hello, world!\n")
+                new ASTStringExpression("Hello, world! %d\n"),
+                new ASTBinaryExpression(BinaryOperator.EQ, new ASTNotExpression(new ASTBinaryExpression(BinaryOperator.EQ, new ASTBinaryExpression(BinaryOperator.MODULO, new ASTVariableExpression("i"), new ASTNumberExpression("2", PrimitiveVariableType.INTEGER)), new ASTNumberExpression("0", PrimitiveVariableType.INTEGER))), new ASTBooleanExpression(true))
             })
         }, 
         new ASTVariableDeclaration("i", new VariableType(PrimitiveVariableType.INTEGER), new ASTNumberExpression("0", PrimitiveVariableType.INTEGER)),
