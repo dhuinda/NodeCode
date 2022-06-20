@@ -37,11 +37,15 @@ public class ASTForLoop : ASTNode
             LLVM.BuildBr(data.Builder, loopBlock);
         }
         
+        var oldValues = new Dictionary<string, LLVMValueRef>(data.NamedValues);
+        
         LLVM.PositionBuilderAtEnd(data.Builder, loopBlock);
         foreach (var node in Body)
         {
             node.Codegen(data);
         }
+
+        data.NamedValues = oldValues;
 
         Action?.Codegen(data);
         if (Condition != null)

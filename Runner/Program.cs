@@ -10,24 +10,17 @@ ast.Add(new ASTPrototypeDeclaration("printf", new List<VariableType>
 
 ast.Add(new ASTFunctionDefinition("main", new List<ASTVariableDefinition>(), new List<ASTNode>
 {
-    new ASTForLoop(
-        new List<ASTNode>
-        {
-            new ASTFunctionInvocation("extern.printf", new List<ASTNode>
-            {
-                new ASTStringExpression("Hello, world! %d\n"),
-                new ASTBinaryExpression(BinaryOperator.EQ, new ASTNotExpression(new ASTBinaryExpression(BinaryOperator.EQ, new ASTBinaryExpression(BinaryOperator.MODULO, new ASTVariableExpression("i"), new ASTNumberExpression("2", PrimitiveVariableType.INTEGER)), new ASTNumberExpression("0", PrimitiveVariableType.INTEGER))), new ASTBooleanExpression(true))
-            })
-        }, 
-        new ASTVariableDeclaration("i", new VariableType(PrimitiveVariableType.INTEGER), new ASTNumberExpression("0", PrimitiveVariableType.INTEGER)),
-        new ASTBinaryExpression(BinaryOperator.LT,
-            new ASTVariableExpression("i"),
-            new ASTNumberExpression("5", PrimitiveVariableType.INTEGER)),
-        new ASTVariableAssignment("i",
-            new ASTBinaryExpression(BinaryOperator.PLUS,
-                new ASTVariableExpression("i"),
-                new ASTNumberExpression("1", PrimitiveVariableType.INTEGER)))
-        )
+    new ASTForLoop(new List<ASTNode>
+     {
+    new ASTVariableDeclaration("i", new VariableType(PrimitiveVariableType.INTEGER), new ASTNumberExpression("2", PrimitiveVariableType.INTEGER)),
+    }, new ASTVariableDeclaration("j", new VariableType(PrimitiveVariableType.INTEGER), new ASTNumberExpression("0", PrimitiveVariableType.INTEGER)),
+    new ASTBinaryExpression(BinaryOperator.GT, new ASTNumberExpression("0", PrimitiveVariableType.INTEGER), new ASTNumberExpression("10", PrimitiveVariableType.INTEGER)),
+    new ASTVariableAssignment("j", new ASTBinaryExpression(BinaryOperator.PLUS, new ASTVariableExpression("j"), new ASTNumberExpression("1", PrimitiveVariableType.INTEGER)))),
+    new ASTFunctionInvocation("extern.printf", new List<ASTNode>
+    {
+        new ASTStringExpression("i: %d\n"),
+        new ASTVariableExpression("i")
+    })
 }, new(PrimitiveVariableType.VOID)));
 
 CodeGenerator.Run(ast);

@@ -24,6 +24,8 @@ public class ASTWhileLoop : ASTNode
         var mergeBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "mergewhile");
         LLVM.BuildCondBr(data.Builder, initialCondition, loopBlock, mergeBlock);
         
+        var oldValues = new Dictionary<string, LLVMValueRef>(data.NamedValues);
+        
         LLVM.PositionBuilderAtEnd(data.Builder, loopBlock);
         foreach (var node in Body)
         {
@@ -34,6 +36,7 @@ public class ASTWhileLoop : ASTNode
         LLVM.BuildCondBr(data.Builder, terminationVal, loopBlock, mergeBlock);
         
         LLVM.PositionBuilderAtEnd(data.Builder, mergeBlock);
+        data.NamedValues = oldValues;
         return mergeBlock;
     }
 }

@@ -152,7 +152,7 @@ public class ASTClassDefinition : ASTNode
                 method.Params.RemoveAt(method.Params.Count - 1);
             }
 
-            data.Generics = new Dictionary<string, string>();
+            data.Generics = new Dictionary<string, string>(); // todo it doesnt seem like this would work with multiple generic classes??
         }
         return new LLVMValueRef();
     }
