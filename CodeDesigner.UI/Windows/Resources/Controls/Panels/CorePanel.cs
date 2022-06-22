@@ -2,6 +2,8 @@
 using CodeDesigner.UI.Node.Blocks.Nodes;
 using CodeDesigner.UI.Node.Blocks.Types;
 using CodeDesigner.UI.Node.Canvas;
+using CodeDesigner.UI.Node.Interaction;
+using CodeDesigner.UI.Node.Interaction.Elements;
 
 namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
 {
@@ -51,6 +53,17 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
                 Connected = false,
                 Name = "Random Variable 2"
             });
+
+            ElementProperties elementProperties = new()
+            {
+                BlockCoordinates = new PointF(30, 30),
+                Size = new SizeF(100, 50)
+            };
+
+            Element buttonElement =
+                new ButtonElement(elementProperties, "Test Button", Color.LightGray, Color.Gray, Color.White, () => MessageBox.Show("button clicked"));
+
+            blockbase.Elements.Add(buttonElement);
             Canvas.AddNode(blockbase);
         }
 

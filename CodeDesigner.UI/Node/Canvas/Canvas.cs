@@ -107,8 +107,12 @@ namespace CodeDesigner.UI.Node.Canvas
         {
             foreach (Element e in block.Elements)
             {
-                RectangleF rect = new(e.Properties.BlockCoordinates.X * CanvasControl.ZoomFactor, e.Properties.BlockCoordinates.Y * CanvasControl.ZoomFactor,
-                    e.Properties.Size.Width * CanvasControl.ZoomFactor, e.Properties.Size.Height * CanvasControl.ZoomFactor);
+                float x = (block.Coordinates.X + e.Properties.BlockCoordinates.X) * CanvasControl.ZoomFactor;
+                float y = (block.Coordinates.Y + e.Properties.BlockCoordinates.Y) * CanvasControl.ZoomFactor;
+                float width = e.Properties.Size.Width * CanvasControl.ZoomFactor;
+                float height = e.Properties.Size.Height * CanvasControl.ZoomFactor;
+                
+                RectangleF rect = new(x, y, width, height);
 
                 if (!rect.Contains(testPoint)) continue;
 
@@ -139,7 +143,7 @@ namespace CodeDesigner.UI.Node.Canvas
             switch (e.GetType().Name)
             {
                 case "ButtonElement":
-                    ((ButtonElement)e).Method();
+                    ((ButtonElement)e).Method.Invoke();
                     break;
             }
         }
