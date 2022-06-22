@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices;
 using CodeDesigner.UI.Node.Blocks;
 using CodeDesigner.UI.Node.Blocks.Nodes;
+using CodeDesigner.UI.Node.Blocks.Types;
 using CodeDesigner.UI.Windows;
 
 namespace CodeRunner.UI
@@ -28,11 +29,18 @@ namespace CodeRunner.UI
 
             var blocks = new List<BlockBase>();
             var mainDef = new FunctionDefinition("main", Parameter.ParameterType.Void);
+            var binOp = new BinaryExpression(BinOp.Add);
+            binOp.Left = "1";
+            binOp.Parameters[1].ReferenceValue = new NumberExpression("2");
             var printfCall = new FunctionInvocation("extern.printf");
-            printfCall.Parameters.Add(new Parameter()
+            printfCall.Parameters.Add(new Parameter
             {
                 Type = Parameter.ParameterType.String,
-                RawValue = "Hello, world!\n"
+                RawValue = "\"1 + 2: %d\n\""
+            });
+            printfCall.Parameters.Add(new Parameter
+            {
+                ReferenceValue = binOp
             });
             mainDef.NextBlock = printfCall;
             printfCall.NextBlock = new ReturnExpression();

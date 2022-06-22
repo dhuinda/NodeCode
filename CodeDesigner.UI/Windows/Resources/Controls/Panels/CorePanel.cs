@@ -56,7 +56,7 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
 
         private void BinaryExpression_Click(object sender, EventArgs e)
         {
-            Canvas.AddNode(new BinaryExpression(BinaryOperator.Add));
+            Canvas.AddNode(new BinaryExpression(BinOp.Add));
         }
 
         private void StringExpression_Click(object sender, EventArgs e)

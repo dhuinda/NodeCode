@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 using CodeDesigner.UI.Designer.Toolbox;
 using CodeDesigner.UI.Node.Blocks.Types;
 
-namespace CodeDesigner.UI.Node.Blocks.Nodes
+namespace CodeDesigner.UI.Node.Blocks.Nodes;
+
+public class BinaryExpression : BlockBase
 {
-    public class BinaryExpression : BlockBase
+    public BinOp Operator;
+
+    public string? Left;
+    public string? Right;
+
+    public BinaryExpression(BinOp binOp)
     {
-        public BinaryOperator Operator;
-
-        public object Left;
-        public object Right;
-
-        public BinaryExpression(BinaryOperator binaryOperator)
-        {
-            Operator = binaryOperator;
+        Operator = binOp;
 
             BlockProperties properties = new BlockProperties
             {
@@ -31,20 +31,19 @@ namespace CodeDesigner.UI.Node.Blocks.Nodes
                 OutputType = Parameter.ParameterType.Object
             };
 
-            Parameters.Add(new Parameter()
-            {
-                Name = "Input 1",
-                Type = Parameter.ParameterType.Object
-            });
+        Parameters.Add(new Parameter
+        {
+            Name = "Left Input",
+            Type = Parameter.ParameterType.Object
+        });
 
-            Parameters.Add(new Parameter()
-            {
-                Name = "Input 2",
-                Type = Parameter.ParameterType.Object
-            });
+        Parameters.Add(new Parameter
+        {
+            Name = "Right Input",
+            Type = Parameter.ParameterType.Object
+        });
 
-            Properties = properties;
-            NodeType = NodeType.BINARY_EXPRESSION;
-        }
+        Properties = properties;
+        NodeType = NodeType.BINARY_EXPRESSION;
     }
 }

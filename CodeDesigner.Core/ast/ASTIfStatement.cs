@@ -28,16 +28,21 @@ public class ASTIfStatement : ASTNode
         {
             elseBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "elsebody");
         }
+        // todo: this doesn't work with nested if statements
         var mergeBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "mergeif");
         LLVM.BuildCondBr(data.Builder, conditionValue, ifBlock, elseBlock.HasValue ? elseBlock.Value : mergeBlock);
+
+        var oldValues = new Dictionary<string, LLVMValueRef>(data.NamedValues);
 
         LLVM.PositionBuilderAtEnd(data.Builder, ifBlock);
         foreach (var node in IfBody)
         {
             node.Codegen(data);
         }
+        
+        data.NamedValues = oldValues;
 
-        if (IfBody.Count != 0 && !IfBody[^1].GetType().Name.Equals("ASTReturn"))
+        if (IfBody.Count == 0 || !IfBody[^1].GetType().Name.Equals("ASTReturn"))
         {
             LLVM.BuildBr(data.Builder, mergeBlock);
         }
@@ -54,8 +59,10 @@ public class ASTIfStatement : ASTNode
             {
                 LLVM.BuildBr(data.Builder, mergeBlock);
             }
+            data.NamedValues = oldValues;
         }
         LLVM.PositionBuilderAtEnd(data.Builder, mergeBlock);
+        data.NamedValues = oldValues;
         return mergeBlock;
     }
 }

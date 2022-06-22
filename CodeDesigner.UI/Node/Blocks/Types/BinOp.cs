@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CodeDesigner.UI.Node.Blocks.Types
 {
-    public enum BinaryOperator
+    public enum BinOp
     {
         #region Arithmetic
         Add,

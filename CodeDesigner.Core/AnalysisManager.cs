@@ -88,6 +88,28 @@ public class AnalysisManager
 
                 break;
             }
+            case "ASTForLoop":
+            {
+                var forLoop = (ASTForLoop) node;
+                if (forLoop.Initializer != null)
+                {
+                    Traverse(forLoop.Initializer);
+                }
+                if (forLoop.Condition != null)
+                {
+                    Traverse(forLoop.Condition);
+                }
+                foreach (var n in forLoop.Body)
+                {
+                    Traverse(n);
+                }
+                if (forLoop.Action != null)
+                {
+                    Traverse(forLoop.Action);
+                }
+
+                break;
+            }
             case "ASTFunctionDefinition":
             {
                 var funcDef = (ASTFunctionDefinition) node;
@@ -150,6 +172,12 @@ public class AnalysisManager
                 _currentNamespace = "default";
                 break;
             }
+            case "ASTNotExpression":
+            {
+                var not = (ASTNotExpression) node;
+                Traverse(not.Value);
+                break;
+            }
             case "ASTReturn":
             {
                 var ret = (ASTReturn) node;
@@ -169,6 +197,17 @@ public class AnalysisManager
             {
                 var varDecl = (ASTVariableDeclaration) node;
                 Traverse(varDecl.Value);
+                break;
+            }
+            case "ASTWhileLoop":
+            {
+                var whileLoop = (ASTWhileLoop) node;
+                Traverse(whileLoop.Condition);
+                foreach (var n in whileLoop.Body)
+                {
+                    Traverse(n);
+                }
+
                 break;
             }
         }
