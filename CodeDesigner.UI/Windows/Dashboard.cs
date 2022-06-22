@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CodeDesigner.UI.Node.Blocks;
 using CodeDesigner.UI.Node.Canvas;
+using CodeDesigner.UI.Node.Interaction;
 using CodeDesigner.UI.Utility.Project;
 
 namespace CodeDesigner.UI.Windows
@@ -67,6 +68,14 @@ namespace CodeDesigner.UI.Windows
 
                 if (e.Button == MouseButtons.Left)
                 {
+                    Element? element = Canvas.IsPointInElement(block, e.Location);
+
+                    if (element != null)
+                    {
+                        Canvas.Interact(element);
+                        return;
+                    }
+
                     Parameter? p = Canvas.PointInParameter(block, e.Location);
 
                     if (p != null)
@@ -95,6 +104,12 @@ namespace CodeDesigner.UI.Windows
         private void DesignerCanvas_MouseUp(object sender, MouseEventArgs e)
         {
             Canvas.MousePosition = e.Location;
+
+            if (Canvas.ElementClickedOn)
+            {
+                Canvas.ElementClickedOn = false;
+                if (Canvas.ElementClicked != null) Canvas.ElementClicked.IsClickedOn = false;
+            }
             
             if (Canvas.Connecting)
             {

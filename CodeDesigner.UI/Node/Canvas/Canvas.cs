@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Accessibility;
 using CodeDesigner.UI.Node.Blocks;
 using CodeDesigner.UI.Node.Blocks.Nodes;
+using CodeDesigner.UI.Node.Interaction;
+using CodeDesigner.UI.Node.Interaction.Elements;
 using CodeDesigner.UI.Windows.Resources.Controls.Panels;
 
 namespace CodeDesigner.UI.Node.Canvas
@@ -18,6 +20,8 @@ namespace CodeDesigner.UI.Node.Canvas
         public static List<BlockBase?> Blocks = new();
         public static bool Connecting;
         public static bool IsOverParameter;
+        public static bool ElementClickedOn;
+        public static Element? ElementClicked;
         public static Parameter? OverParameter;
         public static BlockBase ConnectingBlock;
 
@@ -99,6 +103,25 @@ namespace CodeDesigner.UI.Node.Canvas
             return null;
         }
 
+        public static Element? IsPointInElement(BlockBase block, PointF testPoint)
+        {
+            foreach (Element e in block.Elements)
+            {
+                RectangleF rect = new(e.Properties.BlockCoordinates.X * CanvasControl.ZoomFactor, e.Properties.BlockCoordinates.Y * CanvasControl.ZoomFactor,
+                    e.Properties.Size.Width * CanvasControl.ZoomFactor, e.Properties.Size.Height * CanvasControl.ZoomFactor);
+
+                if (!rect.Contains(testPoint)) continue;
+
+                e.IsClickedOn = true;
+                ElementClickedOn = true;
+                ElementClicked = e;
+
+                return e;
+            }
+
+            return null;
+        }
+
         public static Parameter? PointInParameter(BlockBase block, PointF testPoint)
         {
             foreach (Parameter? param in block.Parameters)
@@ -109,6 +132,16 @@ namespace CodeDesigner.UI.Node.Canvas
             }
 
             return null;
+        }
+
+        public static void Interact(Element e)
+        {
+            switch (e.GetType().Name)
+            {
+                case "ButtonElement":
+                    ((ButtonElement)e).Method();
+                    break;
+            }
         }
 
         public static void ConnectParameter(BlockBase connectingBlock, Parameter? parameter)

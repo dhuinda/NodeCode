@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CodeDesigner.UI.Node.Blocks;
+using CodeDesigner.UI.Node.Interaction;
+using CodeDesigner.UI.Node.Interaction.Elements;
 using CodeRunner.UI;
 
 namespace CodeDesigner.UI.Node.Canvas
@@ -34,6 +36,7 @@ namespace CodeDesigner.UI.Node.Canvas
 
                 DrawIO(block, g, offset, zoom);
                 DrawWires(block, g, zoom);
+                DrawInteraction(block, g, zoom);
             }
 
             LastOffset = offset;
@@ -107,6 +110,14 @@ namespace CodeDesigner.UI.Node.Canvas
                     catch { }
 
                 }
+            }
+        }
+
+        public static void DrawInteraction(BlockBase block, Graphics g, float zoom)
+        {
+            foreach (Element e in block.Elements)
+            {
+                e.Draw(block, g, zoom);
             }
         }
 

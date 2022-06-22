@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CodeDesigner.UI.Node.Blocks;
 
 namespace CodeDesigner.UI.Node.Interaction
 {
     [Serializable]
-    public class Element
+    public abstract class Element
     {
-        public ElementProperties Properties; 
+        public ElementProperties Properties;
+        public bool IsClickedOn = false;
+
+        public abstract void Draw(BlockBase block, Graphics g, float zoom);
     }
 }
