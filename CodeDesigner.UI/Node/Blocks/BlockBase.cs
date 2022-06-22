@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CodeDesigner.UI.Designer.Toolbox;
+using CodeDesigner.UI.Node.Interaction;
 
 namespace CodeDesigner.UI.Node.Blocks
 {
@@ -15,6 +16,7 @@ namespace CodeDesigner.UI.Node.Blocks
 
         public List<Parameter?> Parameters;
         public List<Parameter> ConnectedParameters;
+        public List<Element> Elements;
 
         public BlockProperties Properties;
 
@@ -32,6 +34,7 @@ namespace CodeDesigner.UI.Node.Blocks
             Properties = properties;
             Parameters = new List<Parameter?>();
             ConnectedParameters = new List<Parameter>();
+            Elements = new List<Element>();
         }
 
         public BlockBase(BlockProperties properties, PointF coordinates)
@@ -40,12 +43,14 @@ namespace CodeDesigner.UI.Node.Blocks
             Properties = properties;
             Parameters = new List<Parameter?>();
             ConnectedParameters = new List<Parameter>();
+            Elements = new List<Element>();
         }
 
         public BlockBase()
         {
             Parameters = new List<Parameter?>();
             ConnectedParameters = new List<Parameter>();
+            Elements = new List<Element>();
         }
 
         public void DestroyConnections()
