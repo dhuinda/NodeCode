@@ -1,4 +1,7 @@
 using CodeDesigner.UI.Designer.Toolbox;
+using CodeDesigner.UI.Node.Canvas;
+using CodeDesigner.UI.Node.Interaction;
+using CodeDesigner.UI.Node.Interaction.Elements;
 
 namespace CodeDesigner.UI.Node.Blocks.Nodes;
 
@@ -26,9 +29,22 @@ public class FunctionDefinition : BlockBase
             OutputType = Parameter.ParameterType.Object
         };
 
-        // todo need a way to add/remove parameters in the UI
+        ElementProperties configureBtnProperties = new ElementProperties()
+        {
+            BlockCoordinates = new PointF(70, 30),
+            Size = new SizeF(50, 30)
+        };
 
         Properties = properties;
         NodeType = NodeType.FUNCTION_DEFINITION;
+
+        Element btnElement =
+            new ButtonElement(configureBtnProperties, "Configure", Color.SlateGray, Color.Gray, Color.White, () =>
+            {
+                InteractionHelper.LoadFunctionConfig(this);
+                InteractionHelper.FunctionConfigForm.Show();
+            });
+
+        Elements.Add(btnElement);
     }
 }

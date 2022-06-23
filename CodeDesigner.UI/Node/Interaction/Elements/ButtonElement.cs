@@ -30,7 +30,7 @@ namespace CodeDesigner.UI.Node.Interaction.Elements
             float width = Properties.Size.Width * zoom;
             float height = Properties.Size.Height * zoom;
 
-            g.DrawRectangle(new Pen(BorderColor), x, y, width, height);
+            g.DrawRectangle(new Pen(BorderColor, 1 * zoom), x, y, width, height);
             g.FillRectangle(new SolidBrush(ButtonColor), x, y, width, height);
 
             Rectangle rect = new ((int)x, (int)y, (int)width, (int)height);
