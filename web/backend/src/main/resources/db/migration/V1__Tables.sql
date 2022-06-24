@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS package
     documentation_url TEXT,
     repository_url    TEXT,
     downloads         INTEGER      NOT NULL DEFAULT 0,
-    latest_version    VARCHAR(16)
+    latest_version    VARCHAR(16),
+    ts                tsvector GENERATED ALWAYS AS ( setweight(to_tsvector('english', name), 'A') || setweight(to_tsvector('english', description), 'B') ) STORED
 );
 
 CREATE TABLE IF NOT EXISTS package_version
@@ -30,4 +31,5 @@ CREATE TABLE IF NOT EXISTS package_version
     time_published BIGINT   NOT NULL
 );
 
+CREATE INDEX ts_idx ON package USING GIN (ts);
 CREATE INDEX package_version_package_name_index ON package_version (package_name);

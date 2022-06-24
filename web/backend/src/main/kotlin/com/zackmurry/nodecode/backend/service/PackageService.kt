@@ -14,6 +14,8 @@ import com.zackmurry.nodecode.backend.security.UserPrincipal
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
+import java.util.*
+import kotlin.streams.toList
 
 private val PACKAGE_NAME_REGEX = Regex("[a-z|0-9]+(-[a-z|0-9]+)*")
 
@@ -93,6 +95,10 @@ class PackageService(
 
     fun getNewPackages(): List<PackagePreviewResponse> {
         return packageDao.findTop5ByOrderByLastUpdated().map { PackagePreviewResponse.from(it)}
+    }
+
+    fun searchPackages(q: String): List<PackagePreviewResponse> {
+        return packageDao.searchPackages(q).stream().map { PackagePreviewResponse.from(it) }.toList()
     }
 
 }

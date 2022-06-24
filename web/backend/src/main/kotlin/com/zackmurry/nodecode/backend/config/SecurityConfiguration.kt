@@ -34,9 +34,10 @@ class SecurityConfiguration(
                 authorize("/", permitAll)
                 authorize("/api/v1/users/name/*/avatar_url", permitAll)
                 authorize("/api/v1/users/username", permitAll)
-                authorize(AntPathRequestMatcher("/api/v1/packages/name/*", HttpMethod.GET.name), permitAll)
-                authorize("/api/v1/packages/name/*/versions/*/raw", permitAll)
-                authorize("/api/v1/packages/trending", permitAll)
+                authorize(AntPathRequestMatcher("/api/v1/packages/**", HttpMethod.GET.name), permitAll)
+//                authorize("/api/v1/packages/name/*/versions/*/raw", permitAll)
+//                authorize("/api/v1/packages/trending", permitAll)
+//                authorize("/api/v1/packages/search", permitAll)
                 authorize(anyRequest, authenticated)
             }
             oauth2Login {

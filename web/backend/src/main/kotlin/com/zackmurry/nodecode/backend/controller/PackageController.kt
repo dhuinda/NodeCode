@@ -2,6 +2,7 @@ package com.zackmurry.nodecode.backend.controller
 
 import com.zackmurry.nodecode.backend.exception.BadRequestException
 import com.zackmurry.nodecode.backend.model.PackageCreateRequest
+import com.zackmurry.nodecode.backend.model.PackagePreviewResponse
 import com.zackmurry.nodecode.backend.model.PackageUpdateRequest
 import com.zackmurry.nodecode.backend.model.TrendingPackagesResponse
 import com.zackmurry.nodecode.backend.service.PackageService
@@ -51,6 +52,12 @@ class PackageController(val packageService: PackageService, val packageVersionSe
         val popular = packageService.getPopularPackages()
         val latest = packageService.getNewPackages()
         return TrendingPackagesResponse(popular, latest)
+    }
+
+    @GetMapping("/search")
+    fun searchPackages(@RequestParam q: String): List<PackagePreviewResponse> {
+        println(q)
+        return packageService.searchPackages(q)
     }
 
 }

@@ -60,7 +60,6 @@ class PackageVersionService(
         return Paths.get("${uploadDirectory}${File.separator}${StringUtils.cleanPath(fileName)}")
     }
 
-    // todo: find dependencies and show them in the package screen
     fun addVersionToPackage(name: String, version: String, file: MultipartFile) {
         if (file.originalFilename == null || !file.originalFilename!!.endsWith(".nodecode")) {
             throw BadRequestException()
