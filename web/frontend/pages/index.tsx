@@ -56,8 +56,20 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   console.log('getStaticProps')
   const domain = process.env.NODE_ENV === 'production' ? 'https://ncpm.zackmurry.com' : 'http://localhost'
   // const domain = 'http://localhost'
-  const response = await fetch(`${domain}/api/v1/packages/trending`)
-  const json = await response.json()
+  let response: Response
+  let json: { popular: PackagePreviewResponse[]; latest: PackagePreviewResponse[] }
+  try {
+    response = await fetch(`${domain}/api/v1/packages/trending`)
+    json = await response.json()
+  } catch (e) {
+    return {
+      props: {
+        popularPackages: [],
+        newPackages: []
+      },
+      revalidate: 1
+    }
+  }
 
   return {
     props: {

@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.zackmurry"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.1"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 configurations {
@@ -38,7 +38,7 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 
 
-	compileOnly("net.rossillo.mvc.cache:spring-mvc-cache-control:1.1.1-RELEASE")
+	implementation("net.rossillo.mvc.cache:spring-mvc-cache-control:1.1.1-RELEASE")
 }
 
 tasks.withType<KotlinCompile> {
