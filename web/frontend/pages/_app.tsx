@@ -14,7 +14,7 @@ const MyApp: NextPage<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
       <Head>
-        <title>cdpm</title>
+        <title>ncpm</title>
         <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width' />
       </Head>
       <ChakraProvider theme={theme}>

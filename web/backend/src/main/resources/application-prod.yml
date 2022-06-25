@@ -16,7 +16,7 @@ spring:
           github:
             clientId: ${SPRING_GITHUB_CLIENT_ID}
             clientSecret: ${SPRING_GITHUB_CLIENT_SECRET}
-            redirectUri: "http://localhost/api/v1/oauth2/callback/github"
+            redirectUri: ${SPRING_GITHUB_REDIRECT_URI}
             scope:
               - user:email
               - read:user
