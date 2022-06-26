@@ -22,9 +22,13 @@ namespace CodeDesigner.UI.Node.Blocks
 
         public PointF Coordinates;
 
+        public PointF NextPolygon;
         public PointF[] OutputPolygon;
+        public PointF[] SecondaryPolygon;
         
         public bool Connecting;
+        public bool SecondaryConnecting;
+        public bool UseSecondaryOutput;
 
         public NodeType NodeType = NodeType.DEFAULT;
 
@@ -58,6 +62,7 @@ namespace CodeDesigner.UI.Node.Blocks
             foreach (Parameter p in ConnectedParameters)
             {
                 p.Connected = false;
+                p.SecondaryConnected = false;
                 p.ReferenceValue = null;
             }
 

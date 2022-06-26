@@ -63,6 +63,8 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
             Element buttonElement =
                 new ButtonElement(elementProperties, "Test Button", Color.LightGray, Color.Gray, Color.White, () => MessageBox.Show("button clicked"));
 
+            blockbase.UseSecondaryOutput = true;
+
             blockbase.Elements.Add(buttonElement);
             Canvas.AddNode(blockbase);
         }

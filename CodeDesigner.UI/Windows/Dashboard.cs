@@ -81,6 +81,7 @@ namespace CodeDesigner.UI.Windows
                     if (p != null)
                     {
                         p.Connected = false;
+                        p.SecondaryConnected = false;
                         p.ReferenceValue = null;
                         DesignerCanvas.Refresh();
                         return;
@@ -96,7 +97,19 @@ namespace CodeDesigner.UI.Windows
                     RenderEngine.ConnectingBlock = block;
                     DesignerCanvas.Refresh();
                     return;
-                }
+                } else if (block.UseSecondaryOutput)
+                    if (Canvas.IsPointInPolygon(block.SecondaryPolygon, e.Location))
+                    {
+                        block.SecondaryConnecting = true;
+                        Canvas.Connecting = true;
+                        Canvas.ConnectingBlock = block;
+                        RenderEngine.MouseLocation = e.Location;
+                        RenderEngine.ConnectingBlock = block;
+                        DesignerCanvas.Refresh();
+                        return;
+                        
+                    }
+                
             }
             
             _mouseDown = true;
@@ -120,6 +133,14 @@ namespace CodeDesigner.UI.Windows
                 }
                 Canvas.ConnectingBlock.Connecting = false;
                 Canvas.Connecting = false;
+                
+                if (Canvas.ConnectingBlock.SecondaryConnecting)
+                {
+                    Canvas.ConnectingBlock.SecondaryConnecting = false;
+                }
+
+                Canvas.Connecting = false;
+                
                 DesignerCanvas.Refresh();
             }
             

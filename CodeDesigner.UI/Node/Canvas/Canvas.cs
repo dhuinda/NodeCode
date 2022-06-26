@@ -154,7 +154,11 @@ namespace CodeDesigner.UI.Node.Canvas
             {
                 connectingBlock.ConnectedParameters.Add(parameter);
                 parameter.ReferenceValue = connectingBlock;
-                parameter.Connected = true;
+
+                if (connectingBlock.SecondaryConnecting)
+                    parameter.SecondaryConnected = true;
+                else
+                    parameter.Connected = true;
             }
         }
 
