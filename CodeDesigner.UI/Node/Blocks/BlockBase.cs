@@ -33,6 +33,7 @@ namespace CodeDesigner.UI.Node.Blocks
         public bool UseOutput = true;
 
         public NodeType NodeType = NodeType.DEFAULT;
+        public Guid Id = Guid.NewGuid();
 
         public BlockBase(BlockProperties properties)
         {

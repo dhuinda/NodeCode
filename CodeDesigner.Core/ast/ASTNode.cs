@@ -4,5 +4,12 @@ namespace CodeDesigner.Core;
 
 public abstract class ASTNode
 {
-    public abstract LLVMValueRef Codegen(CodegenData data);
+    protected Guid? id;
+    public ASTNode SetId(Guid id)
+    {
+        this.id = id;
+        return this;
+    }
+    
+    public abstract LLVMValueRef? Codegen(CodegenData data);
 }

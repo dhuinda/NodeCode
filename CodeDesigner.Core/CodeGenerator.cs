@@ -12,9 +12,9 @@ namespace CodeDesigner.Core
         // todo: support mutation operators (through binary operator UI node, but not through binary operator compiler node)
         // todo: support logical not
         // todo: better variable scopes
-        public static void Run(List<ASTNode> ast)
+        
+        public static List<ErrorDescription> Run(List<ASTNode> ast)
         {
-
             LLVM.InitializeCore(LLVM.GetGlobalPassRegistry());
             LLVM.InitializeX86AsmPrinter();
             LLVM.InitializeX86AsmParser();
@@ -44,17 +44,21 @@ namespace CodeDesigner.Core
             }
             
             LLVM.DumpModule(module);
+            if (data.Errors.Count != 0)
+            {
+                return data.Errors;
+            }
             
             if (LLVM.VerifyModule(module, LLVMVerifierFailureAction.LLVMPrintMessageAction, out var error).Value != 0)
             {
-                Console.WriteLine("Failed to validate module: " + error);
-                return;
+                data.Errors.Add(new ErrorDescription("Failed to validate module: " + error));
+                return data.Errors;
             }
 
             if (LLVM.WriteBitcodeToFile(module, "./output.bc") != 0)
             {
-                Console.Error.WriteLine("Failed to write bitcode to file!");
-                return;
+                data.Errors.Add(new ErrorDescription("Failed to write bitcode to file!"));
+                return data.Errors;
             }
 
             var triple = Marshal.PtrToStringAnsi(LLVM.GetDefaultTargetTriple()) ?? throw new InvalidOperationException();
@@ -62,8 +66,8 @@ namespace CodeDesigner.Core
 
             if (LLVM.GetTargetFromTriple(triple, out var target, out error).Value != 0)
             {
-                Console.Error.WriteLine("Failed to get target from triple: " + error);
-                return;
+                data.Errors.Add(new ErrorDescription("Error: failed to get target from triple: " + error));
+                return data.Errors;
             }
 
             var cpu = "generic";
@@ -74,14 +78,15 @@ namespace CodeDesigner.Core
             if (LLVM.TargetMachineEmitToFile(tm, module, Marshal.StringToHGlobalAnsi("./output.o"), LLVMCodeGenFileType.LLVMObjectFile,
                     out error).Value != 0)
             {
-                Console.Error.WriteLine("Failed to emit relocatable object file: " + error);
-                return;
+                data.Errors.Add(new ErrorDescription("Error: failed to emit relocatable object file: " + error));
+                return data.Errors;
             }
             LLVM.PrintModuleToFile(module, "./output.ir", out error);
             
             LLVM.DisposeBuilder(builder);
             LLVM.DisposeModule(module);
             LLVM.ContextDispose(context);
+            return data.Errors;
         }
     }
 }

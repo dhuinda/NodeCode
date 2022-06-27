@@ -62,7 +62,7 @@ public class ASTClassDefinition : ASTNode
         return result;
     }
     
-    public override LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
         foreach (var genericUsage in GenericUsages)
         {
@@ -80,23 +80,18 @@ public class ASTClassDefinition : ASTNode
 
             if (!data.Classes.ContainsKey(fullName))
             {
-                throw new Exception("expected class " + fullName + "to have a struct already generated during analysis");
+                data.Errors.Add(new ErrorDescription("Error: expected class " + fullName + "to have a struct already generated during analysis", id));
+                return null;
             }
             
             var classDef = data.Classes[fullName].Type;
             foreach (var field in Fields)
             {
-                if (!field.Type.IsPrimitive)
-                {
-                    Console.WriteLine(field.Type.ClassType!.Name);
-                }
                 var fieldType = MapVariableTypeToGenericType(field.Type, genericUsage, ClassType).GetLLVMType(data);
-                Console.WriteLine(field.Name + ": " + fieldType);
                 fieldLlvmTypes.Add(fieldType);
                 classFieldTypes.Add(new ClassFieldType(field.Name, fieldType));
             }
 
-            Console.WriteLine("methods");
             var methodOrder = new List<string>();
             var vtableTypeBody = new List<LLVMTypeRef>();
             var vtableValues = new List<LLVMValueRef>();

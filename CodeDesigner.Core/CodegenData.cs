@@ -13,6 +13,7 @@ public class CodegenData
     public Dictionary<string, ClassData> Classes;
     public Dictionary<string, string> ObjectTypes;
     public Dictionary<string, string> Generics;
+    public List<ErrorDescription> Errors;
 
     public CodegenData(LLVMBuilderRef builder, LLVMContextRef context, LLVMValueRef? func,
         LLVMModuleRef module, string namespaceName)
@@ -26,6 +27,7 @@ public class CodegenData
         Classes = new Dictionary<string, ClassData>();
         ObjectTypes = new Dictionary<string, string>();
         Generics = new Dictionary<string, string>();
+        Errors = new List<ErrorDescription>();
     }
     
 }
