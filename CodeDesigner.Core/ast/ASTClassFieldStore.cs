@@ -15,7 +15,7 @@ public class ASTClassFieldStore : ASTNode
         Value = value;
     }
 
-    public override LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
         var obj = Object.Codegen(data);
         

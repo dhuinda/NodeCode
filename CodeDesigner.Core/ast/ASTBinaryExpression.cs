@@ -17,125 +17,141 @@ public class ASTBinaryExpression : ASTNode
         Rhs = rhs;
     }
     
-    public override LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
         if (!data.Func.HasValue)
         {
-            throw new Exception("expected to be inside a function");
+            data.Errors.Add(new ErrorDescription("Error: binary expressions need to be inside a function", id));
+            return null;
         }
         if (Op is BinaryOperator.AND or BinaryOperator.OR) {
-            LLVMValueRef lhsValue = Lhs.Codegen(data);
-            LLVMBasicBlockRef ifBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "condif");
-            LLVMBasicBlockRef mergeBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "mergeif");
-            LLVMValueRef resultAlloca = LLVM.BuildAlloca(data.Builder, LLVM.Int1TypeInContext(data.Context), "condtmp");
-            LLVM.BuildStore(data.Builder, lhsValue, resultAlloca);
+            var lhsValue = Lhs.Codegen(data);
+            if (lhsValue == null) return null;
+            var ifBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "condif");
+            var mergeBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "mergeif");
+            var resultAlloca = LLVM.BuildAlloca(data.Builder, LLVM.Int1TypeInContext(data.Context), "condtmp");
+            LLVM.BuildStore(data.Builder, lhsValue ?? throw new Exception(), resultAlloca);
             if (Op == BinaryOperator.AND) {
-                LLVM.BuildCondBr(data.Builder, lhsValue, ifBlock, mergeBlock);
+                LLVM.BuildCondBr(data.Builder, lhsValue ?? throw new Exception(), ifBlock, mergeBlock);
             } else {
-                LLVM.BuildCondBr(data.Builder, lhsValue, mergeBlock, ifBlock);
+                LLVM.BuildCondBr(data.Builder, lhsValue ?? throw new Exception(), mergeBlock, ifBlock);
             }
             LLVM.PositionBuilderAtEnd(data.Builder, ifBlock);
-            LLVMValueRef rhsValue = Rhs.Codegen(data);
-            LLVM.BuildStore(data.Builder, rhsValue, resultAlloca);
+            var rhsValue = Rhs.Codegen(data);
+            if (rhsValue == null) return null;
+            LLVM.BuildStore(data.Builder, rhsValue ?? throw new Exception(), resultAlloca);
             LLVM.BuildBr(data.Builder, mergeBlock);
             LLVM.PositionBuilderAtEnd(data.Builder, mergeBlock);
             return LLVM.BuildLoad(data.Builder, resultAlloca, "");
         }
         var l = Lhs.Codegen(data);
         var r = Rhs.Codegen(data);
-        var typeKind = LLVM.GetTypeKind(LLVM.TypeOf(l));
+        if (l == null || r == null) return null;
+        var typeKind = LLVM.GetTypeKind(LLVM.TypeOf(l ?? throw new Exception()));
         switch (Op) {
             case BinaryOperator.PLUS:
                 if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
-                    var a = LLVM.BuildAdd(data.Builder, l, r, "addtmp");
+                    var a = LLVM.BuildAdd(data.Builder, l ?? throw new Exception(), r ?? throw new Exception(), "addtmp");
                     return a;
                 }
                 if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
-                    return LLVM.BuildFAdd(data.Builder, l, r, "addtmp");
+                    return LLVM.BuildFAdd(data.Builder, l ?? throw new Exception(), r ?? throw new Exception(), "addtmp");
                 }
-                throw new Exception("Error: unknown add type");
+                data.Errors.Add(new ErrorDescription("Error: unknown add type", id));
+                return null;
             case BinaryOperator.MINUS:
                 if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
-                    return LLVM.BuildSub(data.Builder, l, r, "subtmp");
+                    return LLVM.BuildSub(data.Builder, l ?? throw new Exception(), r ?? throw new Exception(), "subtmp");
                 }
                 if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
-                    return LLVM.BuildFSub(data.Builder, l, r, "subtmp");
+                    return LLVM.BuildFSub(data.Builder, l ?? throw new Exception(), r ?? throw new Exception(), "subtmp");
                 }
-                throw new Exception("Error: unknown subtract type");
+                data.Errors.Add(new ErrorDescription("Error: unknown subtract type", id));
+                return null;
             case BinaryOperator.TIMES:
                 if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
-                    return LLVM.BuildMul(data.Builder, l, r, "multmp");
+                    return LLVM.BuildMul(data.Builder, l ?? throw new Exception(), r ?? throw new Exception(), "multmp");
                 }
                 if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
-                    return LLVM.BuildFMul(data.Builder, l, r, "multmp");
+                    return LLVM.BuildFMul(data.Builder, l ?? throw new Exception(), r ?? throw new Exception(), "multmp");
                 }
-                throw new Exception("Error: unknown multiplication type");
+                data.Errors.Add(new ErrorDescription("Error: unknown multiply type", id));
+                return null;
             case BinaryOperator.DIVIDE:
                 if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
-                    return LLVM.BuildSDiv(data.Builder, l, r, "divtmp");
+                    return LLVM.BuildSDiv(data.Builder, l ?? throw new Exception(), r ?? throw new Exception(), "divtmp");
                 }
                 if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
-                    return LLVM.BuildFDiv(data.Builder, l, r, "divtmp");
+                    return LLVM.BuildFDiv(data.Builder, l ?? throw new Exception(), r ?? throw new Exception(), "divtmp");
                 }
-                throw new Exception("Error: unknown division type");
+                data.Errors.Add(new ErrorDescription("Error: unknown divide type", id));
+                return null;
             case BinaryOperator.LT:
                 if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
-                    return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntSLT, l, r, "cmptmp");
+                    return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntSLT, l ?? throw new Exception(), r ?? throw new Exception(), "cmptmp");
                 }
                 if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
-                    return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealOLT, l, r, "cmptmp");
+                    return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealOLT, l ?? throw new Exception(), r ?? throw new Exception(), "cmptmp");
                 }
-                throw new Exception("Error: unknown comparison type");
+                data.Errors.Add(new ErrorDescription("Error: unknown comparison type", id));
+                return null;
             case BinaryOperator.GT:
                 if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
-                    return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntSGT, l, r, "cmptmp");
+                    return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntSGT, l ?? throw new Exception(), r ?? throw new Exception(), "cmptmp");
                 }
                 if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
-                    return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealOGT, l, r, "cmptmp");
+                    return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealOGT, l ?? throw new Exception(), r ?? throw new Exception(), "cmptmp");
                 }
-                throw new Exception("Error: unknown comparison type");
+                data.Errors.Add(new ErrorDescription("Error: unknown comparison type", id));
+                return null;
             case BinaryOperator.LE:
                 if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
-                    return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntSLE, l, r, "cmptmp");
+                    return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntSLE, l ?? throw new Exception(), r ?? throw new Exception(), "cmptmp");
                 }
                 if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
-                    return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealOLT, l, r, "cmptmp");
+                    return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealOLT, l ?? throw new Exception(), r ?? throw new Exception(), "cmptmp");
                 }
-                throw new Exception("Error: unknown comparison type");
+                data.Errors.Add(new ErrorDescription("Error: unknown comparison type", id));
+                return null;
             case BinaryOperator.GE:
                 if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
-                    return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntSGT, l, r, "cmptmp");
+                    return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntSGT, l ?? throw new Exception(), r ?? throw new Exception(), "cmptmp");
                 }
                 if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
-                    return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealOGT, l, r, "cmptmp");
+                    return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealOGT, l ?? throw new Exception(), r ?? throw new Exception(), "cmptmp");
                 }
-                throw new Exception("Error: unknown comparison type");
+                data.Errors.Add(new ErrorDescription("Error: unknown comparison type", id));
+                return null;
             case BinaryOperator.EQ:
                 if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
-                    return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntEQ, l, r, "cmptmp");
+                    return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntEQ, l ?? throw new Exception(), r ?? throw new Exception(), "cmptmp");
                 }
                 if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
-                    return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealOEQ, l, r, "cmptmp");
+                    return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealOEQ, l ?? throw new Exception(), r ?? throw new Exception(), "cmptmp");
                 }
-                throw new Exception("Error: unknown comparison type");
+                data.Errors.Add(new ErrorDescription("Error: unknown comparison type", id));
+                return null;
             case BinaryOperator.NE:
                 if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
-                    return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntNE, l, r, "cmptmp");
+                    return LLVM.BuildICmp(data.Builder, LLVMIntPredicate.LLVMIntNE, l ?? throw new Exception(), r ?? throw new Exception(), "cmptmp");
                 }
                 if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
-                    return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealONE, l, r, "cmptmp");
+                    return LLVM.BuildFCmp(data.Builder, LLVMRealPredicate.LLVMRealONE, l ?? throw new Exception(), r ?? throw new Exception(), "cmptmp");
                 }
-                throw new Exception("Error: unknown comparison type");
+                data.Errors.Add(new ErrorDescription("Error: unknown comparison type", id));
+                return null;
             case BinaryOperator.MODULO:
                 if (typeKind == LLVMTypeKind.LLVMIntegerTypeKind) {
-                    return LLVM.BuildSRem(data.Builder, l, r, "modtmp");
+                    return LLVM.BuildSRem(data.Builder, l ?? throw new Exception(), r ?? throw new Exception(), "modtmp");
                 }
                 if (typeKind == LLVMTypeKind.LLVMDoubleTypeKind) {
-                    return LLVM.BuildFRem(data.Builder, l, r, "modtmp");
+                    return LLVM.BuildFRem(data.Builder, l ?? throw new Exception(), r ?? throw new Exception(), "modtmp");
                 }
-                throw new Exception("Error: unknown modulo type");
+                data.Errors.Add(new ErrorDescription("Error: unknown modulo type", id));
+                return null;
             default:
-                throw new Exception("Error: unimplemented binary expression");
+                data.Errors.Add(new ErrorDescription("Error: unimplemented binary expression type", id));
+                return null;
         }
 
     }

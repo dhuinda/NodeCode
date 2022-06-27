@@ -18,6 +18,7 @@ namespace CodeDesigner.UI.Windows
     {
         private bool _mouseDown;
         public NodeMap Map;
+        private bool hasErrors = false; // todo: can probably change this to just check list.empty() once a list of errors is added for the UI
 
         public Dashboard()
         {
@@ -29,6 +30,21 @@ namespace CodeDesigner.UI.Windows
         public string[] ListItems = new[]
             { "test 1", "test 2", "test 3", "test 4", "test 5", "test 6", "test 7", "test 8", "test 9", "test 10", };
 
+        public void AddError(String message, Guid? nodeId = null)
+        {
+            hasErrors = true;
+        }
+
+        public void ClearErrors()
+        {
+            hasErrors = false;
+        }
+
+        public bool HasErrors()
+        {
+            return hasErrors;
+        }
+        
         private void BlockSearchBox_TextChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
