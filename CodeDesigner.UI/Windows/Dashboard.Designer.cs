@@ -346,6 +346,7 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(288, 75);
             this.listBox1.TabIndex = 12;
+            this.listBox1.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
             // 
             // label2
             // 
@@ -571,6 +572,7 @@
             this.Name = "Dashboard";
             this.Text = "Dashboard";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Dashboard_FormClosed);
+            this.Load += new System.EventHandler(this.Dashboard_Load);
             this.panel1.ResumeLayout(false);
             this.neoPanel3.ResumeLayout(false);
             this.neoPanel3.PerformLayout();

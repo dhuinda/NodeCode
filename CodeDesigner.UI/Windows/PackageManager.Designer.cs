@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.neoPanel1 = new CodeDesigner.UI.Windows.Resources.Controls.Panels.NeoPanel();
             this.label6 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -38,9 +39,18 @@
             this.neoPanel2 = new CodeDesigner.UI.Windows.Resources.Controls.Panels.NeoPanel();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.neoPanel3 = new CodeDesigner.UI.Windows.Resources.Controls.Panels.NeoPanel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.neoPanel4 = new CodeDesigner.UI.Windows.Resources.Controls.Panels.NeoPanel();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.deletePackageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.neoPanel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.neoPanel2.SuspendLayout();
+            this.neoPanel3.SuspendLayout();
+            this.neoPanel4.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // neoPanel1
@@ -57,7 +67,7 @@
             this.neoPanel1.GradientTwo = System.Drawing.Color.FromArgb(((int)(((byte)(63)))), ((int)(((byte)(43)))), ((int)(((byte)(150)))));
             this.neoPanel1.Location = new System.Drawing.Point(0, 0);
             this.neoPanel1.Name = "neoPanel1";
-            this.neoPanel1.Size = new System.Drawing.Size(51, 256);
+            this.neoPanel1.Size = new System.Drawing.Size(51, 246);
             this.neoPanel1.TabIndex = 9;
             // 
             // label6
@@ -78,7 +88,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(51, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1, 256);
+            this.panel1.Size = new System.Drawing.Size(1, 246);
             this.panel1.TabIndex = 10;
             // 
             // panel3
@@ -140,7 +150,7 @@
             this.neoPanel2.GradientTwo = System.Drawing.Color.Empty;
             this.neoPanel2.Location = new System.Drawing.Point(66, 86);
             this.neoPanel2.Name = "neoPanel2";
-            this.neoPanel2.Size = new System.Drawing.Size(360, 31);
+            this.neoPanel2.Size = new System.Drawing.Size(273, 31);
             this.neoPanel2.TabIndex = 12;
             // 
             // richTextBox1
@@ -149,7 +159,7 @@
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBox1.Location = new System.Drawing.Point(3, 2);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(355, 26);
+            this.richTextBox1.Size = new System.Drawing.Size(269, 26);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
@@ -164,12 +174,86 @@
             this.label2.TabIndex = 13;
             this.label2.Text = "Project Name:";
             // 
+            // neoPanel3
+            // 
+            this.neoPanel3.BorderGradientAngle = 0F;
+            this.neoPanel3.BorderGradientOne = System.Drawing.SystemColors.ButtonShadow;
+            this.neoPanel3.BorderGradientTwo = System.Drawing.SystemColors.ButtonShadow;
+            this.neoPanel3.Controls.Add(this.button1);
+            this.neoPanel3.DragControl = false;
+            this.neoPanel3.DragForm = null;
+            this.neoPanel3.GradientAngle = 45F;
+            this.neoPanel3.GradientOne = System.Drawing.Color.Empty;
+            this.neoPanel3.GradientTwo = System.Drawing.Color.Empty;
+            this.neoPanel3.Location = new System.Drawing.Point(345, 86);
+            this.neoPanel3.Name = "neoPanel3";
+            this.neoPanel3.Size = new System.Drawing.Size(81, 31);
+            this.neoPanel3.TabIndex = 16;
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Transparent;
+            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(69)))), ((int)(((byte)(69)))));
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Gilroy-SemiBold", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(69)))), ((int)(((byte)(69)))));
+            this.button1.Location = new System.Drawing.Point(0, 2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(80, 27);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "Download";
+            this.button1.UseVisualStyleBackColor = false;
+            // 
+            // neoPanel4
+            // 
+            this.neoPanel4.BorderGradientAngle = 0F;
+            this.neoPanel4.BorderGradientOne = System.Drawing.SystemColors.ButtonShadow;
+            this.neoPanel4.BorderGradientTwo = System.Drawing.SystemColors.ButtonShadow;
+            this.neoPanel4.Controls.Add(this.listBox1);
+            this.neoPanel4.DragControl = false;
+            this.neoPanel4.DragForm = null;
+            this.neoPanel4.GradientAngle = 45F;
+            this.neoPanel4.GradientOne = System.Drawing.Color.Empty;
+            this.neoPanel4.GradientTwo = System.Drawing.Color.Empty;
+            this.neoPanel4.Location = new System.Drawing.Point(66, 128);
+            this.neoPanel4.Name = "neoPanel4";
+            this.neoPanel4.Size = new System.Drawing.Size(360, 107);
+            this.neoPanel4.TabIndex = 17;
+            // 
+            // listBox1
+            // 
+            this.listBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listBox1.ContextMenuStrip = this.contextMenuStrip1;
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 15;
+            this.listBox1.Location = new System.Drawing.Point(3, 1);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(354, 105);
+            this.listBox1.TabIndex = 0;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deletePackageToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(155, 26);
+            // 
+            // deletePackageToolStripMenuItem
+            // 
+            this.deletePackageToolStripMenuItem.Name = "deletePackageToolStripMenuItem";
+            this.deletePackageToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.deletePackageToolStripMenuItem.Text = "Delete Package";
+            // 
             // PackageManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.ClientSize = new System.Drawing.Size(438, 256);
+            this.ClientSize = new System.Drawing.Size(438, 246);
+            this.Controls.Add(this.neoPanel4);
+            this.Controls.Add(this.neoPanel3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.neoPanel2);
             this.Controls.Add(this.panel2);
@@ -186,6 +270,9 @@
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.neoPanel2.ResumeLayout(false);
+            this.neoPanel3.ResumeLayout(false);
+            this.neoPanel4.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -203,5 +290,11 @@
         private Resources.Controls.Panels.NeoPanel neoPanel2;
         private RichTextBox richTextBox1;
         private Label label2;
+        private Resources.Controls.Panels.NeoPanel neoPanel3;
+        private Button button1;
+        private Resources.Controls.Panels.NeoPanel neoPanel4;
+        private ListBox listBox1;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem deletePackageToolStripMenuItem;
     }
 }

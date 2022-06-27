@@ -21,7 +21,7 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
 
         private void NewFunction_Click(object sender, EventArgs e)
         {
-            Canvas.AddNode(new FunctionDefinition("main", Parameter.ParameterType.Void));
+            Canvas.AddNode(new FunctionDefinition());
         }
 
         private void InvokeFunction_Click(object sender, EventArgs e)
@@ -73,7 +73,7 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
 
         private void BinaryExpression_Click(object sender, EventArgs e)
         {
-            Canvas.AddNode(new BinaryExpression(BinOp.Add));
+            Canvas.AddNode(new BinaryExpression());
         }
 
         private void StringExpression_Click(object sender, EventArgs e)

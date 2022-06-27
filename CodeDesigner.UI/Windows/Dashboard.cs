@@ -5,11 +5,13 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CodeDesigner.UI.Designer.Toolbox;
 using CodeDesigner.UI.Node.Blocks;
+using CodeDesigner.UI.Node.Blocks.Nodes;
 using CodeDesigner.UI.Node.Canvas;
 using CodeDesigner.UI.Node.Interaction;
 using CodeDesigner.UI.Utility.Project;
@@ -31,8 +33,7 @@ namespace CodeDesigner.UI.Windows
             Canvas.Initialize(DesignerCanvas);
         }
 
-        public string[] ListItems = new[]
-            { "test 1", "test 2", "test 3", "test 4", "test 5", "test 6", "test 7", "test 8", "test 9", "test 10", };
+        private List<string> BlockList = new ();
 
         public void AddError(String message, Guid? nodeId = null)
         {
@@ -54,7 +55,7 @@ namespace CodeDesigner.UI.Windows
         {
             listBox1.Items.Clear();
 
-            foreach (string item in ListItems)
+            foreach (string item in BlockList)
             {
                 if (item.Contains(BlockSearchBox.Text, StringComparison.CurrentCultureIgnoreCase))
                 {
@@ -225,6 +226,37 @@ namespace CodeDesigner.UI.Windows
             }
             NodeConverter.CompileNodes(topLevelBlocks);
             ProgramExecuter.ExecuteProgram();
+        }
+
+        private void Dashboard_Load(object sender, EventArgs e)
+        {
+            IEnumerable<Type> types = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => t.Namespace.StartsWith("CodeDesigner.UI.Node.Blocks.Nodes"));
+
+            foreach (Type type in types)
+            {
+                BlockList.Add(type.Name);
+            }
+
+            listBox1.Items.Clear();
+
+            foreach (string item in BlockList)
+            {
+                listBox1.Items.Add(item);
+            }
+
+
+        }
+
+        private void listBox1_DoubleClick(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedItem == null)
+                return;
+
+            string selectedItem = listBox1.SelectedItem.ToString();
+
+            BlockBase block = (BlockBase)Activator.CreateInstance(Type.GetType("CodeDesigner.UI.Node.Blocks.Nodes." + selectedItem));
+            Canvas.AddNode(block);
         }
     }
 }
