@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ using CodeDesigner.UI.Node.Blocks;
 using CodeDesigner.UI.Node.Canvas;
 using CodeDesigner.UI.Node.Interaction;
 using CodeDesigner.UI.Utility.Project;
+using CodeRunner.UI;
+using CodeRunner.UI.Utility;
 
 namespace CodeDesigner.UI.Windows
 {
@@ -33,6 +36,7 @@ namespace CodeDesigner.UI.Windows
         public void AddError(String message, Guid? nodeId = null)
         {
             hasErrors = true;
+            Console.WriteLine(message);
         }
 
         public void ClearErrors()
@@ -211,6 +215,7 @@ namespace CodeDesigner.UI.Windows
         {
             Console.WriteLine("running");
             NodeConverter.CompileNodes(Canvas.Blocks);
+            ProgramExecuter.ExecuteProgram();
         }
     }
 }
