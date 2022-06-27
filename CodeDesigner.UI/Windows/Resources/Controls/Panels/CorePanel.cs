@@ -60,12 +60,14 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
                 Size = new SizeF(100, 50)
             };
 
-            Element buttonElement =
-                new ButtonElement(elementProperties, "Test Button", Color.LightGray, Color.Gray, Color.White, () => MessageBox.Show("button clicked"));
+            Element textbox =
+                new TextBoxElement(elementProperties, "Test \n Button", Color.LightGray, Color.Gray, Color.White, () => MessageBox.Show("button clicked"));
 
             blockbase.UseSecondaryOutput = true;
 
-            blockbase.Elements.Add(buttonElement);
+            ((TextBoxElement)textbox).Text = "Test String lalala";
+
+            blockbase.Elements.Add(textbox);
             Canvas.AddNode(blockbase);
         }
 

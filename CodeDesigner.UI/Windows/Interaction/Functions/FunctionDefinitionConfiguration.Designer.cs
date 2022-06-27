@@ -299,23 +299,23 @@
         private ListView listView1;
         private ColumnHeader ParamName;
         private ColumnHeader Type;
-        private TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox1;
         private Label label2;
         private Label label3;
         private Button button1;
         private Panel panel1;
         private Label label4;
         private Label label5;
-        private TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox2;
         private Panel panel2;
         private Label label6;
         private Label label7;
         private ComboBox comboBox1;
         private CheckBox checkBox1;
-        private TextBox textBox3;
+        private System.Windows.Forms.TextBox textBox3;
         private Label label8;
         private Button button2;
-        private TextBox textBox4;
+        private System.Windows.Forms.TextBox textBox4;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem deleteParameterToolStripMenuItem;
     }

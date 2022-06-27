@@ -147,6 +147,9 @@ namespace CodeDesigner.UI.Node.Canvas
                 case "ButtonElement":
                     ((ButtonElement)e).Method.Invoke();
                     break;
+                case "TextBoxElement":
+                    InteractionHelper.LoadTextBoxConfig((TextBoxElement)e);
+                    break;
             }
         }
 
@@ -173,8 +176,8 @@ namespace CodeDesigner.UI.Node.Canvas
 
         public static void DeleteBlock(BlockBase block)
         {
-            block.NextBlock.InputBlock = null;
-            block.InputBlock.NextBlock = null;
+            if (block.NextBlock != null) block.NextBlock.InputBlock = null;
+            if (block.InputBlock != null) block.InputBlock.NextBlock = null;
             block.DestroyConnections();
             Blocks.Remove(block);
             CanvasControl.Refresh();
