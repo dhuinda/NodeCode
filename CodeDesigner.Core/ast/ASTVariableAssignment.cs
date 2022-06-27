@@ -13,15 +13,18 @@ public class ASTVariableAssignment : ASTNode
         Value = value;
     }
 
-    public override LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
         if (!data.NamedValues.ContainsKey(Name))
         {
-            throw new InvalidCodeException("unknown variable " + Name);
+            data.Errors.Add(new("Error: unknown variable " + Name, id));
+            return null;
         }
 
         var llvmVar = data.NamedValues[Name];
-        LLVM.BuildStore(data.Builder, Value.Codegen(data), llvmVar);
+        var val = Value.Codegen(data);
+        if (val == null) return null;
+        LLVM.BuildStore(data.Builder, (LLVMValueRef) val, llvmVar);
         return llvmVar;
     }
 }

@@ -18,7 +18,7 @@ public class ASTPrototypeDeclaration : ASTNode
         IsVarArgs = isVarArgs;
     }
 
-    public override LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
         if (LLVM.GetNamedFunction(data.Module, Name).Pointer.ToInt64() != 0)
         {
@@ -32,7 +32,8 @@ public class ASTPrototypeDeclaration : ASTNode
 
         if (!ReturnType.IsPrimitive)
         {
-            throw new Exception("classes aren't implemented yet");
+            data.Errors.Add(new("classes aren't implemented yet", id));
+            return null;
         }
         var funcType = LLVM.FunctionType(ReturnType.GetLLVMType(data), llvmParamTypes.ToArray(), IsVarArgs);
         return LLVM.AddFunction(data.Module, Name, funcType);

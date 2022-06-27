@@ -23,7 +23,7 @@ public class ASTClassInstantiation : ASTNode
         Args = new();
     }
 
-    public override LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
         foreach (var t in ClassType.GenericTypes)
         {
@@ -38,7 +38,8 @@ public class ASTClassInstantiation : ASTNode
         var fullName = ClassType.Name.Contains('.') ? ClassType.GetGenericName() : $"default.{ClassType.GetGenericName()}";
         if (!data.Classes.ContainsKey(fullName))
         {
-            throw new InvalidCodeException("cannot find class " + fullName + " to instantiate");
+            data.Errors.Add(new("Error: cannot find class " + fullName + " to instantiate", id));
+            return null;
         }
 
         var classData = data.Classes[fullName];

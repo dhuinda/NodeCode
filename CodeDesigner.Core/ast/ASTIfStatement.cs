@@ -15,12 +15,13 @@ public class ASTIfStatement : ASTNode
         ElseBody = elseBody;
     }
     
-    public override LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
         var conditionValue = Condition.Codegen(data);
+        if (conditionValue == null) return null;
         if (!data.Func.HasValue)
         {
-            throw new Exception("expected to be inside a function");
+            data.Errors.Add(new("expected to be inside a function", id));
         }
         var ifBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "ifbody");
         LLVMBasicBlockRef? elseBlock = null;
@@ -30,7 +31,7 @@ public class ASTIfStatement : ASTNode
         }
         // todo: this doesn't work with nested if statements
         var mergeBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "mergeif");
-        LLVM.BuildCondBr(data.Builder, conditionValue, ifBlock, elseBlock.HasValue ? elseBlock.Value : mergeBlock);
+        LLVM.BuildCondBr(data.Builder, (LLVMValueRef) conditionValue, ifBlock, elseBlock ?? mergeBlock);
 
         var oldValues = new Dictionary<string, LLVMValueRef>(data.NamedValues);
 

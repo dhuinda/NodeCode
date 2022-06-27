@@ -16,19 +16,22 @@ public class ASTMethodInvocation : ASTNode
     }
     
     
-    public override LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
         var obj = Object.Codegen(data);
-        if (LLVM.GetTypeKind(LLVM.TypeOf(obj)) != LLVMTypeKind.LLVMPointerTypeKind ||
-            LLVM.GetTypeKind(LLVM.GetElementType(LLVM.TypeOf(obj))) != LLVMTypeKind.LLVMStructTypeKind)
+        if (obj == null) return null;
+        if (LLVM.GetTypeKind(LLVM.TypeOf((LLVMValueRef) obj)) != LLVMTypeKind.LLVMPointerTypeKind ||
+            LLVM.GetTypeKind(LLVM.GetElementType(LLVM.TypeOf((LLVMValueRef) obj))) != LLVMTypeKind.LLVMStructTypeKind)
         {
-            throw new InvalidCodeException("unexpected method call on non-object variable");
+            data.Errors.Add(new("unexpected method call on non-object variable", id));
+            return null;
         }
 
-        var className = VariableType.GetClassNameOfObject(obj);
+        var className = VariableType.GetClassNameOfObject((LLVMValueRef) obj);
         if (!data.Classes.ContainsKey(className))
         {
-            throw new Exception("unknown class " + className);
+            data.Errors.Add(new("Error: unknown class " + className, id));
+            return null;
         }
 
         var classData = data.Classes[className];
@@ -48,11 +51,12 @@ public class ASTMethodInvocation : ASTNode
 
             if (methodIndex == classData.MethodOrder.Count)
             {
-                throw new Exception("method registered in data as a method, but not included in method order");
+                data.Errors.Add(new ErrorDescription("Error: method registered in data as a method, but not included in method order", id));
+                return null;
             }
 
             var vtable = LLVM.BuildLoad(data.Builder,
-                LLVM.BuildStructGEP(data.Builder, obj, 0, ""), "");
+                LLVM.BuildStructGEP(data.Builder, (LLVMValueRef) obj, 0, ""), "");
             var gep = LLVM.BuildStructGEP(data.Builder, vtable, methodIndex, "");
             method = LLVM.BuildLoad(data.Builder, gep, "");
         }
@@ -61,16 +65,18 @@ public class ASTMethodInvocation : ASTNode
             method = LLVM.GetNamedFunction(data.Module, $"{className}__{MethodName}");
             if (method.Pointer.ToInt64() == 0)
             {
-                throw new InvalidCodeException("unknown method " + MethodName + " of class " + className);
+                data.Errors.Add(new("unknown method " + MethodName + " of class " + className, id));
             }
         }
 
         var llvmArgs = new List<LLVMValueRef>();
         foreach (var arg in Args)
         {
-            llvmArgs.Add(arg.Codegen(data));
+            var cd = arg.Codegen(data);
+            if (cd == null) return null;
+            llvmArgs.Add((LLVMValueRef) cd);
         }
-        llvmArgs.Add(obj); // Add reference to object ("this")
+        llvmArgs.Add((LLVMValueRef) obj); // Add reference to object ("this")
         return LLVM.BuildCall(data.Builder, method, llvmArgs.ToArray(), "");
     }
 }

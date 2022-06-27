@@ -21,18 +21,17 @@ public class ASTFunctionDefinition : ASTNode
         ReturnType = returnType;
     }
 
-    public override LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
         if (data.Func.HasValue)
         {
-            throw new InvalidCodeException("cannot define a function within a function");
+            data.Errors.Add(new("Error: cannot define a function within a function", id));
         }
 
         var fullName = Name;
         if (!Name.Contains('.'))
         {
             fullName = Name == "main" ? "__main_designer" : $"{data.NamespaceName}.{Name}";
-            // throw new InvalidCodeException("a function's name cannot contain a '.'");
         }
         var func = LLVM.GetNamedFunction(data.Module, fullName);
         var paramTypes = new LLVMTypeRef[Params.Count];

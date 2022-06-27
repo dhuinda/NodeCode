@@ -13,16 +13,18 @@ public class ASTWhileLoop : ASTNode
         Body = body;
     }
     
-    public override LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
         if (!data.Func.HasValue)
         {
-            throw new Exception("while loop expected to be inside a function");
+            data.Errors.Add(new("Error: while loop expected to be inside a function", id));
+            return null;
         }
         var initialCondition = Condition.Codegen(data);
+        if (initialCondition == null) return null;
         var loopBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "whilebody");
         var mergeBlock = LLVM.AppendBasicBlockInContext(data.Context, data.Func.Value, "mergewhile");
-        LLVM.BuildCondBr(data.Builder, initialCondition, loopBlock, mergeBlock);
+        LLVM.BuildCondBr(data.Builder, (LLVMValueRef) initialCondition, loopBlock, mergeBlock);
         
         var oldValues = new Dictionary<string, LLVMValueRef>(data.NamedValues);
         
@@ -33,7 +35,8 @@ public class ASTWhileLoop : ASTNode
         }
 
         var terminationVal = Condition.Codegen(data);
-        LLVM.BuildCondBr(data.Builder, terminationVal, loopBlock, mergeBlock);
+        if (terminationVal == null) return null;
+        LLVM.BuildCondBr(data.Builder, (LLVMValueRef) terminationVal, loopBlock, mergeBlock);
         
         LLVM.PositionBuilderAtEnd(data.Builder, mergeBlock);
         data.NamedValues = oldValues;

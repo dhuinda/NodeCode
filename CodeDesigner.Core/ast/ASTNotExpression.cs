@@ -11,8 +11,10 @@ public class ASTNotExpression : ASTNode
         Value = value;
     }
     
-    public override LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
-        return LLVM.BuildNot(data.Builder, Value.Codegen(data), "not");
+        var val = Value.Codegen(data);
+        if (val == null) return null;
+        return LLVM.BuildNot(data.Builder, (LLVMValueRef) val, "not");
     }
 }

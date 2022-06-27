@@ -17,11 +17,12 @@ public class ASTForLoop : ASTNode
         Body = body;
     }
     
-    public override LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
         if (!data.Func.HasValue)
         {
-            throw new Exception("for loop expected to be inside a function");
+            data.Errors.Add(new("Error: for loops need to be inside a function", id));
+            return null;
         }
 
         Initializer?.Codegen(data);
@@ -30,7 +31,8 @@ public class ASTForLoop : ASTNode
         if (Condition != null)
         {
             var initialCondition = Condition.Codegen(data);
-            LLVM.BuildCondBr(data.Builder, initialCondition, loopBlock, mergeBlock);
+            if (initialCondition == null) return null;
+            LLVM.BuildCondBr(data.Builder, (LLVMValueRef) initialCondition, loopBlock, mergeBlock);
         }
         else
         {
@@ -51,7 +53,8 @@ public class ASTForLoop : ASTNode
         if (Condition != null)
         {
             var terminationVal = Condition.Codegen(data);
-            LLVM.BuildCondBr(data.Builder, terminationVal, loopBlock, mergeBlock);
+            if (terminationVal == null) return null;
+            LLVM.BuildCondBr(data.Builder, (LLVMValueRef) terminationVal, loopBlock, mergeBlock);
         }
         else
         {

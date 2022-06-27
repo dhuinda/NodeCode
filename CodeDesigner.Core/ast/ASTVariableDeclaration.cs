@@ -18,16 +18,18 @@ public class ASTVariableDeclaration : ASTNode
         Value = value;
     }
 
-    public override LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
         if (!Type.IsPrimitive)
         {
-            throw new Exception("classes aren't implemented yet");
+            data.Errors.Add(new("Error: classes aren't implemented yet", id));
         }
 
         var llvmType = Type.GetLLVMType(data);
         var alloca = LLVM.BuildAlloca(data.Builder, llvmType, Name);
-        LLVM.BuildStore(data.Builder, Value.Codegen(data), alloca);
+        var val = Value.Codegen(data);
+        if (val == null) return null;
+        LLVM.BuildStore(data.Builder, (LLVMValueRef) val, alloca);
         data.NamedValues.Add(Name, alloca);
         return alloca;
     }

@@ -16,7 +16,7 @@ public class ASTNumberExpression : ASTNode
         Type = type;
     }
 
-    public override unsafe LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
         if (Type == PrimitiveVariableType.INTEGER)
         {
@@ -28,6 +28,7 @@ public class ASTNumberExpression : ASTNode
             return LLVM.ConstRealOfString(LLVM.DoubleTypeInContext(data.Context), Value);
         }
 
-        throw new Exception("unable to use PrimitiveVariableType " + Type + " as a number");
+        data.Errors.Add(new("Error: unable to use PrimitiveVariableType " + Type + " as a number", id));
+        return null;
     }
 }

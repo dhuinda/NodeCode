@@ -18,17 +18,19 @@ public class ASTClassFieldStore : ASTNode
     public override LLVMValueRef? Codegen(CodegenData data)
     {
         var obj = Object.Codegen(data);
-        
-        if (LLVM.GetTypeKind(LLVM.TypeOf(obj)) != LLVMTypeKind.LLVMPointerTypeKind ||
-            LLVM.GetTypeKind(LLVM.GetElementType(LLVM.TypeOf(obj))) != LLVMTypeKind.LLVMStructTypeKind)
+        if (obj == null) return null;
+        if (LLVM.GetTypeKind(LLVM.TypeOf(obj ?? throw new Exception())) != LLVMTypeKind.LLVMPointerTypeKind ||
+            LLVM.GetTypeKind(LLVM.GetElementType(LLVM.TypeOf(obj ?? throw new Exception()))) != LLVMTypeKind.LLVMStructTypeKind)
         {
-            throw new InvalidCodeException("unexpected field access of non-object variable");
+            data.Errors.Add(new("Error: unexpected field access of non-object variable", id));
+            return null;
         }
 
-        var className = VariableType.GetClassNameOfObject(obj);
+        var className = VariableType.GetClassNameOfObject(obj ?? throw new Exception());
         if (!data.Classes.ContainsKey(className))
         {
-            throw new Exception("unknown class " + className);
+            data.Errors.Add(new("Error: unknown class " + className, id));
+            return null;
         }
         var fields = data.Classes[className].Fields;
         var fieldNumber = -1;
@@ -43,11 +45,14 @@ public class ASTClassFieldStore : ASTNode
 
         if (fieldNumber == -1)
         {
-            throw new InvalidCodeException("unknown field of class " + className + ": " + FieldName);
+            data.Errors.Add(new("Error: unknown field of class " + className + ": " + FieldName, id));
+            return null;
         }
 
-        var gep = LLVM.BuildStructGEP(data.Builder, obj, (uint) fieldNumber + 1, "gep");
-        LLVM.BuildStore(data.Builder, Value.Codegen(data), gep);
+        var gep = LLVM.BuildStructGEP(data.Builder, obj ?? throw new Exception(), (uint) fieldNumber + 1, "gep");
+        var valCodegen = Value.Codegen(data);
+        if (valCodegen == null) return null;
+        LLVM.BuildStore(data.Builder, valCodegen ?? throw new Exception(), gep);
         return gep;
     }
 }

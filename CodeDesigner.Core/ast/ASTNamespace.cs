@@ -13,11 +13,11 @@ public class ASTNamespace : ASTNode
         Body = body;
     }
     
-    public override LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
         if (data.Func.HasValue)
         {
-            throw new InvalidCodeException("a namespace cannot be declared inside of a function");
+            data.Errors.Add(new("Error: a namespace cannot be declared inside of a function", id));
         }
         data.NamespaceName = Name;
         foreach (var node in Body)

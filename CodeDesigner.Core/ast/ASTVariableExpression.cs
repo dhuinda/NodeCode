@@ -13,12 +13,11 @@ public class ASTVariableExpression : ASTNode
         Name = name;
     }
 
-    public override LLVMValueRef Codegen(CodegenData data)
+    public override LLVMValueRef? Codegen(CodegenData data)
     {
         if (!data.NamedValues.ContainsKey(Name))
         {
-            // todo: it would be nice to report back exactly which block the error is at (if possible, which it would be for errors like this)
-            throw new InvalidCodeException("unknown variable identifier " + Name + ". Maybe the variable isn't in the correct context?");
+            data.Errors.Add(new("Error: unknown variable identifier " + Name + ". Maybe the variable isn't in the correct context?", id));
         }
         return LLVM.BuildLoad(data.Builder, data.NamedValues[Name], Name);
     }
