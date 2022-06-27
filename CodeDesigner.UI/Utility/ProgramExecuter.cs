@@ -27,6 +27,7 @@ public class ProgramExecuter
         program.StartInfo.FileName = "a.exe";
         program.Start();
         
+        Console.WriteLine("Started a.exe");
         string programOutput = program.StandardOutput.ReadToEnd();
         Console.WriteLine(programOutput);
         program.WaitForExit();

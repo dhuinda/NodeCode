@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CodeDesigner.UI.Designer.Toolbox;
 using CodeDesigner.UI.Node.Blocks;
 using CodeDesigner.UI.Node.Canvas;
 using CodeDesigner.UI.Node.Interaction;
@@ -214,7 +215,15 @@ namespace CodeDesigner.UI.Windows
         private void button2_Click(object sender, EventArgs e)
         {
             Console.WriteLine("running");
-            NodeConverter.CompileNodes(Canvas.Blocks);
+            List<BlockBase> topLevelBlocks = new List<BlockBase>();
+            foreach (var block in Canvas.Blocks)
+            {
+                if (block.NodeType == NodeType.FUNCTION_DEFINITION)
+                {
+                    topLevelBlocks.Add(block);
+                }
+            }
+            NodeConverter.CompileNodes(topLevelBlocks);
             ProgramExecuter.ExecuteProgram();
         }
     }

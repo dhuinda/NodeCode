@@ -21,7 +21,7 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
 
         private void NewFunction_Click(object sender, EventArgs e)
         {
-            Canvas.AddNode(new FunctionDefinition("Test Function", Parameter.ParameterType.Object));
+            Canvas.AddNode(new FunctionDefinition("main", Parameter.ParameterType.Void));
         }
 
         private void InvokeFunction_Click(object sender, EventArgs e)
@@ -78,7 +78,7 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
 
         private void StringExpression_Click(object sender, EventArgs e)
         {
-            Canvas.AddNode(new StringExpression("Test Value"));
+            Canvas.AddNode(new StringExpression());
         }
 
         private void ReturnExpression_Click(object sender, EventArgs e)

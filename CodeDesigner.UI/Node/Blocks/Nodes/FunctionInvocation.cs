@@ -1,5 +1,4 @@
 using CodeDesigner.UI.Designer.Toolbox;
-using CodeDesigner.UI.Node.Canvas;
 using CodeDesigner.UI.Node.Interaction;
 using CodeDesigner.UI.Node.Interaction.Elements;
 
@@ -7,15 +6,13 @@ namespace CodeDesigner.UI.Node.Blocks.Nodes;
 
 public class FunctionInvocation : BlockBase
 {
-    public string Name => ((TextBoxElement)Elements[0]).Text;
-
-    public FunctionInvocation() : base(new BlockProperties()
+    public FunctionInvocation() : base(new BlockProperties
     {
         BorderColor = Color.FromArgb(69, 69, 69),
         FillColor = Color.FromArgb(85, 85, 85),
         SecondaryColor = Color.FromArgb(69, 69, 69),
-        Height = 90,
-        Width = 160,
+        Height = 110,
+        Width = 215,
         TextColor = Color.FromArgb(255, 255, 255),
         Name = "Function Invocation",
         OutputType = Parameter.ParameterType.Object
@@ -25,33 +22,41 @@ public class FunctionInvocation : BlockBase
 
         TextBoxElement element = new TextBoxElement(new ElementProperties
         {
-            BlockCoordinates = new PointF(27, 38),
-            Size = new SizeF(100, 30)
+            BlockCoordinates = new PointF(60, 38),
+            Size = new SizeF(120, 30)
         }, "Edit", Color.Gray, Color.DarkGray, Color.Beige, null);
+        element.Text = "extern.printf";
         
         Elements.Add(element);
         NodeType = NodeType.FUNCTION_INVOCATION;
+        UpdateFunction();
+        CheckNext();
     }
 
-    public void UpdateParameters()
+    public void UpdateFunction()
     {
         Parameters.Clear();
-        if (Canvas.Canvas.FunctionParameters.ContainsKey(Name))
+        var textBox = (TextBoxElement) Elements[0];
+        var name = textBox.Text;
+        if (Canvas.Canvas.FunctionParameters.ContainsKey(name))
         {
-            var parameters = Canvas.Canvas.FunctionParameters[Name];
-            foreach (var parameter in parameters)
+            var fun = Canvas.Canvas.FunctionParameters[name];
+            foreach (var parameter in fun.Parameters)
             {
                 Parameters.Add(new Parameter
                 {
                     Type = parameter.Type
                 });
             }
-        } else if (Name == "extern.printf")
+
+            UseOutput = fun.ReturnType != Parameter.ParameterType.Void;
+        } else if (name == "extern.printf")
         {
             Parameters.Add(new Parameter
             {
                 Type = Parameter.ParameterType.String
             });
+            UseOutput = false;
         }
     }
     

@@ -70,7 +70,7 @@ public class ASTFunctionDefinition : ASTNode
         if (ReturnType.IsPrimitive && ReturnType.PrimitiveType == PrimitiveVariableType.VOID && (fullName != "__main_designer" || isAlreadyDefined))
         {
             LLVM.BuildRetVoid(data.Builder);
-        } else if (Body.Count == 0 || Body[^1].GetType().Name != "ASTReturn")
+        } else if ((Body.Count == 0 || Body[^1].GetType().Name != "ASTReturn") && fullName != "__main_designer")
         {
             LLVM.BuildRetVoid(data.Builder);
         }

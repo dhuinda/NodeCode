@@ -68,7 +68,8 @@ namespace CodeDesigner.UI.Node.Blocks
             {
                 Parameters.Insert(0, new Parameter
                 {
-                    Type = Parameter.ParameterType.Next
+                    Type = Parameter.ParameterType.Next,
+                    Parent = this
                 });
             }
         }

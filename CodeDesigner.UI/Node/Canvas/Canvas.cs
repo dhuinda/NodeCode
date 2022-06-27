@@ -25,7 +25,7 @@ namespace CodeDesigner.UI.Node.Canvas
         public static Parameter? OverParameter;
         public static BlockBase ConnectingBlock;
         public static BlockBase? DraggingBlock;
-        public static Dictionary<String, List<Parameter>> FunctionParameters = new();
+        public static Dictionary<String, FunctionInformation> FunctionParameters = new();
 
         public static void Initialize(CanvasPanel panel)
         {
@@ -166,7 +166,7 @@ namespace CodeDesigner.UI.Node.Canvas
                     parameter.Connected = true;
                 else if (connectingBlock.NextConnecting)
                 {
-                    connectingBlock.NextBlock = parameter.ReferenceValue;
+                    connectingBlock.NextBlock = parameter.Parent;
                     parameter.ReferenceValue.InputBlock = connectingBlock;
                     parameter.NextConnected = true;
                 }

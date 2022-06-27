@@ -14,6 +14,7 @@ namespace CodeDesigner.UI.Node.Blocks
         // Either RawValue or Reference value must be null
         public string? RawValue { get; set; } // A string representing a primitive literal; ex: "1", "false", "hi", "1.2" (coalesced via Type)
         public BlockBase? ReferenceValue { get; set; } // The type of this is based on Type
+        public BlockBase Parent;
 
         public PointF Coordinates { get; set; }
         public string Name { get; set; }

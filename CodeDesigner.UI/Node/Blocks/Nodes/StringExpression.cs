@@ -1,12 +1,12 @@
 using CodeDesigner.UI.Designer.Toolbox;
+using CodeDesigner.UI.Node.Interaction;
+using CodeDesigner.UI.Node.Interaction.Elements;
 
 namespace CodeDesigner.UI.Node.Blocks.Nodes;
 
 public class StringExpression : BlockBase
 {
-    public string Value;
-    
-    public StringExpression(string value) : base(new BlockProperties
+    public StringExpression() : base(new BlockProperties
     {
         BorderColor = Color.FromArgb(69, 69, 69),
         FillColor = Color.FromArgb(85, 85, 85),
@@ -18,8 +18,15 @@ public class StringExpression : BlockBase
         OutputType = Parameter.ParameterType.Object
     })
     {
-        Value = value;
+        TextBoxElement element = new TextBoxElement(new ElementProperties
+        {
+            BlockCoordinates = new PointF(10, 30),
+            Size = new SizeF(90, 30)
+        }, "Edit", Color.Gray, Color.DarkGray, Color.Beige, null);
+        Elements.Add(element);
+
         NodeType = NodeType.STRING_EXPRESSION;
         UseNext = false;
+        CheckNext();
     }
 }

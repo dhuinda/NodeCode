@@ -3,6 +3,7 @@ using CodeDesigner.Core.ast;
 using CodeDesigner.UI.Designer.Toolbox;
 using CodeDesigner.UI.Node.Blocks.Nodes;
 using CodeDesigner.UI.Node.Blocks.Types;
+using CodeDesigner.UI.Node.Interaction.Elements;
 using CodeRunner.UI;
 
 namespace CodeDesigner.UI.Node.Blocks;
@@ -13,6 +14,7 @@ public static class NodeConverter
     {
         Console.WriteLine("compiling");
         var ast = new List<ASTNode>();
+        Console.WriteLine(nodes.Count);
         ConvertToAST(nodes, ast);
         if (Program.dash.HasErrors())
         {
@@ -98,9 +100,10 @@ public static class NodeConverter
                 var body = new List<ASTNode>();
                 if (funDefNode.NextBlock != null)
                 {
+                    Console.WriteLine("has next");
                     AnalyzeNode(funDefNode.NextBlock, body);
                 }
-
+                Console.WriteLine(body.Count);
                 var returnType = GetVariableType(funDefNode.ReturnType, funDefNode.ObjectReturnType);
                 if (returnType == null) return;
                 pc.Add(new ASTFunctionDefinition(funDefNode.Name, astParams, body, returnType).SetId(node.Id));
@@ -110,11 +113,12 @@ public static class NodeConverter
             {
                 var funInvNode = (FunctionInvocation) node;
                 var astArgs = new List<ASTNode>();
+                var name = ((TextBoxElement) funInvNode.Elements[0]).Text;
                 foreach (var arg in funInvNode.Parameters)
                 {
                     if (arg == null)
                     {
-                        Program.dash.AddError("Unexpected null parameter in invocation of function " + funInvNode.Name +
+                        Program.dash.AddError("Unexpected null parameter in invocation of function " + name +
                                         ": either remove the parameter or assign it a value", node.Id);
                         return;
                     }
@@ -127,9 +131,11 @@ public static class NodeConverter
                     if (n == null) return;
                     astArgs.Add(n);
                 }
-                pc.Add(new ASTFunctionInvocation(funInvNode.Name, astArgs).SetId(node.Id));
+
+                pc.Add(new ASTFunctionInvocation(name, astArgs).SetId(node.Id));
                 if (funInvNode.NextBlock != null)
                 {
+                    Console.WriteLine("funinv has next");
                     AnalyzeNode(funInvNode.NextBlock, pc);
                 }
                 break;
@@ -165,7 +171,8 @@ public static class NodeConverter
             case NodeType.STRING_EXPRESSION:
             {
                 var stringExpNode = (StringExpression) node;
-                pc.Add(new ASTStringExpression(stringExpNode.Value).SetId(node.Id));
+                var value = ((TextBoxElement) stringExpNode.Elements[0]).Text;
+                pc.Add(new ASTStringExpression(value).SetId(node.Id));
                 break;
             }
             case NodeType.RETURN:

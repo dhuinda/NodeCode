@@ -116,10 +116,9 @@ namespace CodeDesigner.UI.Windows.Interaction.Functions
                 Function.Parameters.Add(p);
             }
 
-            Canvas.FunctionParameters[Function.Name] = Function.Parameters;
-
             Function.ObjectReturnType = checkBox1.Checked ? textBox3.Text : comboBox1.SelectedItem.ToString();
             Function.ReturnType = checkBox1.Checked ? ValidType(textBox3.Text) : ValidType(comboBox1.SelectedItem.ToString());
+            Canvas.FunctionParameters[Function.Name] = new FunctionInformation(Function.Parameters, Function.ReturnType);
 
             Canvas.CanvasControl.Refresh();
 
