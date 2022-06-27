@@ -10,15 +10,13 @@ namespace CodeDesigner.UI.Node.Interaction.Elements
     public class TextBoxElement : Element
     {
         public string Text = string.Empty;
-        public string ButtonText = string.Empty;
         public Action Method;
         private Color _color;
         private Color _buttonColor;
         private Color _strokeColor;
 
-        public TextBoxElement(ElementProperties properties, string buttonText, Color color, Color buttonColor, Color stroke, Action method)
+        public TextBoxElement(ElementProperties properties, Color color, Color buttonColor, Color stroke, Action method)
         {
-            ButtonText = buttonText;
             Properties = properties;
             _color = color;
             _buttonColor = buttonColor;
@@ -33,22 +31,12 @@ namespace CodeDesigner.UI.Node.Interaction.Elements
             float width = Properties.Size.Width * zoom;
             float height = Properties.Size.Height * zoom;
 
-            g.DrawRectangle(new Pen(_strokeColor, 1 * zoom), x, y, width, height);
-            float buttonWidth = g.MeasureString(ButtonText,
-                new Font("Gilroy-Bold", 9f * zoom, FontStyle.Regular, GraphicsUnit.Point)).Width;
-
-            buttonWidth += 10 * zoom;
-            g.FillRectangle(new SolidBrush(_buttonColor), x + width - buttonWidth, y, buttonWidth, height);
-
-            float textWidth = width - buttonWidth;
-            g.FillRectangle(new SolidBrush(_color), x, y, textWidth, height);
+            g.FillRectangle(new SolidBrush(_color), x, y, width, height);
 
             TextFormatFlags flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter |
                                     TextFormatFlags.WordBreak;
 
-            TextRenderer.DrawText(g, ButtonText, new Font("Gilroy-Bold", 9f * zoom, FontStyle.Regular, GraphicsUnit.Point), new Rectangle((int)(x + width - buttonWidth), (int)y, (int)buttonWidth, (int)height), Color.White, flags);
-
-            TextRenderer.DrawText(g, Text, new Font("Gilroy-Bold", 9f * zoom, FontStyle.Regular, GraphicsUnit.Point), new Rectangle((int)x, (int)y, (int)textWidth, (int)height), Color.White, flags);
+            TextRenderer.DrawText(g, Text, new Font("Gilroy-Bold", 9f * zoom, FontStyle.Regular, GraphicsUnit.Point), new Rectangle((int)x, (int)y, (int)width, (int)height), Color.White, flags);
 
             //g.FillRectangle(new SolidBrush());
         }

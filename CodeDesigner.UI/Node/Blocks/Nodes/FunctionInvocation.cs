@@ -24,7 +24,7 @@ public class FunctionInvocation : BlockBase
         {
             BlockCoordinates = new PointF(60, 38),
             Size = new SizeF(120, 30)
-        }, "Edit", Color.Gray, Color.DarkGray, Color.Beige, null);
+        }, Color.Gray, Color.DarkGray, Color.Beige, null);
         element.Text = "extern.printf";
         
         Elements.Add(element);

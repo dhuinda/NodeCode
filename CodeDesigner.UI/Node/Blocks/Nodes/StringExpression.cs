@@ -22,7 +22,7 @@ public class StringExpression : BlockBase
         {
             BlockCoordinates = new PointF(10, 30),
             Size = new SizeF(90, 30)
-        }, "Edit", Color.Gray, Color.DarkGray, Color.Beige, null);
+        }, Color.Gray, Color.DarkGray, Color.Beige, null);
         Elements.Add(element);
 
         NodeType = NodeType.STRING_EXPRESSION;

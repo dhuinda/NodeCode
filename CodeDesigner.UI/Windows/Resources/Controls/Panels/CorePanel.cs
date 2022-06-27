@@ -61,7 +61,7 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
             };
 
             Element textbox =
-                new TextBoxElement(elementProperties, "Test \n Button", Color.LightGray, Color.Gray, Color.White, () => MessageBox.Show("button clicked"));
+                new TextBoxElement(elementProperties, Color.LightGray, Color.Gray, Color.White, () => MessageBox.Show("button clicked"));
 
             blockbase.UseSecondaryOutput = true;
 
