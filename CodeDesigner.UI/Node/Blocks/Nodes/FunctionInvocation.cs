@@ -10,6 +10,8 @@ public class FunctionInvocation : BlockBase
     public FunctionInvocation(string name)
     {
         Name = name;
+        Name = "extern.printf";
+        UpdateParameters();
 
         BlockProperties properties = new BlockProperties
         {
@@ -29,4 +31,19 @@ public class FunctionInvocation : BlockBase
         NodeType = NodeType.FUNCTION_INVOCATION;
         CheckNext();
     }
+
+    public void UpdateParameters()
+    {
+        if (Canvas.Canvas.FunctionParameters.ContainsKey(Name))
+        {
+            
+        } else if (Name == "extern.printf")
+        {
+            Parameters.Add(new Parameter
+            {
+                Type = Parameter.ParameterType.String
+            });
+        }
+    }
+    
 }

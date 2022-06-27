@@ -25,6 +25,7 @@ namespace CodeDesigner.UI.Node.Canvas
         public static Parameter? OverParameter;
         public static BlockBase ConnectingBlock;
         public static BlockBase? DraggingBlock;
+        public static Dictionary<String, List<Parameter.ParameterType>> FunctionParameters = new();
 
         public static void Initialize(CanvasPanel panel)
         {
@@ -40,8 +41,7 @@ namespace CodeDesigner.UI.Node.Canvas
 
         public static void Pan(PointF delta)
         {
-            BlockBase? block = IsPointInBlock(delta);
-            if (block == null && DraggingBlock != null) block = DraggingBlock;
+            BlockBase? block = DraggingBlock != null ? DraggingBlock : IsPointInBlock(delta);
             if (block != null)
             {
                 DraggingBlock = block;

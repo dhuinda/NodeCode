@@ -29,7 +29,7 @@ namespace CodeDesigner.UI.Windows.Interaction.Functions
             textBox2.Text = string.Empty;
             textBox3.Text = string.Empty;
             textBox4.Text = string.Empty;
-            comboBox1.SelectedItem = string.Empty;
+            comboBox1.SelectedItem = "Void";
             Function = function;
 
             foreach (Parameter p in function.Parameters)
