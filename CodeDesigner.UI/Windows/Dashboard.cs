@@ -118,6 +118,8 @@ namespace CodeDesigner.UI.Windows
         {
             Canvas.MousePosition = e.Location;
 
+            Canvas.IsPointInBlock(e.Location);
+
             if (Canvas.ElementClickedOn)
             {
                 Canvas.ElementClickedOn = false;
@@ -143,6 +145,8 @@ namespace CodeDesigner.UI.Windows
                 
                 DesignerCanvas.Refresh();
             }
+
+            Canvas.IsOverParameter = false;
             
             _mouseDown = false;
         }

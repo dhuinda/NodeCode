@@ -97,6 +97,7 @@ namespace CodeDesigner.UI.Node.Canvas
                 case Parameter.ParameterType.Bool:
                     return Color.LightGreen;
                 case Parameter.ParameterType.Object:
+                    
                     return Color.LightBlue;
                 default:
                     return Color.LightBlue;
