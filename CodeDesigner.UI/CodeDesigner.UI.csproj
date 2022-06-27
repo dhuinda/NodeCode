@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Windows\Resources\Icons\Configure_64px.png" />
     <None Remove="Windows\Resources\Icons\Exit_20px.png" />
     <None Remove="Windows\Resources\Icons\Exit_35px_RED.png" />
     <None Remove="Windows\Resources\Icons\Globe_20px.png" />
@@ -30,6 +31,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Windows\Resources\Icons\Configure_64px.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Windows\Resources\Icons\template.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

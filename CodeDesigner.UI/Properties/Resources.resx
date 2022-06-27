@@ -142,4 +142,7 @@
   <data name="template" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\windows\resources\icons\template.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Configure_64px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Windows\Resources\Icons\Configure_64px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
