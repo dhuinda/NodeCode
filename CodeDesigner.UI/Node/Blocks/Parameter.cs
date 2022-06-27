@@ -28,7 +28,8 @@ namespace CodeDesigner.UI.Node.Blocks
             Double,
             Int,
             Object,
-            Void
+            Void,
+            Next
         }
 
         public string? ObjectType;

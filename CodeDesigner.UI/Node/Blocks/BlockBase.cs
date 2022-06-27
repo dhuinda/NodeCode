@@ -31,6 +31,7 @@ namespace CodeDesigner.UI.Node.Blocks
         public bool NextConnecting;
         public bool UseSecondaryOutput;
         public bool UseOutput = true;
+        public bool UseNext = true;
 
         public NodeType NodeType = NodeType.DEFAULT;
         public Guid Id = Guid.NewGuid();
@@ -58,6 +59,17 @@ namespace CodeDesigner.UI.Node.Blocks
             Parameters = new List<Parameter?>();
             ConnectedParameters = new List<Parameter>();
             Elements = new List<Element>();
+        }
+
+        public void CheckNext()
+        {
+            if (UseNext)
+            {
+                Parameters.Add(new Parameter
+                {
+                    Type = Parameter.ParameterType.Next
+                });
+            }
         }
 
         public void DestroyConnections()
