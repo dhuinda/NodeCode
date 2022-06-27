@@ -44,16 +44,19 @@ namespace CodeDesigner.UI.Node.Canvas
 
         public static void DrawIO(BlockBase? block, Graphics g, PointF offset, float zoom)
         {
-            PointF[] testPoints = new PointF[5];
-            testPoints[0] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + 42) * zoom);
-            testPoints[1] = new PointF((block.Coordinates.X + block.Properties.Width - 13) * zoom, (block.Coordinates.Y + 42) * zoom);
-            testPoints[2] = new PointF((block.Coordinates.X + block.Properties.Width - 8) * zoom, (block.Coordinates.Y + 36) * zoom);
-            testPoints[3] = new PointF((block.Coordinates.X + block.Properties.Width - 13) * zoom, (block.Coordinates.Y + 30) * zoom);
-            testPoints[4] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + 30) * zoom);
-            block.NextPolygon = testPoints;
+            if (block.UseNext)
+            {
+                PointF[] testPoints = new PointF[5];
+                testPoints[0] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + 42) * zoom);
+                testPoints[1] = new PointF((block.Coordinates.X + block.Properties.Width - 13) * zoom, (block.Coordinates.Y + 42) * zoom);
+                testPoints[2] = new PointF((block.Coordinates.X + block.Properties.Width - 8) * zoom, (block.Coordinates.Y + 36) * zoom);
+                testPoints[3] = new PointF((block.Coordinates.X + block.Properties.Width - 13) * zoom, (block.Coordinates.Y + 30) * zoom);
+                testPoints[4] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + 30) * zoom);
+                block.NextPolygon = testPoints;
             
-            g.FillPolygon(new SolidBrush(Color.White), testPoints);
-
+                g.FillPolygon(new SolidBrush(Color.White), testPoints);
+            }
+            
             PointF[] outputPoints = new PointF[5];
             
             if (block.UseOutput)

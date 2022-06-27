@@ -114,26 +114,27 @@ namespace CodeDesigner.UI.Windows
                     RenderEngine.ConnectingBlock = block;
                     DesignerCanvas.Refresh();
                     return;
-                } else if (block.UseSecondaryOutput)
-                    if (Canvas.IsPointInPolygon(block.SecondaryPolygon, e.Location))
-                    {
-                        block.SecondaryConnecting = true;
-                        Canvas.Connecting = true;
-                        Canvas.ConnectingBlock = block;
-                        RenderEngine.MouseLocation = e.Location;
-                        RenderEngine.ConnectingBlock = block;
-                        DesignerCanvas.Refresh();
-                        return;
-                        
-                    }
-                    else if (Canvas.IsPointInPolygon(block.NextPolygon, e.Location))
-                    {
-                        block.NextConnecting = true;
-                        Canvas.Connecting = true;
-                        Canvas.ConnectingBlock = block;
-                        RenderEngine.MouseLocation = e.Location;
-                        RenderEngine.ConnectingBlock = block;
-                    }
+                } 
+                if (block.UseSecondaryOutput && Canvas.IsPointInPolygon(block.SecondaryPolygon, e.Location))
+                { 
+                    block.SecondaryConnecting = true;
+                    Canvas.Connecting = true;
+                    Canvas.ConnectingBlock = block;
+                    RenderEngine.MouseLocation = e.Location;
+                    RenderEngine.ConnectingBlock = block;
+                    DesignerCanvas.Refresh();
+                    return;
+                }
+                
+                if (Canvas.IsPointInPolygon(block.NextPolygon, e.Location))
+                {
+                    block.NextConnecting = true;
+                    Canvas.Connecting = true;
+                    Canvas.ConnectingBlock = block;
+                    RenderEngine.MouseLocation = e.Location;
+                    RenderEngine.ConnectingBlock = block;
+                    return;
+                }
             }
             
             _mouseDown = true;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,6 +44,7 @@ namespace CodeDesigner.UI.Node.Blocks
             Parameters = new List<Parameter?>();
             ConnectedParameters = new List<Parameter>();
             Elements = new List<Element>();
+            CheckNext();
         }
 
         public BlockBase(BlockProperties properties, PointF coordinates)
@@ -52,6 +54,7 @@ namespace CodeDesigner.UI.Node.Blocks
             Parameters = new List<Parameter?>();
             ConnectedParameters = new List<Parameter>();
             Elements = new List<Element>();
+            CheckNext();
         }
 
         public BlockBase()
@@ -59,6 +62,7 @@ namespace CodeDesigner.UI.Node.Blocks
             Parameters = new List<Parameter?>();
             ConnectedParameters = new List<Parameter>();
             Elements = new List<Element>();
+            CheckNext();
         }
 
         public void CheckNext()
