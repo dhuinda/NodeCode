@@ -26,7 +26,7 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
 
         private void InvokeFunction_Click(object sender, EventArgs e)
         {
-            Canvas.AddNode(new FunctionInvocation("Test Function"));
+            Canvas.AddNode(new FunctionInvocation());
         }
 
         private void TestExpression_Click(object sender, EventArgs e)
