@@ -6,7 +6,7 @@ namespace CodeRunner.UI.Utility;
 
 public class ProgramExecuter
 {
-    public static void ExecuteProgram()
+    public static string ExecuteProgram()
     {
         Process p = new Process();
         p.StartInfo.UseShellExecute = false;
@@ -17,7 +17,7 @@ public class ProgramExecuter
         p.StartInfo.Arguments = "/c gcc " + projectDir + Path.DirectorySeparatorChar + "linker.cpp " + projectDir + Path.DirectorySeparatorChar + "CodeDesigner.UI" + Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar + "debug" + Path.DirectorySeparatorChar + "net6.0-windows" + Path.DirectorySeparatorChar + "output.o -static";
         Console.WriteLine(p.StartInfo.Arguments);
         p.Start();
-        string strOutput = p.StandardOutput.ReadToEnd();
+        var strOutput = p.StandardOutput.ReadToEnd();
         Console.WriteLine(strOutput);
         p.WaitForExit();
         Console.WriteLine("executed ld");
@@ -28,8 +28,9 @@ public class ProgramExecuter
         program.Start();
         
         Console.WriteLine("Started a.exe");
-        string programOutput = program.StandardOutput.ReadToEnd();
+        var programOutput = program.StandardOutput.ReadToEnd();
         Console.WriteLine(programOutput);
         program.WaitForExit();
+        return programOutput;
     }
 }

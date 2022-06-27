@@ -30,8 +30,10 @@ namespace CodeDesigner.UI.Node.Blocks
         public bool Connecting;
         public bool SecondaryConnecting;
         public bool NextConnecting;
-        public bool UseSecondaryOutput;
         public bool UseOutput = true;
+        public BlockBase? Output;
+        public bool UseSecondaryOutput;
+        public BlockBase? SecondaryOutput;
         public bool UseNext = true;
 
         public NodeType NodeType = NodeType.DEFAULT;

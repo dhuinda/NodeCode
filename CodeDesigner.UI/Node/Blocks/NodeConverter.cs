@@ -118,7 +118,7 @@ public static class NodeConverter
                 {
                     if (arg == null)
                     {
-                        Program.dash.AddError("Unexpected null parameter in invocation of function " + name +
+                        Program.dash.AddError("Error: nexpected null parameter in invocation of function " + name +
                                         ": either remove the parameter or assign it a value", node.Id);
                         return;
                     }
@@ -138,6 +138,33 @@ public static class NodeConverter
                     Console.WriteLine("funinv has next");
                     AnalyzeNode(funInvNode.NextBlock, pc);
                 }
+                break;
+            }
+            case NodeType.IF_STATEMENT:
+            {
+                var ifNode = (IfStatement) node;
+                if (ifNode.Parameters.Count != 2 || ifNode.Parameters[1] == null)
+                {
+                    Program.dash.AddError("Error: expected if statement to have a condition", ifNode.Id);
+                    return;
+                }
+
+                var astCondition = GetASTNodeFromParam((Parameter) ifNode.Parameters[1]);
+                if (astCondition == null) return;
+                var ifBody = new List<ASTNode>();
+                if (ifNode.Output != null)
+                {
+                    Console.WriteLine("has if");
+                    AnalyzeNode(ifNode.Output, ifBody);
+                }
+
+                var elseBody = new List<ASTNode>();
+                if (ifNode.SecondaryOutput != null)
+                {
+                    Console.WriteLine("has else");
+                    AnalyzeNode(ifNode.SecondaryOutput, elseBody);
+                }
+                pc.Add(new ASTIfStatement(astCondition, ifBody, elseBody));
                 break;
             }
             case NodeType.NUMBER_EXPRESSION:

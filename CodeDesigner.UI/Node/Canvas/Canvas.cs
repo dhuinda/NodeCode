@@ -150,6 +150,9 @@ namespace CodeDesigner.UI.Node.Canvas
                 case "TextBoxElement":
                     InteractionHelper.LoadTextBoxConfig((TextBoxElement)e);
                     break;
+                case "IconButtonElement":
+                    ((IconButtonElement)e).Method.Invoke();
+                    break;
             }
         }
 
@@ -161,9 +164,15 @@ namespace CodeDesigner.UI.Node.Canvas
                 parameter.ReferenceValue = connectingBlock;
 
                 if (connectingBlock.SecondaryConnecting)
+                {
                     parameter.SecondaryConnected = true;
+                    connectingBlock.SecondaryOutput = parameter.Parent;
+                }
                 else if (connectingBlock.Connecting)
+                {
                     parameter.Connected = true;
+                    connectingBlock.Output = parameter.Parent;
+                }
                 else if (connectingBlock.NextConnecting)
                 {
                     connectingBlock.NextBlock = parameter.Parent;

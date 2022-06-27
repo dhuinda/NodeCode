@@ -29,7 +29,7 @@ public class FunctionDefinition : BlockBase
 
         ElementProperties configureBtnProperties = new ElementProperties()
         {
-            BlockCoordinates = new PointF(50, 30),
+            BlockCoordinates = new PointF(70, 25),
             Size = new SizeF(30, 30)
         };
 
