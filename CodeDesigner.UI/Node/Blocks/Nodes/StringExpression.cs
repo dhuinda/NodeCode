@@ -27,6 +27,5 @@ public class StringExpression : BlockBase
 
         NodeType = NodeType.STRING_EXPRESSION;
         UseNext = false;
-        CheckNext();
     }
 }

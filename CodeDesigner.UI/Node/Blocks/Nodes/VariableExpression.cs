@@ -21,5 +21,7 @@ public class VariableExpression : BlockBase
     {
         Name = name;
         NodeType = NodeType.VARIABLE_EXPRESSION;
+        UseNext = false;
+        CheckNext();
     }
 }

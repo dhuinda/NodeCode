@@ -7,7 +7,7 @@ public class NumberExpression : BlockBase
 {
     public string Value;
     
-    public NumberExpression(string value) : base (new BlockProperties
+    public NumberExpression() : base (new BlockProperties
     {
         BorderColor = Color.FromArgb(69, 69, 69),
         FillColor = Color.FromArgb(85, 85, 85),
@@ -19,7 +19,7 @@ public class NumberExpression : BlockBase
         OutputType = Parameter.ParameterType.Object
     })
     {
-        Value = value;
+        Value = "0";
         NodeType = NodeType.NUMBER_EXPRESSION;
     }
 }

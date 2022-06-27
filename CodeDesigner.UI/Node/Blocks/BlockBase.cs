@@ -66,6 +66,10 @@ namespace CodeDesigner.UI.Node.Blocks
 
         public void CheckNext()
         {
+            if (Parameters.Count != 0 && Parameters[0].Type == Parameter.ParameterType.Next)
+            {
+                Parameters.RemoveAt(0);
+            }
             if (UseNext)
             {
                 Parameters.Insert(0, new Parameter

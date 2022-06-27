@@ -6,7 +6,7 @@ public class BooleanExpression : BlockBase
 {
     public bool Value;
     
-    public BooleanExpression(bool value) : base(new BlockProperties
+    public BooleanExpression() : base(new BlockProperties
     {
         BorderColor = Color.FromArgb(69, 69, 69),
         FillColor = Color.FromArgb(85, 85, 85),
@@ -18,7 +18,7 @@ public class BooleanExpression : BlockBase
         OutputType = Parameter.ParameterType.Object
     })
     {
-        Value = value;
+        Value = true;
         
         NodeType = NodeType.BOOLEAN_EXPRESSION;
     }

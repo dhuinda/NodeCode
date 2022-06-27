@@ -15,7 +15,7 @@ public class BinaryExpression : BlockBase
     public string? Left;
     public string? Right;
 
-    public BinaryExpression(BinOp binOp) : base(new BlockProperties
+    public BinaryExpression() : base(new BlockProperties
     {
         BorderColor = Color.FromArgb(69, 69, 69),
         FillColor = Color.FromArgb(85, 85, 85),
@@ -27,7 +27,7 @@ public class BinaryExpression : BlockBase
         OutputType = Parameter.ParameterType.Object
     })
     {
-        Operator = binOp;
+        Operator = BinOp.Add;
 
         Parameters.Add(new Parameter
         {

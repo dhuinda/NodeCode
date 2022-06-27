@@ -8,7 +8,7 @@ public class PrototypeDeclaration : BlockBase
     public Parameter.ParameterType ReturnType;
     public string? ObjectReturnType;
 
-    public PrototypeDeclaration(string name, Parameter.ParameterType returnType, string? objectReturnType = null) : base( new BlockProperties
+    public PrototypeDeclaration() : base( new BlockProperties
     {
         BorderColor = Color.FromArgb(69, 69, 69),
         FillColor = Color.FromArgb(85, 85, 85),
@@ -20,9 +20,9 @@ public class PrototypeDeclaration : BlockBase
         OutputType = Parameter.ParameterType.Object
     })
     {
-        Name = name;
-        ReturnType = returnType;
-        ObjectReturnType = objectReturnType;
+        Name = "main";
+        ReturnType = Parameter.ParameterType.Void;
+        ObjectReturnType = null;
         NodeType = NodeType.PROTOTYPE_DECLARATION;
     }
 }

@@ -17,6 +17,5 @@ public class ReturnExpression : BlockBase
     })
     {
         NodeType = NodeType.RETURN;
-        CheckNext();
     }
 }

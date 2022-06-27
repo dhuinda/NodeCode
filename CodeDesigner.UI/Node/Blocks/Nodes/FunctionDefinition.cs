@@ -11,7 +11,7 @@ public class FunctionDefinition : BlockBase
     public Parameter.ParameterType ReturnType;
     public string? ObjectReturnType;
 
-    public FunctionDefinition(string name, Parameter.ParameterType returnType, string? objectReturnType = null) : base(new BlockProperties
+    public FunctionDefinition() : base(new BlockProperties
     {
         BorderColor = Color.FromArgb(69, 69, 69),
         FillColor = Color.FromArgb(85, 85, 85),
@@ -23,9 +23,9 @@ public class FunctionDefinition : BlockBase
         OutputType = Parameter.ParameterType.Void
     })
     {
-        Name = name;
-        ReturnType = returnType;
-        ObjectReturnType = objectReturnType;
+        Name = "main";
+        ReturnType = Parameter.ParameterType.Void;
+        ObjectReturnType = null;
 
         ElementProperties configureBtnProperties = new ElementProperties()
         {
