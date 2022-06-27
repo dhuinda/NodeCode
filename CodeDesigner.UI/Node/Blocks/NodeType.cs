@@ -26,6 +26,7 @@ namespace CodeDesigner.UI.Designer.Toolbox
         VARIABLE_ASSIGNMENT,
         VARIABLE_DECLARATION,
         VARIABLE_DEFINITION,
-        VARIABLE_EXPRESSION
+        VARIABLE_EXPRESSION,
+        WHILE_LOOP
     }
 }

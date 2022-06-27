@@ -135,7 +135,6 @@ public static class NodeConverter
                 pc.Add(new ASTFunctionInvocation(name, astArgs).SetId(node.Id));
                 if (funInvNode.NextBlock != null)
                 {
-                    Console.WriteLine("funinv has next");
                     AnalyzeNode(funInvNode.NextBlock, pc);
                 }
                 break;
@@ -154,14 +153,12 @@ public static class NodeConverter
                 var ifBody = new List<ASTNode>();
                 if (ifNode.Output != null)
                 {
-                    Console.WriteLine("has if");
                     AnalyzeNode(ifNode.Output, ifBody);
                 }
 
                 var elseBody = new List<ASTNode>();
                 if (ifNode.SecondaryOutput != null)
                 {
-                    Console.WriteLine("has else");
                     AnalyzeNode(ifNode.SecondaryOutput, elseBody);
                 }
                 pc.Add(new ASTIfStatement(astCondition, ifBody, elseBody));
@@ -261,6 +258,26 @@ public static class NodeConverter
             {
                 var varExpNode = (VariableExpression) node;
                 pc.Add(new ASTVariableExpression(varExpNode.Name).SetId(node.Id));
+                break;
+            }
+            case NodeType.WHILE_LOOP:
+            {
+                var whileNode = (WhileLoop) node;
+                if (whileNode.Parameters.Count != 2 || whileNode.Parameters[1] == null)
+                {
+                    Program.dash.AddError("Error: expected while loop to have a condition", whileNode.Id);
+                    return;
+                }
+
+                var astCondition = GetASTNodeFromParam((Parameter) whileNode.Parameters[1]);
+                if (astCondition == null) return;
+                var body = new List<ASTNode>();
+                if (whileNode.Output != null)
+                {
+                    AnalyzeNode(whileNode.Output, body);
+                }
+
+                pc.Add(new ASTWhileLoop(astCondition, body));
                 break;
             }
         }
