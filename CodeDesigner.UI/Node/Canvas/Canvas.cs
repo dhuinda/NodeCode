@@ -160,12 +160,19 @@ namespace CodeDesigner.UI.Node.Canvas
                 else if (connectingBlock.Connecting)
                     parameter.Connected = true;
                 else if (connectingBlock.NextConnecting)
+                {
+                    connectingBlock.NextBlock = parameter.ReferenceValue;
+                    parameter.ReferenceValue.InputBlock = connectingBlock;
                     parameter.NextConnected = true;
+                }
+
             }
         }
 
         public static void DeleteBlock(BlockBase block)
         {
+            block.NextBlock.InputBlock = null;
+            block.InputBlock.NextBlock = null;
             block.DestroyConnections();
             Blocks.Remove(block);
             CanvasControl.Refresh();
