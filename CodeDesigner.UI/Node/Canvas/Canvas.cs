@@ -157,8 +157,10 @@ namespace CodeDesigner.UI.Node.Canvas
 
                 if (connectingBlock.SecondaryConnecting)
                     parameter.SecondaryConnected = true;
-                else
+                else if (connectingBlock.Connecting)
                     parameter.Connected = true;
+                else if (connectingBlock.NextConnecting)
+                    parameter.NextConnected = true;
             }
         }
 

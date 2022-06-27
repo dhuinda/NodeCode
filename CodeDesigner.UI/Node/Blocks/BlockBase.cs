@@ -65,6 +65,7 @@ namespace CodeDesigner.UI.Node.Blocks
             {
                 p.Connected = false;
                 p.SecondaryConnected = false;
+                p.NextConnected = false;
                 p.ReferenceValue = null;
             }
 

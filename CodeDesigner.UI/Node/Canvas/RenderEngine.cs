@@ -89,7 +89,7 @@ namespace CodeDesigner.UI.Node.Canvas
             foreach (Parameter? parameter in block.Parameters)
             {
                 parameter.Coordinates = new PointF((block.Coordinates.X + 5) * zoom, (block.Coordinates.Y + y) * zoom);
-                if (parameter.Connected || parameter.SecondaryConnected)
+                if (parameter.Connected || parameter.SecondaryConnected || parameter.NextConnected)
                     g.FillEllipse(new SolidBrush(GetParameterColor(parameter.Type)), parameter.Coordinates.X, parameter.Coordinates.Y, 8 * zoom, 8 * zoom);
                 else 
                     g.DrawEllipse(new Pen(GetParameterColor(parameter.Type)), parameter.Coordinates.X, parameter.Coordinates.Y, 8 * zoom, 8 * zoom);
@@ -125,15 +125,30 @@ namespace CodeDesigner.UI.Node.Canvas
         {
             foreach (Parameter parameter in block.Parameters)
             {
-                if (parameter != null && (parameter.Connected || parameter.SecondaryConnected))
+                if (parameter != null && (parameter.Connected || parameter.SecondaryConnected || parameter.NextConnected))
                 {
                     try
                     {
-                        PointF[] points = new PointF[4];
-                        points[0] = parameter.SecondaryConnected ? parameter.ReferenceValue.SecondaryPolygon[2] : parameter.ReferenceValue.OutputPolygon[2];
+                        PointF[] points = new PointF[4];                        
+                        if (parameter.Connected)
+                        {
+                            points[0] = parameter.ReferenceValue.OutputPolygon[2];
+                            points[1] = new PointF(parameter.ReferenceValue.OutputPolygon[2].X + 70, parameter.ReferenceValue.OutputPolygon[2].Y);
+                        } else if (parameter.SecondaryConnected)
+                        {
+                            points[0] = parameter.ReferenceValue.SecondaryPolygon[2];
+                            points[1] = new PointF(parameter.ReferenceValue.SecondaryPolygon[2].X + 70,
+                                parameter.ReferenceValue.SecondaryPolygon[2].Y);
+                        } else if (parameter.NextConnected)
+                        {
+                            points[0] = parameter.ReferenceValue.NextPolygon[2];
+                            points[1] = new PointF(parameter.ReferenceValue.NextPolygon[2].X + 70, parameter.ReferenceValue.NextPolygon[2].Y);
+                        }
+                        
+                        /*points[0] = parameter.SecondaryConnected ? parameter.ReferenceValue.SecondaryPolygon[2] : parameter.ReferenceValue.OutputPolygon[2];
                         points[1] = parameter.SecondaryConnected? new PointF(parameter.ReferenceValue.SecondaryPolygon[2].X + 70,
                             parameter.ReferenceValue.SecondaryPolygon[2].Y): new PointF(parameter.ReferenceValue.OutputPolygon[2].X + 70,
-                            parameter.ReferenceValue.OutputPolygon[2].Y);
+                            parameter.ReferenceValue.OutputPolygon[2].Y);*/
                         points[2] = new PointF(parameter.Coordinates.X - 70, parameter.Coordinates.Y + (4 * zoom));
                         points[3] = new PointF(parameter.Coordinates.X, parameter.Coordinates.Y + (4 * zoom));
                         g.DrawBezier(new Pen(Color.Gray), points[0], points[1], points[2], points[3]);
@@ -159,8 +174,21 @@ namespace CodeDesigner.UI.Node.Canvas
                 return;
 
             PointF[] points = new PointF[4];
-            points[0] = block.SecondaryConnecting ? block.SecondaryPolygon[2] : block.OutputPolygon[2];
-            points[1] = block.SecondaryConnecting ? new PointF(block.SecondaryPolygon[2].X + 70, block.SecondaryPolygon[2].Y): new PointF(block.OutputPolygon[2].X + 70, block.OutputPolygon[2].Y);
+
+            if (block.Connecting)
+            {
+                points[0] = block.OutputPolygon[2];
+                points[1] = new PointF(block.OutputPolygon[2].X + 70, block.OutputPolygon[2].Y);
+            } else if (block.SecondaryConnecting)
+            {
+                points[0] = block.SecondaryPolygon[2];
+                points[1] = new PointF(block.SecondaryPolygon[2].X + 70, block.SecondaryPolygon[2].Y);
+            } else if (block.NextConnecting)
+            {
+                points[0] = block.NextPolygon[2];
+                points[1] = new PointF(block.NextPolygon[2].X + 70, block.NextPolygon[2].Y);
+            }
+
             points[2] = new PointF(MouseLocation.X - 70, MouseLocation.Y);
             points[3] = MouseLocation;
 

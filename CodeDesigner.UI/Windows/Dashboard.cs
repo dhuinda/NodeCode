@@ -82,6 +82,7 @@ namespace CodeDesigner.UI.Windows
                     {
                         p.Connected = false;
                         p.SecondaryConnected = false;
+                        p.NextConnected = false;
                         p.ReferenceValue = null;
                         DesignerCanvas.Refresh();
                         return;
@@ -109,7 +110,7 @@ namespace CodeDesigner.UI.Windows
                         return;
                         
                     }
-                else if (Canvas.IsPointInPolygon(block.NextPolygon, e.Location))
+                    else if (Canvas.IsPointInPolygon(block.NextPolygon, e.Location))
                     {
                         block.NextConnecting = true;
                         Canvas.Connecting = true;
@@ -141,12 +142,8 @@ namespace CodeDesigner.UI.Windows
                     Canvas.ConnectParameter(Canvas.ConnectingBlock, Canvas.OverParameter);
                 }
                 Canvas.ConnectingBlock.Connecting = false;
-                Canvas.Connecting = false;
-                
-                if (Canvas.ConnectingBlock.SecondaryConnecting)
-                {
-                    Canvas.ConnectingBlock.SecondaryConnecting = false;
-                }
+                Canvas.ConnectingBlock.SecondaryConnecting = false;
+                Canvas.ConnectingBlock.NextConnecting = false;
 
                 Canvas.Connecting = false;
                 

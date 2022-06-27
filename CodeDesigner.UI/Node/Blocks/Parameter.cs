@@ -19,6 +19,7 @@ namespace CodeDesigner.UI.Node.Blocks
         public string Name { get; set; }
         public bool Connected { get; set; }
         public bool SecondaryConnected { get; set; }
+        public bool NextConnected { get; set; }
 
         public enum ParameterType
         {
