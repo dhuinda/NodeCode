@@ -32,6 +32,7 @@ namespace CodeDesigner.UI.Node.Interaction.Elements
 
             g.DrawRectangle(new Pen(BorderColor, 1 * zoom), x, y, width, height);
             g.FillRectangle(new SolidBrush(ButtonColor), x, y, width, height);
+            // g.DrawImage(CodeDesigner.UI.Properties.Resources.);
 
             Rectangle rect = new ((int)x, (int)y, (int)width, (int)height);
 

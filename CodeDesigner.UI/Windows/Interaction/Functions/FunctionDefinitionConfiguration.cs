@@ -99,6 +99,7 @@ namespace CodeDesigner.UI.Windows.Interaction.Functions
         {
             Canvas.FunctionParameters.Remove(Function.Name);
             Function.Name = textBox2.Text;
+            Function.Properties.Name = "Function " + Function.Name;
             Function.Parameters.Clear();
 
 

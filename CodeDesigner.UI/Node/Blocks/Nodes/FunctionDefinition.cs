@@ -19,7 +19,7 @@ public class FunctionDefinition : BlockBase
         Height = 70,
         Width = 140,
         TextColor = Color.FromArgb(255, 255, 255),
-        Name = "Function Definition",
+        Name = "Function main",
         OutputType = Parameter.ParameterType.Void
     })
     {
@@ -29,14 +29,14 @@ public class FunctionDefinition : BlockBase
 
         ElementProperties configureBtnProperties = new ElementProperties()
         {
-            BlockCoordinates = new PointF(70, 30),
-            Size = new SizeF(50, 30)
+            BlockCoordinates = new PointF(50, 30),
+            Size = new SizeF(30, 30)
         };
 
         NodeType = NodeType.FUNCTION_DEFINITION;
 
         Element btnElement =
-            new ButtonElement(configureBtnProperties, "Configure", Color.SlateGray, Color.Gray, Color.White, () =>
+            new IconButtonElement(configureBtnProperties, CodeDesigner.UI.Properties.Resources.Save_35px, Color.SlateGray, Color.Gray, Color.White, () =>
             {
                 InteractionHelper.LoadFunctionConfig(this);
                 InteractionHelper.FunctionConfigForm.Show();
