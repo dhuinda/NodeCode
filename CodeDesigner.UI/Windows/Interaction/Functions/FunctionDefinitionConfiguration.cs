@@ -97,6 +97,7 @@ namespace CodeDesigner.UI.Windows.Interaction.Functions
 
         private void button2_Click(object sender, EventArgs e)
         {
+            Canvas.FunctionParameters.Remove(Function.Name);
             Function.Name = textBox2.Text;
             Function.Parameters.Clear();
 
@@ -114,6 +115,8 @@ namespace CodeDesigner.UI.Windows.Interaction.Functions
                 
                 Function.Parameters.Add(p);
             }
+
+            Canvas.FunctionParameters[Function.Name] = Function.Parameters;
 
             Function.ObjectReturnType = checkBox1.Checked ? textBox3.Text : comboBox1.SelectedItem.ToString();
             Function.ReturnType = checkBox1.Checked ? ValidType(textBox3.Text) : ValidType(comboBox1.SelectedItem.ToString());

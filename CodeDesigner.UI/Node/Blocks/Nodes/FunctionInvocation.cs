@@ -34,9 +34,17 @@ public class FunctionInvocation : BlockBase
 
     public void UpdateParameters()
     {
+        Parameters.Clear();
         if (Canvas.Canvas.FunctionParameters.ContainsKey(Name))
         {
-            
+            var parameters = Canvas.Canvas.FunctionParameters[Name];
+            foreach (var parameter in parameters)
+            {
+                Parameters.Add(new Parameter
+                {
+                    Type = parameter.Type
+                });
+            }
         } else if (Name == "extern.printf")
         {
             Parameters.Add(new Parameter

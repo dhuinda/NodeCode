@@ -25,7 +25,7 @@ namespace CodeDesigner.UI.Node.Canvas
         public static Parameter? OverParameter;
         public static BlockBase ConnectingBlock;
         public static BlockBase? DraggingBlock;
-        public static Dictionary<String, List<Parameter.ParameterType>> FunctionParameters = new();
+        public static Dictionary<String, List<Parameter>> FunctionParameters = new();
 
         public static void Initialize(CanvasPanel panel)
         {
