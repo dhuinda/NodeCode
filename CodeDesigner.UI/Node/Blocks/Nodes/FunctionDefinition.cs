@@ -36,7 +36,7 @@ public class FunctionDefinition : BlockBase
         NodeType = NodeType.FUNCTION_DEFINITION;
 
         Element btnElement =
-            new IconButtonElement(configureBtnProperties, CodeDesigner.UI.Properties.Resources.Save_35px, Color.SlateGray, Color.Gray, Color.White, () =>
+            new IconButtonElement(configureBtnProperties, CodeDesigner.UI.Properties.Resources.Configure_64px, Color.SlateGray, Color.Gray, Color.White, () =>
             {
                 InteractionHelper.LoadFunctionConfig(this);
                 InteractionHelper.FunctionConfigForm.Show();
