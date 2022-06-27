@@ -28,5 +28,6 @@ public class VariableDefinition : BlockBase
 
         Properties = properties;
         NodeType = NodeType.VARIABLE_DEFINITION;
+        CheckNext();
     }
 }

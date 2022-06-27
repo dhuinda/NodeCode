@@ -30,5 +30,6 @@ public class VariableAssignment : BlockBase
         
         Properties = properties;
         NodeType = NodeType.VARIABLE_ASSIGNMENT;
+        CheckNext();
     }
 }

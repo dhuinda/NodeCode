@@ -19,17 +19,17 @@ public class BinaryExpression : BlockBase
     {
         Operator = binOp;
 
-            BlockProperties properties = new BlockProperties
-            {
-                BorderColor = Color.FromArgb(69, 69, 69),
-                FillColor = Color.FromArgb(85, 85, 85),
-                SecondaryColor = Color.FromArgb(69, 69, 69),
-                Height = 70,
-                Width = 140,
-                TextColor = Color.FromArgb(255, 255, 255),
-                Name = "Binary Expression",
-                OutputType = Parameter.ParameterType.Object
-            };
+        BlockProperties properties = new BlockProperties
+        {
+            BorderColor = Color.FromArgb(69, 69, 69),
+            FillColor = Color.FromArgb(85, 85, 85),
+            SecondaryColor = Color.FromArgb(69, 69, 69),
+            Height = 70,
+            Width = 140,
+            TextColor = Color.FromArgb(255, 255, 255),
+            Name = "Binary Expression",
+            OutputType = Parameter.ParameterType.Object
+        };
 
         Parameters.Add(new Parameter
         {
@@ -43,6 +43,7 @@ public class BinaryExpression : BlockBase
             Type = Parameter.ParameterType.Object
         });
 
+        UseNext = false;
         Properties = properties;
         NodeType = NodeType.BINARY_EXPRESSION;
     }

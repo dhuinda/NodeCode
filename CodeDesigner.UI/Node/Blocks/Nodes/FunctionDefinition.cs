@@ -35,6 +35,7 @@ public class FunctionDefinition : BlockBase
             Size = new SizeF(50, 30)
         };
 
+        UseNext = false;
         Properties = properties;
         NodeType = NodeType.FUNCTION_DEFINITION;
 

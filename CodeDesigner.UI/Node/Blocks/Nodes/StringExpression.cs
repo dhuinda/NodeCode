@@ -24,5 +24,6 @@ public class StringExpression : BlockBase
 
         Properties = properties;
         NodeType = NodeType.STRING_EXPRESSION;
+        UseNext = false;
     }
 }

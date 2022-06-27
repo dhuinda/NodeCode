@@ -44,7 +44,6 @@ namespace CodeDesigner.UI.Node.Blocks
             Parameters = new List<Parameter?>();
             ConnectedParameters = new List<Parameter>();
             Elements = new List<Element>();
-            CheckNext();
         }
 
         public BlockBase(BlockProperties properties, PointF coordinates)
@@ -54,7 +53,6 @@ namespace CodeDesigner.UI.Node.Blocks
             Parameters = new List<Parameter?>();
             ConnectedParameters = new List<Parameter>();
             Elements = new List<Element>();
-            CheckNext();
         }
 
         public BlockBase()
@@ -62,14 +60,13 @@ namespace CodeDesigner.UI.Node.Blocks
             Parameters = new List<Parameter?>();
             ConnectedParameters = new List<Parameter>();
             Elements = new List<Element>();
-            CheckNext();
         }
 
         public void CheckNext()
         {
             if (UseNext)
             {
-                Parameters.Add(new Parameter
+                Parameters.Insert(0, new Parameter
                 {
                     Type = Parameter.ParameterType.Next
                 });

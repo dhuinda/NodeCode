@@ -118,6 +118,10 @@ public static class NodeConverter
                                         ": either remove the parameter or assign it a value", node.Id);
                         return;
                     }
+                    if (arg.Type == Parameter.ParameterType.Next)
+                    {
+                        continue;
+                    }
 
                     var n = GetASTNodeFromParam(arg);
                     if (n == null) return;
@@ -148,7 +152,6 @@ public static class NodeConverter
                                             ": either remove the parameter or assign it a value", node.Id);
                         return;
                     }
-
                     var vt = GetVariableType(p.Type, p.ObjectType);
                     if (vt == null) return;
                     astParams.Add(vt);
@@ -168,12 +171,12 @@ public static class NodeConverter
             case NodeType.RETURN:
             {
                 var returnExp = (ReturnExpression) node;
-                if (returnExp.Parameters.Count == 0)
+                if (returnExp.Parameters.Count == 1)
                 {
                     pc.Add(new ASTReturn().SetId(node.Id));
-                } else if (returnExp.Parameters.Count == 1)
+                } else if (returnExp.Parameters.Count == 2)
                 {
-                    var val = returnExp.Parameters[0];
+                    var val = returnExp.Parameters[1]; // skip next
                     if (val == null)
                     {
                         Program.dash.AddError(
@@ -192,24 +195,24 @@ public static class NodeConverter
             case NodeType.VARIABLE_ASSIGNMENT:
             {
                 var varAssignNode = (VariableAssignment) node;
-                if (varAssignNode.Parameters.Count != 1)
+                if (varAssignNode.Parameters.Count != 2)
                 {
                     Program.dash.AddError("Expected variable assignment to have one parameter but instead it has " + varAssignNode.Parameters.Count, node.Id);
                     return;
                 }
 
-                pc.Add(new ASTVariableAssignment(varAssignNode.Name, GetASTNodeFromParam(varAssignNode.Parameters[0] ?? throw new Exception("Unexpected null parameter in variable assignment")).SetId(node.Id)));
+                pc.Add(new ASTVariableAssignment(varAssignNode.Name, GetASTNodeFromParam(varAssignNode.Parameters[1] ?? throw new Exception("Unexpected null parameter in variable assignment")).SetId(node.Id)));
                 break;
             }
             case NodeType.VARIABLE_DECLARATION:
             {
                 var varDeclNode = (VariableDeclaration) node;
-                if (varDeclNode.Parameters.Count != 1)
+                if (varDeclNode.Parameters.Count != 2)
                 {
                     Program.dash.AddError("Expected variable assignment to have one parameter but instead it has " + varDeclNode.Parameters.Count, node.Id);
                     return;
                 }
-                pc.Add(new ASTVariableDeclaration(varDeclNode.Name, GetVariableType(varDeclNode.Type, varDeclNode.ObjectType), GetASTNodeFromParam(varDeclNode.Parameters[0] ?? throw new Exception("Unexpected null parameter in variable assignment")).SetId(node.Id)));
+                pc.Add(new ASTVariableDeclaration(varDeclNode.Name, GetVariableType(varDeclNode.Type, varDeclNode.ObjectType), GetASTNodeFromParam(varDeclNode.Parameters[1] ?? throw new Exception("Unexpected null parameter in variable assignment")).SetId(node.Id)));
                 break;
             }
             case NodeType.VARIABLE_DEFINITION:

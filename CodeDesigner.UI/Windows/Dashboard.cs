@@ -141,6 +141,7 @@ namespace CodeDesigner.UI.Windows
         }
         private void DesignerCanvas_MouseUp(object sender, MouseEventArgs e)
         {
+            Canvas.MouseUp();
             Canvas.MousePosition = e.Location;
 
             Canvas.IsPointInBlock(e.Location);
@@ -189,7 +190,7 @@ namespace CodeDesigner.UI.Windows
 
             Canvas.Pan(e.Location);
         }
-
+        
         private void SaveBtn_Click(object sender, EventArgs e)
         {
             Bitmap bitmap = new Bitmap(DesignerCanvas.Width, DesignerCanvas.Height);
@@ -208,7 +209,8 @@ namespace CodeDesigner.UI.Windows
         //Run button
         private void button2_Click(object sender, EventArgs e)
         {
-
+            Console.WriteLine("running");
+            NodeConverter.CompileNodes(Canvas.Blocks);
         }
     }
 }

@@ -22,5 +22,6 @@ public class ReturnExpression : BlockBase
 
         Properties = properties;
         NodeType = NodeType.RETURN;
+        CheckNext();
     }
 }

@@ -17,13 +17,14 @@ namespace CodeDesigner.UI.Node.Canvas
     {
         public static CanvasPanel CanvasControl;
         public static PointF MousePosition;
-        public static List<BlockBase?> Blocks = new();
+        public static List<BlockBase> Blocks = new();
         public static bool Connecting;
         public static bool IsOverParameter;
         public static bool ElementClickedOn;
         public static Element? ElementClicked;
         public static Parameter? OverParameter;
         public static BlockBase ConnectingBlock;
+        public static BlockBase? DraggingBlock;
 
         public static void Initialize(CanvasPanel panel)
         {
@@ -40,9 +41,10 @@ namespace CodeDesigner.UI.Node.Canvas
         public static void Pan(PointF delta)
         {
             BlockBase? block = IsPointInBlock(delta);
-
+            if (block == null && DraggingBlock != null) block = DraggingBlock;
             if (block != null)
             {
+                DraggingBlock = block;
                 MoveBlock(block, delta);
                 return;
             }
@@ -181,6 +183,7 @@ namespace CodeDesigner.UI.Node.Canvas
         public static bool IsPointInPolygon(PointF[] polygon, PointF testPoint)
         {
             bool result = false;
+            if (polygon == null || polygon.Length == 0) return false;
             int j = polygon.Count() - 1;
             for (int i = 0; i < polygon.Count(); i++)
             {
@@ -194,6 +197,11 @@ namespace CodeDesigner.UI.Node.Canvas
                 j = i;
             }
             return result;
+        }
+
+        public static void MouseUp()
+        {
+            DraggingBlock = null;
         }
     }
 }
