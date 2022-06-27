@@ -11,23 +11,21 @@ public class FunctionDefinition : BlockBase
     public Parameter.ParameterType ReturnType;
     public string? ObjectReturnType;
 
-    public FunctionDefinition(string name, Parameter.ParameterType returnType, string? objectReturnType = null)
+    public FunctionDefinition(string name, Parameter.ParameterType returnType, string? objectReturnType = null) : base(BlockProperties properties = new BlockProperties
+    {
+        BorderColor = Color.FromArgb(69, 69, 69),
+        FillColor = Color.FromArgb(85, 85, 85),
+        SecondaryColor = Color.FromArgb(69, 69, 69),
+        Height = 70,
+        Width = 140,
+        TextColor = Color.FromArgb(255, 255, 255),
+        Name = "Function Definition",
+        OutputType = Parameter.ParameterType.Object
+    })
     {
         Name = name;
         ReturnType = returnType;
         ObjectReturnType = objectReturnType;
-
-        BlockProperties properties = new BlockProperties
-        {
-            BorderColor = Color.FromArgb(69, 69, 69),
-            FillColor = Color.FromArgb(85, 85, 85),
-            SecondaryColor = Color.FromArgb(69, 69, 69),
-            Height = 70,
-            Width = 140,
-            TextColor = Color.FromArgb(255, 255, 255),
-            Name = "Function Definition",
-            OutputType = Parameter.ParameterType.Object
-        };
 
         ElementProperties configureBtnProperties = new ElementProperties()
         {
@@ -36,7 +34,6 @@ public class FunctionDefinition : BlockBase
         };
 
         UseNext = false;
-        Properties = properties;
         NodeType = NodeType.FUNCTION_DEFINITION;
 
         Element btnElement =
