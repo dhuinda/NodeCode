@@ -88,7 +88,7 @@ namespace CodeDesigner.UI.Windows
                     }
                 }
                 
-                if (Canvas.IsPointInPolygon(block.OutputPolygon, e.Location))
+                if (block.UseOutput && Canvas.IsPointInPolygon(block.OutputPolygon, e.Location))
                 {
                     block.Connecting = true;
                     Canvas.Connecting = true;
@@ -109,7 +109,14 @@ namespace CodeDesigner.UI.Windows
                         return;
                         
                     }
-                
+                else if (Canvas.IsPointInPolygon(block.NextPolygon, e.Location))
+                    {
+                        block.NextConnecting = true;
+                        Canvas.Connecting = true;
+                        Canvas.ConnectingBlock = block;
+                        RenderEngine.MouseLocation = e.Location;
+                        RenderEngine.ConnectingBlock = block;
+                    }
             }
             
             _mouseDown = true;

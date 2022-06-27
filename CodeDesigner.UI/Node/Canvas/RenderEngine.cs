@@ -44,31 +44,46 @@ namespace CodeDesigner.UI.Node.Canvas
 
         public static void DrawIO(BlockBase? block, Graphics g, PointF offset, float zoom)
         {
+            PointF[] testPoints = new PointF[5];
+            testPoints[0] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + 42) * zoom);
+            testPoints[1] = new PointF((block.Coordinates.X + block.Properties.Width - 13) * zoom, (block.Coordinates.Y + 42) * zoom);
+            testPoints[2] = new PointF((block.Coordinates.X + block.Properties.Width - 8) * zoom, (block.Coordinates.Y + 36) * zoom);
+            testPoints[3] = new PointF((block.Coordinates.X + block.Properties.Width - 13) * zoom, (block.Coordinates.Y + 30) * zoom);
+            testPoints[4] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + 30) * zoom);
+            block.NextPolygon = testPoints;
+            
+            g.FillPolygon(new SolidBrush(Color.White), testPoints);
+
             PointF[] outputPoints = new PointF[5];
-            outputPoints[0] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + block.Properties.Height - 22) * zoom);
-            outputPoints[1] = new PointF((block.Coordinates.X + block.Properties.Width - 13) * zoom, (block.Coordinates.Y + block.Properties.Height - 22) * zoom);
-            outputPoints[2] = new PointF((block.Coordinates.X + block.Properties.Width - 8) * zoom, (block.Coordinates.Y + block.Properties.Height - 16) * zoom);
-            outputPoints[3] = new PointF((block.Coordinates.X + block.Properties.Width - 13) * zoom, (block.Coordinates.Y + block.Properties.Height - 10) * zoom);
-            outputPoints[4] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + block.Properties.Height - 10) * zoom);
-
-            block.OutputPolygon = outputPoints;
-
-            g.FillPolygon(new SolidBrush(GetParameterColor(block.Properties.OutputType)), outputPoints);
-
-            if (block.UseSecondaryOutput)
+            
+            if (block.UseOutput)
             {
-                PointF[] secondaryOutputPoints = new PointF[5];
-                secondaryOutputPoints[0] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + block.Properties.Height - 42) * zoom);
-                secondaryOutputPoints[1] = new PointF((block.Coordinates.X + block.Properties.Width - 13) * zoom, (block.Coordinates.Y + block.Properties.Height - 42) * zoom);
-                secondaryOutputPoints[2] = new PointF((block.Coordinates.X + block.Properties.Width - 8) * zoom, (block.Coordinates.Y + block.Properties.Height - 36) * zoom);
-                secondaryOutputPoints[3] = new PointF((block.Coordinates.X + block.Properties.Width - 13) * zoom, (block.Coordinates.Y + block.Properties.Height - 30) * zoom);
-                secondaryOutputPoints[4] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + block.Properties.Height - 30) * zoom);
+                outputPoints[0] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + block.Properties.Height - 22) * zoom);
+                outputPoints[1] = new PointF((block.Coordinates.X + block.Properties.Width - 13) * zoom, (block.Coordinates.Y + block.Properties.Height - 22) * zoom);
+                outputPoints[2] = new PointF((block.Coordinates.X + block.Properties.Width - 8) * zoom, (block.Coordinates.Y + block.Properties.Height - 16) * zoom);
+                outputPoints[3] = new PointF((block.Coordinates.X + block.Properties.Width - 13) * zoom, (block.Coordinates.Y + block.Properties.Height - 10) * zoom);
+                outputPoints[4] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + block.Properties.Height - 10) * zoom);
 
-                block.SecondaryPolygon = secondaryOutputPoints;
+                block.OutputPolygon = outputPoints;
 
-                g.FillPolygon(new SolidBrush(GetParameterColor(block.Properties.OutputType)), secondaryOutputPoints);
+                g.FillPolygon(new SolidBrush(GetParameterColor(block.Properties.OutputType)), outputPoints);
+
+                if (block.UseSecondaryOutput)
+                {
+                    PointF[] secondaryOutputPoints = new PointF[5];
+                    secondaryOutputPoints[0] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + block.Properties.Height - 42) * zoom);
+                    secondaryOutputPoints[1] = new PointF((block.Coordinates.X + block.Properties.Width - 13) * zoom, (block.Coordinates.Y + block.Properties.Height - 42) * zoom);
+                    secondaryOutputPoints[2] = new PointF((block.Coordinates.X + block.Properties.Width - 8) * zoom, (block.Coordinates.Y + block.Properties.Height - 36) * zoom);
+                    secondaryOutputPoints[3] = new PointF((block.Coordinates.X + block.Properties.Width - 13) * zoom, (block.Coordinates.Y + block.Properties.Height - 30) * zoom);
+                    secondaryOutputPoints[4] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + block.Properties.Height - 30) * zoom);
+
+                    block.SecondaryPolygon = secondaryOutputPoints;
+
+                    g.FillPolygon(new SolidBrush(GetParameterColor(block.Properties.OutputType)), secondaryOutputPoints);
+                }
             }
 
+            
             float y = 25;
             
             foreach (Parameter? parameter in block.Parameters)

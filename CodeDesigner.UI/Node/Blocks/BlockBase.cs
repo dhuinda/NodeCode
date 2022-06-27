@@ -22,13 +22,15 @@ namespace CodeDesigner.UI.Node.Blocks
 
         public PointF Coordinates;
 
-        public PointF NextPolygon;
+        public PointF[] NextPolygon;
         public PointF[] OutputPolygon;
         public PointF[] SecondaryPolygon;
         
         public bool Connecting;
         public bool SecondaryConnecting;
+        public bool NextConnecting;
         public bool UseSecondaryOutput;
+        public bool UseOutput = true;
 
         public NodeType NodeType = NodeType.DEFAULT;
 
