@@ -203,5 +203,12 @@ namespace CodeDesigner.UI.Windows
         {
             Environment.Exit(0);
         }
+
+        
+        //Run button
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
