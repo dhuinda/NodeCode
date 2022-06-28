@@ -40,7 +40,7 @@ namespace CodeDesigner.UI.Windows
             
             foreach (string s in Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)))
             {
-                if (s.EndsWith(".ncmap"))
+                if (s.EndsWith(".nodecode"))
                 {
                     using (FileStream fs = new FileStream(s, FileMode.Open))
                     {

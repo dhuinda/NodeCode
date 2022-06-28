@@ -45,12 +45,16 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deletePackageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.neoPanel5 = new CodeDesigner.UI.Windows.Resources.Controls.Panels.NeoPanel();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.neoPanel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.neoPanel2.SuspendLayout();
             this.neoPanel3.SuspendLayout();
             this.neoPanel4.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
+            this.neoPanel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // neoPanel1
@@ -150,7 +154,7 @@
             this.neoPanel2.GradientTwo = System.Drawing.Color.Empty;
             this.neoPanel2.Location = new System.Drawing.Point(66, 86);
             this.neoPanel2.Name = "neoPanel2";
-            this.neoPanel2.Size = new System.Drawing.Size(273, 31);
+            this.neoPanel2.Size = new System.Drawing.Size(179, 31);
             this.neoPanel2.TabIndex = 12;
             // 
             // richTextBox1
@@ -159,7 +163,7 @@
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBox1.Location = new System.Drawing.Point(3, 2);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(269, 26);
+            this.richTextBox1.Size = new System.Drawing.Size(174, 26);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
@@ -204,6 +208,7 @@
             this.button1.TabIndex = 17;
             this.button1.Text = "Download";
             this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // neoPanel4
             // 
@@ -246,12 +251,51 @@
             this.deletePackageToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.deletePackageToolStripMenuItem.Text = "Delete Package";
             // 
+            // neoPanel5
+            // 
+            this.neoPanel5.BorderGradientAngle = 0F;
+            this.neoPanel5.BorderGradientOne = System.Drawing.SystemColors.ButtonShadow;
+            this.neoPanel5.BorderGradientTwo = System.Drawing.SystemColors.ButtonShadow;
+            this.neoPanel5.Controls.Add(this.richTextBox2);
+            this.neoPanel5.DragControl = false;
+            this.neoPanel5.DragForm = null;
+            this.neoPanel5.GradientAngle = 45F;
+            this.neoPanel5.GradientOne = System.Drawing.Color.Empty;
+            this.neoPanel5.GradientTwo = System.Drawing.Color.Empty;
+            this.neoPanel5.Location = new System.Drawing.Point(251, 86);
+            this.neoPanel5.Name = "neoPanel5";
+            this.neoPanel5.Size = new System.Drawing.Size(88, 31);
+            this.neoPanel5.TabIndex = 18;
+            // 
+            // richTextBox2
+            // 
+            this.richTextBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.richTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBox2.Location = new System.Drawing.Point(3, 2);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(82, 26);
+            this.richTextBox2.TabIndex = 0;
+            this.richTextBox2.Text = "";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Gilroy-Bold", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(69)))), ((int)(((byte)(69)))));
+            this.label3.Location = new System.Drawing.Point(249, 62);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(51, 15);
+            this.label3.TabIndex = 19;
+            this.label3.Text = "Version:";
+            // 
             // PackageManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
             this.ClientSize = new System.Drawing.Size(438, 246);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.neoPanel5);
             this.Controls.Add(this.neoPanel4);
             this.Controls.Add(this.neoPanel3);
             this.Controls.Add(this.label2);
@@ -266,6 +310,7 @@
             this.Name = "PackageManager";
             this.Text = "PackageManager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PackageManager_FormClosing);
+            this.Shown += new System.EventHandler(this.PackageManager_Shown);
             this.neoPanel1.ResumeLayout(false);
             this.neoPanel1.PerformLayout();
             this.panel3.ResumeLayout(false);
@@ -274,6 +319,7 @@
             this.neoPanel3.ResumeLayout(false);
             this.neoPanel4.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
+            this.neoPanel5.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -297,5 +343,8 @@
         private ListBox listBox1;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem deletePackageToolStripMenuItem;
+        private Resources.Controls.Panels.NeoPanel neoPanel5;
+        private RichTextBox richTextBox2;
+        private Label label3;
     }
 }

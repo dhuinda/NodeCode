@@ -28,7 +28,7 @@ namespace CodeDesigner.UI.Utility.Project
 
             BinaryFormatter formatter = new();
             
-            using (FileStream stream = new(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + name + ".ncmap", FileMode.Create))
+            using (FileStream stream = new(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + name + ".nodecode", FileMode.Create))
             {
                 formatter.Serialize(stream, map);
             }
