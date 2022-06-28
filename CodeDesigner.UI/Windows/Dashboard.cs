@@ -217,6 +217,7 @@ namespace CodeDesigner.UI.Windows
         //Run button
         private void button2_Click(object sender, EventArgs e)
         {
+            ClearErrors();
             Console.WriteLine("running");
             List<BlockBase> topLevelBlocks = new List<BlockBase>();
             foreach (var block in Canvas.Blocks)
@@ -227,6 +228,10 @@ namespace CodeDesigner.UI.Windows
                 }
             }
             NodeConverter.CompileNodes(topLevelBlocks);
+            if (hasErrors)
+            {
+                return;
+            }
             OutputText.Text = ProgramExecuter.ExecuteProgram();
         }
 
