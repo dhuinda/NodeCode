@@ -226,7 +226,7 @@ namespace CodeDesigner.UI.Windows
                 }
             }
             NodeConverter.CompileNodes(topLevelBlocks);
-            ProgramExecuter.ExecuteProgram();
+            OutputText.Text = ProgramExecuter.ExecuteProgram();
         }
 
         private void Dashboard_Load(object sender, EventArgs e)

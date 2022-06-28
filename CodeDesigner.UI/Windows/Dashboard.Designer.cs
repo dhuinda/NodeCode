@@ -58,9 +58,11 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.WarningPanel = new System.Windows.Forms.Panel();
+            this.panel15 = new System.Windows.Forms.Panel();
             this.panel12 = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.OutputPanel = new System.Windows.Forms.Panel();
+            this.panel14 = new System.Windows.Forms.Panel();
             this.panel9 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.panel10 = new System.Windows.Forms.Panel();
@@ -68,6 +70,7 @@
             this.DesignerCanvas = new CodeDesigner.UI.Windows.Resources.Controls.Panels.CanvasPanel();
             this.neoPanel4 = new CodeDesigner.UI.Windows.Resources.Controls.Panels.NeoPanel();
             this.button1 = new System.Windows.Forms.Button();
+            this.OutputText = new System.Windows.Forms.RichTextBox();
             this.panel1.SuspendLayout();
             this.neoPanel3.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -457,12 +460,22 @@
             // WarningPanel
             // 
             this.WarningPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.WarningPanel.Controls.Add(this.panel15);
             this.WarningPanel.Controls.Add(this.panel12);
             this.WarningPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.WarningPanel.Location = new System.Drawing.Point(538, 0);
             this.WarningPanel.Name = "WarningPanel";
             this.WarningPanel.Size = new System.Drawing.Size(310, 105);
             this.WarningPanel.TabIndex = 1;
+            // 
+            // panel15
+            // 
+            this.panel15.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.panel15.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel15.Location = new System.Drawing.Point(0, 25);
+            this.panel15.Name = "panel15";
+            this.panel15.Size = new System.Drawing.Size(310, 1);
+            this.panel15.TabIndex = 3;
             // 
             // panel12
             // 
@@ -471,7 +484,7 @@
             this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel12.Location = new System.Drawing.Point(0, 0);
             this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(310, 26);
+            this.panel12.Size = new System.Drawing.Size(310, 25);
             this.panel12.TabIndex = 2;
             // 
             // label7
@@ -488,6 +501,8 @@
             // OutputPanel
             // 
             this.OutputPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.OutputPanel.Controls.Add(this.OutputText);
+            this.OutputPanel.Controls.Add(this.panel14);
             this.OutputPanel.Controls.Add(this.panel9);
             this.OutputPanel.Controls.Add(this.panel10);
             this.OutputPanel.Dock = System.Windows.Forms.DockStyle.Left;
@@ -496,6 +511,15 @@
             this.OutputPanel.Size = new System.Drawing.Size(538, 105);
             this.OutputPanel.TabIndex = 0;
             // 
+            // panel14
+            // 
+            this.panel14.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.panel14.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel14.Location = new System.Drawing.Point(0, 25);
+            this.panel14.Name = "panel14";
+            this.panel14.Size = new System.Drawing.Size(537, 1);
+            this.panel14.TabIndex = 2;
+            // 
             // panel9
             // 
             this.panel9.BackColor = System.Drawing.SystemColors.ButtonFace;
@@ -503,7 +527,7 @@
             this.panel9.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel9.Location = new System.Drawing.Point(0, 0);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(537, 26);
+            this.panel9.Size = new System.Drawing.Size(537, 25);
             this.panel9.TabIndex = 1;
             // 
             // label3
@@ -581,6 +605,18 @@
             this.button1.TabIndex = 9;
             this.button1.Text = "-";
             this.button1.UseVisualStyleBackColor = false;
+            // 
+            // OutputText
+            // 
+            this.OutputText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.OutputText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.OutputText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OutputText.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.OutputText.Location = new System.Drawing.Point(0, 26);
+            this.OutputText.Name = "OutputText";
+            this.OutputText.Size = new System.Drawing.Size(537, 79);
+            this.OutputText.TabIndex = 17;
+            this.OutputText.Text = "";
             // 
             // Dashboard
             // 
@@ -663,5 +699,8 @@
         private Label label3;
         private Panel panel12;
         private Label label7;
+        private Panel panel15;
+        private Panel panel14;
+        private RichTextBox OutputText;
     }
 }
