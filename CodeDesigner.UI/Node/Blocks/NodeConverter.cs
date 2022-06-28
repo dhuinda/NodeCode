@@ -3,7 +3,6 @@ using CodeDesigner.Core.ast;
 using CodeDesigner.UI.Designer.Toolbox;
 using CodeDesigner.UI.Node.Blocks.Nodes;
 using CodeDesigner.UI.Node.Blocks.Types;
-using CodeDesigner.UI.Node.Interaction.Elements;
 using CodeRunner.UI;
 
 namespace CodeDesigner.UI.Node.Blocks;
@@ -14,6 +13,11 @@ public static class NodeConverter
     {
         Console.WriteLine("compiling");
         var ast = new List<ASTNode>();
+        foreach (var map in Canvas.Canvas.NodeMap.Dependencies)
+        {
+            Console.WriteLine("map: " + map.Name);
+            ConvertToAST(map.Blocks, ast, true);
+        }
         ConvertToAST(nodes, ast);
         if (Program.dash.HasErrors())
         {
@@ -26,10 +30,14 @@ public static class NodeConverter
         CodeGenerator.Run(ast);
     }
 
-    private static void ConvertToAST(List<BlockBase> nodes, List<ASTNode> parentChildren)
+    private static void ConvertToAST(List<BlockBase> nodes, List<ASTNode> parentChildren, bool topLevelOnly = false)
     {
         foreach (var node in nodes)
         {
+            if (topLevelOnly && node.NodeType != NodeType.FUNCTION_DEFINITION)
+            {
+                continue;
+            }
             AnalyzeNode(node, parentChildren);
         }
     }
@@ -82,6 +90,7 @@ public static class NodeConverter
             case NodeType.FUNCTION_DEFINITION:
             {
                 var funDefNode = (FunctionDefinition) node;
+                Console.WriteLine("generating " + funDefNode.Name + ": " + funDefNode.ReturnType);
                 var astParams = new List<ASTVariableDefinition>();
                 foreach (var p in funDefNode.Parameters)
                 {
@@ -110,12 +119,11 @@ public static class NodeConverter
             {
                 var funInvNode = (FunctionInvocation) node;
                 var astArgs = new List<ASTNode>();
-                var name = ((TextBoxElement) funInvNode.Elements[0]).Text;
                 foreach (var arg in funInvNode.Parameters)
                 {
                     if (arg == null)
                     {
-                        Program.dash.AddError("Error: nexpected null parameter in invocation of function " + name +
+                        Program.dash.AddError("Error: unexpected null parameter in invocation of function " + funInvNode.Name +
                                         ": either remove the parameter or assign it a value", node.Id);
                         return;
                     }
@@ -129,7 +137,7 @@ public static class NodeConverter
                     astArgs.Add(n);
                 }
 
-                pc.Add(new ASTFunctionInvocation(name, astArgs).SetId(node.Id));
+                pc.Add(new ASTFunctionInvocation(funInvNode.Name, astArgs).SetId(node.Id));
                 if (funInvNode.NextBlock != null)
                 {
                     AnalyzeNode(funInvNode.NextBlock, pc);

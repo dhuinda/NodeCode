@@ -7,7 +7,7 @@ namespace CodeDesigner.UI.Node.Blocks.Nodes;
 [Serializable]
 public class FunctionInvocation : BlockBase
 {
-    public string Value;
+    public string Name;
     
     public FunctionInvocation() : base(new BlockProperties
     {
@@ -21,11 +21,12 @@ public class FunctionInvocation : BlockBase
         OutputType = Parameter.ParameterType.Object
     })
     {
-        if (Value == null)
+        if (Name == null)
         {
-            Value = "extern.printf";
+            Name = "extern.printf";
         }
         NodeType = NodeType.FUNCTION_INVOCATION;
+        AddElements();
         UpdateFunction();
         CheckNext();
     }
@@ -37,8 +38,12 @@ public class FunctionInvocation : BlockBase
         {
             BlockCoordinates = new PointF(60, 38),
             Size = new SizeF(120, 30)
-        }, Color.Gray, Color.DarkGray, Color.Beige, null);
-        element.Text = Value;
+        }, Color.Gray, Color.DarkGray, Color.Beige, () =>
+        {
+            Name = ((TextBoxElement) Elements[0]).Text;
+            UpdateFunction();
+        });
+        element.Text = Name;
         
         Elements.Add(element);
     }
@@ -48,9 +53,9 @@ public class FunctionInvocation : BlockBase
         Parameters.Clear();
         var textBox = (TextBoxElement) Elements[0];
         var name = textBox.Text;
-        if (Canvas.Canvas.FunctionParameters.ContainsKey(name))
+        if (Canvas.Canvas.FunctionData.ContainsKey(name))
         {
-            var fun = Canvas.Canvas.FunctionParameters[name];
+            var fun = Canvas.Canvas.FunctionData[name];
             foreach (var parameter in fun.Parameters)
             {
                 Parameters.Add(new Parameter
@@ -68,6 +73,7 @@ public class FunctionInvocation : BlockBase
             });
             UseOutput = false;
         }
+        CheckNext();
     }
     
 }

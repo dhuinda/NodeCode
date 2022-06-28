@@ -9,6 +9,7 @@ using CodeDesigner.UI.Node.Blocks;
 using CodeDesigner.UI.Node.Blocks.Nodes;
 using CodeDesigner.UI.Node.Interaction;
 using CodeDesigner.UI.Node.Interaction.Elements;
+using CodeDesigner.UI.Utility.Project;
 using CodeDesigner.UI.Windows.Resources.Controls.Panels;
 
 namespace CodeDesigner.UI.Node.Canvas
@@ -25,7 +26,8 @@ namespace CodeDesigner.UI.Node.Canvas
         public static Parameter? OverParameter;
         public static BlockBase ConnectingBlock;
         public static BlockBase? DraggingBlock;
-        public static Dictionary<String, FunctionInformation> FunctionParameters = new();
+        public static Dictionary<String, FunctionInformation> FunctionData = new();
+        public static NodeMap NodeMap;
 
         public static void Initialize(CanvasPanel panel)
         {

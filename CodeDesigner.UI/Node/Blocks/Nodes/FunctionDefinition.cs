@@ -29,6 +29,7 @@ public class FunctionDefinition : BlockBase
             Name = "main";
         }
 
+        Console.WriteLine("RETURN TYPE: " + ReturnType);
         if (ReturnType == null)
         {
             ReturnType = Parameter.ParameterType.Void;

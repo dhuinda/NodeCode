@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using CodeDesigner.UI.Node.Canvas;
 using CodeDesigner.UI.Utility.Project;
 using CodeDesigner.UI.Windows.Resources.Controls.Panels;
 
@@ -47,6 +48,8 @@ namespace CodeDesigner.UI.Windows
                         BinaryFormatter formatter = new BinaryFormatter();
                         map = (NodeMap)formatter.Deserialize(fs);
                         map.Blocks.ForEach(b => b.AddElements());
+                        map.ScanForFunctions();
+                        Canvas.NodeMap = map;
                     }
 
                     ProjectPanel panel = new ProjectPanel();
