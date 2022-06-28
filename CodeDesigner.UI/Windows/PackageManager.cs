@@ -16,5 +16,11 @@ namespace CodeDesigner.UI.Windows
         {
             InitializeComponent();
         }
+
+        private void PackageManager_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
+        }
     }
 }

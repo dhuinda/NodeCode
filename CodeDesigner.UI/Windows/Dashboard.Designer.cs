@@ -34,7 +34,7 @@
             this.panel8 = new System.Windows.Forms.Panel();
             this.button8 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
+            this.PackageManagerBtn = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.SaveBtn = new System.Windows.Forms.Button();
@@ -58,8 +58,10 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.WarningPanel = new System.Windows.Forms.Panel();
-            this.label4 = new System.Windows.Forms.Label();
+            this.panel12 = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
             this.OutputPanel = new System.Windows.Forms.Panel();
+            this.panel9 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.panel10 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
@@ -75,7 +77,9 @@
             this.neoPanel1.SuspendLayout();
             this.panel5.SuspendLayout();
             this.WarningPanel.SuspendLayout();
+            this.panel12.SuspendLayout();
             this.OutputPanel.SuspendLayout();
+            this.panel9.SuspendLayout();
             this.DesignerCanvas.SuspendLayout();
             this.neoPanel4.SuspendLayout();
             this.SuspendLayout();
@@ -98,7 +102,7 @@
             this.neoPanel3.Controls.Add(this.panel8);
             this.neoPanel3.Controls.Add(this.button8);
             this.neoPanel3.Controls.Add(this.button7);
-            this.neoPanel3.Controls.Add(this.button6);
+            this.neoPanel3.Controls.Add(this.PackageManagerBtn);
             this.neoPanel3.Controls.Add(this.button5);
             this.neoPanel3.Controls.Add(this.button4);
             this.neoPanel3.Controls.Add(this.SaveBtn);
@@ -108,8 +112,8 @@
             this.neoPanel3.DragControl = false;
             this.neoPanel3.DragForm = null;
             this.neoPanel3.GradientAngle = 45F;
-            this.neoPanel3.GradientOne = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(112)))), ((int)(((byte)(156)))));
-            this.neoPanel3.GradientTwo = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(148)))), ((int)(((byte)(114)))));
+            this.neoPanel3.GradientOne = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(210)))), ((int)(((byte)(255)))));
+            this.neoPanel3.GradientTwo = System.Drawing.Color.FromArgb(((int)(((byte)(58)))), ((int)(((byte)(123)))), ((int)(((byte)(213)))));
             this.neoPanel3.Location = new System.Drawing.Point(0, 0);
             this.neoPanel3.Name = "neoPanel3";
             this.neoPanel3.Size = new System.Drawing.Size(51, 608);
@@ -153,19 +157,20 @@
             this.button7.TabIndex = 14;
             this.button7.UseVisualStyleBackColor = false;
             // 
-            // button6
+            // PackageManagerBtn
             // 
-            this.button6.BackColor = System.Drawing.Color.Transparent;
-            this.button6.FlatAppearance.BorderSize = 0;
-            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button6.Font = new System.Drawing.Font("Gilroy-Medium", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(69)))), ((int)(((byte)(69)))));
-            this.button6.Image = ((System.Drawing.Image)(resources.GetObject("button6.Image")));
-            this.button6.Location = new System.Drawing.Point(7, 220);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(37, 31);
-            this.button6.TabIndex = 13;
-            this.button6.UseVisualStyleBackColor = false;
+            this.PackageManagerBtn.BackColor = System.Drawing.Color.Transparent;
+            this.PackageManagerBtn.FlatAppearance.BorderSize = 0;
+            this.PackageManagerBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PackageManagerBtn.Font = new System.Drawing.Font("Gilroy-Medium", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.PackageManagerBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(69)))), ((int)(((byte)(69)))));
+            this.PackageManagerBtn.Image = ((System.Drawing.Image)(resources.GetObject("PackageManagerBtn.Image")));
+            this.PackageManagerBtn.Location = new System.Drawing.Point(7, 220);
+            this.PackageManagerBtn.Name = "PackageManagerBtn";
+            this.PackageManagerBtn.Size = new System.Drawing.Size(37, 31);
+            this.PackageManagerBtn.TabIndex = 13;
+            this.PackageManagerBtn.UseVisualStyleBackColor = false;
+            this.PackageManagerBtn.Click += new System.EventHandler(this.PackageManagerBtn_Click);
             // 
             // button5
             // 
@@ -298,6 +303,7 @@
             // 
             // neoPanel2
             // 
+            this.neoPanel2.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.neoPanel2.BorderGradientAngle = 0F;
             this.neoPanel2.BorderGradientOne = System.Drawing.SystemColors.ButtonShadow;
             this.neoPanel2.BorderGradientTwo = System.Drawing.SystemColors.ButtonShadow;
@@ -309,16 +315,16 @@
             this.neoPanel2.GradientTwo = System.Drawing.Color.Empty;
             this.neoPanel2.Location = new System.Drawing.Point(-1, 0);
             this.neoPanel2.Name = "neoPanel2";
-            this.neoPanel2.Size = new System.Drawing.Size(289, 25);
+            this.neoPanel2.Size = new System.Drawing.Size(289, 27);
             this.neoPanel2.TabIndex = 10;
             // 
             // BlockSearchBox
             // 
-            this.BlockSearchBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.BlockSearchBox.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.BlockSearchBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.BlockSearchBox.Location = new System.Drawing.Point(29, 3);
+            this.BlockSearchBox.Location = new System.Drawing.Point(29, 1);
             this.BlockSearchBox.Name = "BlockSearchBox";
-            this.BlockSearchBox.Size = new System.Drawing.Size(259, 19);
+            this.BlockSearchBox.Size = new System.Drawing.Size(259, 23);
             this.BlockSearchBox.TabIndex = 0;
             this.BlockSearchBox.Text = "";
             this.BlockSearchBox.TextChanged += new System.EventHandler(this.BlockSearchBox_TextChanged);
@@ -342,7 +348,7 @@
             "test 8",
             "test 9",
             "test 10"});
-            this.listBox1.Location = new System.Drawing.Point(0, 26);
+            this.listBox1.Location = new System.Drawing.Point(0, 28);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(288, 75);
             this.listBox1.TabIndex = 12;
@@ -451,28 +457,38 @@
             // WarningPanel
             // 
             this.WarningPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.WarningPanel.Controls.Add(this.label4);
+            this.WarningPanel.Controls.Add(this.panel12);
             this.WarningPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.WarningPanel.Location = new System.Drawing.Point(538, 0);
             this.WarningPanel.Name = "WarningPanel";
             this.WarningPanel.Size = new System.Drawing.Size(310, 105);
             this.WarningPanel.TabIndex = 1;
             // 
-            // label4
+            // panel12
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Gilroy-Bold", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(69)))), ((int)(((byte)(69)))));
-            this.label4.Location = new System.Drawing.Point(8, 7);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(61, 15);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "Warnings";
+            this.panel12.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.panel12.Controls.Add(this.label7);
+            this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel12.Location = new System.Drawing.Point(0, 0);
+            this.panel12.Name = "panel12";
+            this.panel12.Size = new System.Drawing.Size(310, 26);
+            this.panel12.TabIndex = 2;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Gilroy-Bold", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(69)))), ((int)(((byte)(69)))));
+            this.label7.Location = new System.Drawing.Point(8, 5);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(61, 15);
+            this.label7.TabIndex = 10;
+            this.label7.Text = "Warnings";
             // 
             // OutputPanel
             // 
             this.OutputPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.OutputPanel.Controls.Add(this.label3);
+            this.OutputPanel.Controls.Add(this.panel9);
             this.OutputPanel.Controls.Add(this.panel10);
             this.OutputPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.OutputPanel.Location = new System.Drawing.Point(0, 0);
@@ -480,15 +496,25 @@
             this.OutputPanel.Size = new System.Drawing.Size(538, 105);
             this.OutputPanel.TabIndex = 0;
             // 
+            // panel9
+            // 
+            this.panel9.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.panel9.Controls.Add(this.label3);
+            this.panel9.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel9.Location = new System.Drawing.Point(0, 0);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(537, 26);
+            this.panel9.TabIndex = 1;
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Gilroy-Bold", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(69)))), ((int)(((byte)(69)))));
-            this.label3.Location = new System.Drawing.Point(8, 7);
+            this.label3.Location = new System.Drawing.Point(8, 5);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(49, 15);
-            this.label3.TabIndex = 8;
+            this.label3.TabIndex = 10;
             this.label3.Text = "Output";
             // 
             // panel10
@@ -584,9 +610,11 @@
             this.neoPanel1.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.WarningPanel.ResumeLayout(false);
-            this.WarningPanel.PerformLayout();
+            this.panel12.ResumeLayout(false);
+            this.panel12.PerformLayout();
             this.OutputPanel.ResumeLayout(false);
-            this.OutputPanel.PerformLayout();
+            this.panel9.ResumeLayout(false);
+            this.panel9.PerformLayout();
             this.DesignerCanvas.ResumeLayout(false);
             this.DesignerCanvas.PerformLayout();
             this.neoPanel4.ResumeLayout(false);
@@ -611,8 +639,6 @@
         private Panel WarningPanel;
         private Panel OutputPanel;
         private Panel panel10;
-        private Label label4;
-        private Label label3;
         private Resources.Controls.Panels.NeoPanel neoPanel2;
         private RichTextBox BlockSearchBox;
         private Panel panel11;
@@ -628,10 +654,14 @@
         private Button SaveBtn;
         private Button button4;
         private Button button5;
-        private Button button6;
+        private Button PackageManagerBtn;
         private Button button7;
         private Button button8;
         private Panel panel8;
         private Resources.Controls.Panels.CorePanel corePanel1;
+        private Panel panel9;
+        private Label label3;
+        private Panel panel12;
+        private Label label7;
     }
 }

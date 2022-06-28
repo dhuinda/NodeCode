@@ -25,6 +25,7 @@ namespace CodeDesigner.UI.Windows
         private bool _mouseDown;
         public NodeMap Map;
         private bool hasErrors = false; // todo: can probably change this to just check list.empty() once a list of errors is added for the UI
+        private PackageManager _packageManager = new();
 
         public Dashboard()
         {
@@ -257,6 +258,11 @@ namespace CodeDesigner.UI.Windows
 
             BlockBase block = (BlockBase)Activator.CreateInstance(Type.GetType("CodeDesigner.UI.Node.Blocks.Nodes." + selectedItem));
             Canvas.AddNode(block);
+        }
+
+        private void PackageManagerBtn_Click(object sender, EventArgs e)
+        {
+            _packageManager.Show();
         }
     }
 }
