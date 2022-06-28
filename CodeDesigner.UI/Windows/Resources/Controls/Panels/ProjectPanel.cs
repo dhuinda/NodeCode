@@ -95,7 +95,7 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
 
             if (result == DialogResult.Yes)
             {
-                File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + Map.Name + ".ncmap");
+                File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + Map.Name + ".nodecode");
             }
 
             Program.pm.LoadProjects();
