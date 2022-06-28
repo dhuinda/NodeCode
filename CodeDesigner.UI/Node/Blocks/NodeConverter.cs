@@ -192,8 +192,7 @@ public static class NodeConverter
             case NodeType.STRING_EXPRESSION:
             {
                 var stringExpNode = (StringExpression) node;
-                var value = ((TextBoxElement) stringExpNode.Elements[0]).Text;
-                pc.Add(new ASTStringExpression(value).SetId(node.Id));
+                pc.Add(new ASTStringExpression(stringExpNode.Value).SetId(node.Id));
                 break;
             }
             case NodeType.RETURN:

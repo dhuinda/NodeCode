@@ -5,6 +5,7 @@ using CodeDesigner.UI.Node.Interaction.Elements;
 
 namespace CodeDesigner.UI.Node.Blocks.Nodes;
 
+[Serializable]
 public class FunctionDefinition : BlockBase
 {
     public string Name;
@@ -23,28 +24,35 @@ public class FunctionDefinition : BlockBase
         OutputType = Parameter.ParameterType.Void
     })
     {
-        Name = "main";
-        ReturnType = Parameter.ParameterType.Void;
-        ObjectReturnType = null;
+        if (Name == null)
+        {
+            Name = "main";
+        }
 
+        if (ReturnType == null)
+        {
+            ReturnType = Parameter.ParameterType.Void;
+            ObjectReturnType = null;
+        }
+        NodeType = NodeType.FUNCTION_DEFINITION;
+        UseOutput = false;
+        AddElements();
+    }
+
+    public override void AddElements()
+    {
+        Elements = new List<Element>();
         ElementProperties configureBtnProperties = new ElementProperties()
         {
             BlockCoordinates = new PointF(70, 25),
             Size = new SizeF(30, 30)
         };
-
-        NodeType = NodeType.FUNCTION_DEFINITION;
-
         Element btnElement =
             new IconButtonElement(configureBtnProperties, CodeDesigner.UI.Properties.Resources.Configure_64px, Color.SlateGray, Color.Gray, Color.White, () =>
             {
                 InteractionHelper.LoadFunctionConfig(this);
                 InteractionHelper.FunctionConfigForm.Show();
             });
-
-        UseOutput = false;
-
         Elements.Add(btnElement);
-        // CheckNext();
     }
 }

@@ -5,6 +5,7 @@ using CodeDesigner.UI.Node.Interaction.Elements;
 
 namespace CodeDesigner.UI.Node.Blocks.Nodes;
 
+[Serializable]
 public class NumberExpression : BlockBase
 {
     public string Value;
@@ -21,7 +22,16 @@ public class NumberExpression : BlockBase
         OutputType = Parameter.ParameterType.Object
     })
     {
-        Value = "0";
+        if (Value == null)
+        {
+            Value = "0";
+        }
+        NodeType = NodeType.NUMBER_EXPRESSION;
+    }
+
+    public override void AddElements()
+    {
+        Elements = new List<Element>();
         TextBoxElement element = new TextBoxElement(new ElementProperties
         {
             BlockCoordinates = new PointF(10, 30),
@@ -31,6 +41,6 @@ public class NumberExpression : BlockBase
             Value = ((TextBoxElement) Elements[0]).Text;
         });
         Elements.Add(element);
-        NodeType = NodeType.NUMBER_EXPRESSION;
     }
+    
 }

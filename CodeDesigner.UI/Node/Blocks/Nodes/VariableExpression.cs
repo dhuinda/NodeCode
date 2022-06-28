@@ -2,12 +2,13 @@ using CodeDesigner.UI.Designer.Toolbox;
 
 namespace CodeDesigner.UI.Node.Blocks.Nodes;
 
+[Serializable]
 public class VariableExpression : BlockBase
 {
     
     public string Name;
     
-    public VariableExpression(string name) : base ( new BlockProperties
+    public VariableExpression() : base ( new BlockProperties
     {
         BorderColor = Color.FromArgb(69, 69, 69),
         FillColor = Color.FromArgb(85, 85, 85),
@@ -19,7 +20,7 @@ public class VariableExpression : BlockBase
         OutputType = Parameter.ParameterType.Object
     })
     {
-        Name = name;
+        Name = "";
         NodeType = NodeType.VARIABLE_EXPRESSION;
         CanHavePrevious = false;
         CheckNext();

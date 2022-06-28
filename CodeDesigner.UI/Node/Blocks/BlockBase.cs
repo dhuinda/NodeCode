@@ -17,6 +17,7 @@ namespace CodeDesigner.UI.Node.Blocks
 
         public List<Parameter?> Parameters;
         public List<Parameter> ConnectedParameters;
+        [NonSerialized]
         public List<Element> Elements;
 
         public BlockProperties Properties;
@@ -46,7 +47,7 @@ namespace CodeDesigner.UI.Node.Blocks
             Properties = properties;
             Parameters = new List<Parameter?>();
             ConnectedParameters = new List<Parameter>();
-            Elements = new List<Element>();
+            Elements = new();
         }
 
         public BlockBase(BlockProperties properties, PointF coordinates)
@@ -55,7 +56,7 @@ namespace CodeDesigner.UI.Node.Blocks
             Properties = properties;
             Parameters = new List<Parameter?>();
             ConnectedParameters = new List<Parameter>();
-            Elements = new List<Element>();
+            Elements = new();
         }
 
         public BlockBase()
@@ -93,5 +94,7 @@ namespace CodeDesigner.UI.Node.Blocks
 
             ConnectedParameters.Clear();
         }
+        
+        public virtual void AddElements() {}
     }
 }

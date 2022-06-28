@@ -2,6 +2,7 @@ using CodeDesigner.UI.Designer.Toolbox;
 
 namespace CodeDesigner.UI.Node.Blocks.Nodes;
 
+[Serializable]
 public class BooleanExpression : BlockBase
 {
     public bool Value;

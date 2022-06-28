@@ -2,6 +2,7 @@
 
 namespace CodeDesigner.UI.Node.Blocks.Nodes;
 
+[Serializable]
 public class IfStatement : BlockBase
 {
     public IfStatement() : base(new BlockProperties

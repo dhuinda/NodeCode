@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CodeDesigner.UI.Node.Blocks;
+﻿using CodeDesigner.UI.Node.Blocks;
 
 namespace CodeDesigner.UI.Node.Interaction.Elements
 {
+    [Serializable]
     public class TextBoxElement : Element
     {
         public string Text = string.Empty;

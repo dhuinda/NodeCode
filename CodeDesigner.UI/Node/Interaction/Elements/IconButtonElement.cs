@@ -2,6 +2,7 @@
 
 namespace CodeDesigner.UI.Node.Interaction.Elements;
 
+[Serializable]
 public class IconButtonElement : Element
 {
     public Color ButtonColor { get; set; }
