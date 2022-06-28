@@ -18,7 +18,7 @@ a {
 .moving-gradient {
   background: linear-gradient(255.44deg, #41ab98 29.44%, #3d64c7 59.43%, #38739d 88.21%);
   height: 65vh;
-  width: 100vw;
+  width: 100%;
   background-size: 200% 100%;
   -webkit-animation: LoopGradient 10s ease infinite;
   -moz-animation: LoopGradient 10s ease infinite;

@@ -22,7 +22,6 @@ const Home: NextPage<Props> = ({ popularPackages, newPackages }) => {
         </Heading>
       </Box>
 
-      {/* todo get data from API */}
       <SimpleGrid columns={{ sm: 1, xl: 2 }} m='15vh 10vw'>
         <Box>
           <Heading>Popular Packages</Heading>
