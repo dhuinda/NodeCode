@@ -39,12 +39,13 @@ namespace CodeDesigner.UI.Windows
         public void AddError(String message, Guid? nodeId = null)
         {
             hasErrors = true;
-            Console.WriteLine(message);
+            listBox2.Items.Add(message);
         }
 
         public void ClearErrors()
         {
             hasErrors = false;
+            listBox2.Items.Clear();
         }
 
         public bool HasErrors()

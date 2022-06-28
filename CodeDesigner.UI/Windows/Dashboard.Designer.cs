@@ -62,6 +62,7 @@
             this.panel12 = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.OutputPanel = new System.Windows.Forms.Panel();
+            this.OutputText = new System.Windows.Forms.RichTextBox();
             this.panel14 = new System.Windows.Forms.Panel();
             this.panel9 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
@@ -70,7 +71,7 @@
             this.DesignerCanvas = new CodeDesigner.UI.Windows.Resources.Controls.Panels.CanvasPanel();
             this.neoPanel4 = new CodeDesigner.UI.Windows.Resources.Controls.Panels.NeoPanel();
             this.button1 = new System.Windows.Forms.Button();
-            this.OutputText = new System.Windows.Forms.RichTextBox();
+            this.listBox2 = new System.Windows.Forms.ListBox();
             this.panel1.SuspendLayout();
             this.neoPanel3.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -460,6 +461,7 @@
             // WarningPanel
             // 
             this.WarningPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.WarningPanel.Controls.Add(this.listBox2);
             this.WarningPanel.Controls.Add(this.panel15);
             this.WarningPanel.Controls.Add(this.panel12);
             this.WarningPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -510,6 +512,20 @@
             this.OutputPanel.Name = "OutputPanel";
             this.OutputPanel.Size = new System.Drawing.Size(538, 105);
             this.OutputPanel.TabIndex = 0;
+            // 
+            // OutputText
+            // 
+            this.OutputText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.OutputText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.OutputText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.OutputText.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.OutputText.Location = new System.Drawing.Point(8, 30);
+            this.OutputText.Name = "OutputText";
+            this.OutputText.Size = new System.Drawing.Size(527, 72);
+            this.OutputText.TabIndex = 17;
+            this.OutputText.Text = "Nothing to see here yet!";
             // 
             // panel14
             // 
@@ -606,17 +622,18 @@
             this.button1.Text = "-";
             this.button1.UseVisualStyleBackColor = false;
             // 
-            // OutputText
+            // listBox2
             // 
-            this.OutputText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.OutputText.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.OutputText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.OutputText.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.OutputText.Location = new System.Drawing.Point(0, 26);
-            this.OutputText.Name = "OutputText";
-            this.OutputText.Size = new System.Drawing.Size(537, 79);
-            this.OutputText.TabIndex = 17;
-            this.OutputText.Text = "";
+            this.listBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.listBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listBox2.Font = new System.Drawing.Font("Gilroy-Bold", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.listBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(69)))), ((int)(((byte)(69)))));
+            this.listBox2.FormattingEnabled = true;
+            this.listBox2.ItemHeight = 15;
+            this.listBox2.Location = new System.Drawing.Point(3, 29);
+            this.listBox2.Name = "listBox2";
+            this.listBox2.Size = new System.Drawing.Size(305, 75);
+            this.listBox2.TabIndex = 13;
             // 
             // Dashboard
             // 
@@ -702,5 +719,6 @@
         private Panel panel15;
         private Panel panel14;
         private RichTextBox OutputText;
+        private ListBox listBox2;
     }
 }
