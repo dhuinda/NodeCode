@@ -26,6 +26,9 @@ namespace CodeDesigner.UI.Windows
         public NodeMap Map;
         private bool hasErrors = false; // todo: can probably change this to just check list.empty() once a list of errors is added for the UI
         private PackageManager _packageManager = new();
+        private List<Guid> _errorGuids = new();
+        private List<string> _identifiableErrors = new ();
+        private List<string> _nonIdentifiableErrors = new();
 
         public Dashboard()
         {
@@ -38,14 +41,33 @@ namespace CodeDesigner.UI.Windows
 
         public void AddError(String message, Guid? nodeId = null)
         {
+            listBox2.Items.Clear();
+            
             hasErrors = true;
-            listBox2.Items.Add(message);
+
+            if (nodeId == null)
+                _nonIdentifiableErrors.Add(message);
+            else
+            {
+                _identifiableErrors.Add(message);
+                _errorGuids.Add((Guid)nodeId);
+            }
+
+            foreach (string s in _identifiableErrors)
+                listBox2.Items.Add(s);
+
+            foreach (string s in _nonIdentifiableErrors)
+                listBox2.Items.Add(s);
+
         }
 
         public void ClearErrors()
         {
             hasErrors = false;
             listBox2.Items.Clear();
+            _errorGuids.Clear();
+            _identifiableErrors.Clear();
+            _nonIdentifiableErrors.Clear();
         }
 
         public bool HasErrors()
@@ -269,6 +291,14 @@ namespace CodeDesigner.UI.Windows
         private void PackageManagerBtn_Click(object sender, EventArgs e)
         {
             _packageManager.Show();
+        }
+
+        private void listBox2_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (listBox2.SelectedIndex > _identifiableErrors.Count - 1)
+                return;
+
+            Canvas.HighlightNode(_errorGuids.ElementAt(listBox2.SelectedIndex));
         }
     }
 }

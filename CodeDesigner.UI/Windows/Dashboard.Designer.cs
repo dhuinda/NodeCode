@@ -523,9 +523,10 @@
             this.OutputText.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.OutputText.Location = new System.Drawing.Point(8, 30);
             this.OutputText.Name = "OutputText";
+            this.OutputText.ReadOnly = true;
             this.OutputText.Size = new System.Drawing.Size(527, 72);
             this.OutputText.TabIndex = 17;
-            this.OutputText.Text = "Nothing to see here yet!";
+            this.OutputText.Text = "";
             // 
             // panel14
             // 
@@ -634,6 +635,7 @@
             this.listBox2.Name = "listBox2";
             this.listBox2.Size = new System.Drawing.Size(305, 75);
             this.listBox2.TabIndex = 13;
+            this.listBox2.SelectedValueChanged += new System.EventHandler(this.listBox2_SelectedValueChanged);
             // 
             // Dashboard
             // 
