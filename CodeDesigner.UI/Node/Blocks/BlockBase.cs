@@ -44,7 +44,7 @@ namespace CodeDesigner.UI.Node.Blocks
 
         public BlockBase(BlockProperties properties)
         {
-            Coordinates = new Point(0, 0);
+            Coordinates = new Point(300, 25);
             Properties = properties;
             Parameters = new List<Parameter?>();
             ConnectedParameters = new List<Parameter>();
@@ -62,6 +62,7 @@ namespace CodeDesigner.UI.Node.Blocks
 
         public BlockBase()
         {
+            Coordinates = new Point(300, 25);
             Parameters = new List<Parameter?>();
             ConnectedParameters = new List<Parameter>();
             Elements = new List<Element>();
