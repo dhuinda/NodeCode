@@ -37,6 +37,7 @@ namespace CodeDesigner.UI.Node.Blocks
         public BlockBase? SecondaryOutput;
         public bool CanHavePrevious = true;
         public bool CanHaveNext = true;
+        public bool IsHighlighted = false;
 
         public NodeType NodeType = NodeType.DEFAULT;
         public Guid Id = Guid.NewGuid();

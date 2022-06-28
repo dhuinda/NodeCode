@@ -217,5 +217,26 @@ namespace CodeDesigner.UI.Node.Canvas
         {
             DraggingBlock = null;
         }
+
+        public static void HighlightNode(Guid guid)
+        {
+            foreach (BlockBase b in Blocks)
+                b.IsHighlighted = false;
+            
+            foreach (BlockBase block in Blocks)
+            {
+                if (block.Id != guid) continue;
+
+                block.IsHighlighted = true;
+
+                float x = CanvasControl.Width / 2f - block.Properties.Width / 2f;
+                float y = CanvasControl.Height / 2f - block.Properties.Height / 2f;
+
+                CanvasControl.OffsetX = x;
+                CanvasControl.OffsetY = y;
+                break;
+            }
+            
+        }
     }
 }

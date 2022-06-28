@@ -29,7 +29,9 @@ namespace CodeDesigner.UI.Node.Canvas
                 block.Coordinates.X += (offset.X - LastOffset.X) / zoom;
                 block.Coordinates.Y += (offset.Y - LastOffset.Y) / zoom;
 
-                g.DrawRectangle(new Pen(block.Properties.BorderColor, 1 * zoom), (block.Coordinates.X * zoom), (block.Coordinates.Y * zoom), block.Properties.Width * zoom, block.Properties.Height * zoom);
+                Color borderColor = block.IsHighlighted ? Color.Red : block.Properties.BorderColor;
+
+                g.DrawRectangle(new Pen(borderColor, 1 * zoom), (block.Coordinates.X * zoom), (block.Coordinates.Y * zoom), block.Properties.Width * zoom, block.Properties.Height * zoom);
                 g.FillRectangle(new SolidBrush(block.Properties.FillColor), block.Coordinates.X * zoom, block.Coordinates.Y * zoom, block.Properties.Width * zoom, block.Properties.Height * zoom);
                 g.FillRectangle(new SolidBrush(block.Properties.SecondaryColor), block.Coordinates.X * zoom, block.Coordinates.Y * zoom, block.Properties.Width * zoom, 20 * zoom);
                 g.DrawString(block.Properties.Name, new Font("Gilroy-Bold", 9f * zoom, FontStyle.Regular, GraphicsUnit.Point), new SolidBrush(block.Properties.TextColor), (block.Coordinates.X * zoom) + (5 * zoom), (block.Coordinates.Y * zoom) + (3.2f * zoom));
