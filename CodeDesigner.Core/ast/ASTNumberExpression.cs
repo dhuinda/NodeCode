@@ -7,7 +7,7 @@ using Core;
 public class ASTNumberExpression : ASTNode
 {
 
-    private string Value;
+    public string Value;
     private PrimitiveVariableType Type;
 
     public ASTNumberExpression(string value, PrimitiveVariableType type)

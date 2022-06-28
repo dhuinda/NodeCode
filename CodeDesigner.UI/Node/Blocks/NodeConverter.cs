@@ -14,7 +14,6 @@ public static class NodeConverter
     {
         Console.WriteLine("compiling");
         var ast = new List<ASTNode>();
-        Console.WriteLine(nodes.Count);
         ConvertToAST(nodes, ast);
         if (Program.dash.HasErrors())
         {
@@ -88,7 +87,7 @@ public static class NodeConverter
                 {
                     if (p == null)
                     {
-                        Program.dash.AddError("Unexpected null parameter in definition of function " + funDefNode.Name + ": either remove the parameter or assign it a value", node.Id);
+                        Program.dash.AddError("Error: nexpected null parameter in definition of function " + funDefNode.Name + ": either remove the parameter or assign it a value", node.Id);
                         return;
                     }
 
@@ -100,10 +99,8 @@ public static class NodeConverter
                 var body = new List<ASTNode>();
                 if (funDefNode.NextBlock != null)
                 {
-                    Console.WriteLine("has next");
                     AnalyzeNode(funDefNode.NextBlock, body);
                 }
-                Console.WriteLine(body.Count);
                 var returnType = GetVariableType(funDefNode.ReturnType, funDefNode.ObjectReturnType);
                 if (returnType == null) return;
                 pc.Add(new ASTFunctionDefinition(funDefNode.Name, astParams, body, returnType).SetId(node.Id));
@@ -151,15 +148,15 @@ public static class NodeConverter
                 var astCondition = GetASTNodeFromParam((Parameter) ifNode.Parameters[1]);
                 if (astCondition == null) return;
                 var ifBody = new List<ASTNode>();
-                if (ifNode.Output != null)
+                if (ifNode.SecondaryOutput != null)
                 {
-                    AnalyzeNode(ifNode.Output, ifBody);
+                    AnalyzeNode(ifNode.SecondaryOutput, ifBody);
                 }
 
                 var elseBody = new List<ASTNode>();
-                if (ifNode.SecondaryOutput != null)
+                if (ifNode.Output != null)
                 {
-                    AnalyzeNode(ifNode.SecondaryOutput, elseBody);
+                    AnalyzeNode(ifNode.Output, elseBody);
                 }
                 pc.Add(new ASTIfStatement(astCondition, ifBody, elseBody));
                 break;

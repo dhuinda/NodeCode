@@ -27,7 +27,7 @@ public class BinaryExpression : BlockBase
         OutputType = Parameter.ParameterType.Object
     })
     {
-        Operator = BinOp.Add;
+        Operator = BinOp.GreaterThanOrEqual;
 
         Parameters.Add(new Parameter
         {
@@ -41,7 +41,7 @@ public class BinaryExpression : BlockBase
             Type = Parameter.ParameterType.Object
         });
 
-        UseNext = false;
+        CanHavePrevious = false;
         NodeType = NodeType.BINARY_EXPRESSION;
     }
 }

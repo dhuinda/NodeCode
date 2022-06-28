@@ -44,7 +44,7 @@ namespace CodeDesigner.UI.Node.Canvas
 
         public static void DrawIO(BlockBase? block, Graphics g, PointF offset, float zoom)
         {
-            if (block.UseNext)
+            if (block.CanHavePrevious)
             {
                 PointF[] testPoints = new PointF[5];
                 testPoints[0] = new PointF((block.Coordinates.X + block.Properties.Width - 20) * zoom, (block.Coordinates.Y + 42) * zoom);

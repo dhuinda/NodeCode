@@ -34,7 +34,8 @@ namespace CodeDesigner.UI.Node.Blocks
         public BlockBase? Output;
         public bool UseSecondaryOutput;
         public BlockBase? SecondaryOutput;
-        public bool UseNext = true;
+        public bool CanHavePrevious = true;
+        public bool CanHaveNext = true;
 
         public NodeType NodeType = NodeType.DEFAULT;
         public Guid Id = Guid.NewGuid();
@@ -70,7 +71,7 @@ namespace CodeDesigner.UI.Node.Blocks
             {
                 Parameters.RemoveAt(0);
             }
-            if (UseNext)
+            if (CanHavePrevious)
             {
                 Parameters.Insert(0, new Parameter
                 {

@@ -10,12 +10,12 @@ namespace CodeDesigner.UI.Node.Interaction.Elements
     public class TextBoxElement : Element
     {
         public string Text = string.Empty;
-        public Action Method;
+        public Action? Method;
         private Color _color;
         private Color _buttonColor;
         private Color _strokeColor;
 
-        public TextBoxElement(ElementProperties properties, Color color, Color buttonColor, Color stroke, Action method)
+        public TextBoxElement(ElementProperties properties, Color color, Color buttonColor, Color stroke, Action? method)
         {
             Properties = properties;
             _color = color;
