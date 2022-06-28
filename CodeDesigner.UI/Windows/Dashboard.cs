@@ -68,6 +68,10 @@ namespace CodeDesigner.UI.Windows
             _errorGuids.Clear();
             _identifiableErrors.Clear();
             _nonIdentifiableErrors.Clear();
+            foreach (var block in Canvas.Blocks)
+            {
+                block.IsHighlighted = false;
+            }
         }
 
         public bool HasErrors()
@@ -295,9 +299,11 @@ namespace CodeDesigner.UI.Windows
 
         private void listBox2_SelectedValueChanged(object sender, EventArgs e)
         {
+            Console.WriteLine("select error");
             if (listBox2.SelectedIndex > _identifiableErrors.Count - 1)
                 return;
 
+            Console.WriteLine("highlight");
             Canvas.HighlightNode(_errorGuids.ElementAt(listBox2.SelectedIndex));
         }
     }

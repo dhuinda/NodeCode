@@ -226,14 +226,14 @@ namespace CodeDesigner.UI.Node.Canvas
             foreach (BlockBase block in Blocks)
             {
                 if (block.Id != guid) continue;
-
+                Console.WriteLine("found node");
                 block.IsHighlighted = true;
 
-                float x = CanvasControl.Width / 2f - block.Properties.Width / 2f;
-                float y = CanvasControl.Height / 2f - block.Properties.Height / 2f;
-
+                float x = CanvasControl.Width / 2f - block.Properties.Width /2f - block.Coordinates.X*CanvasControl.ZoomFactor + CanvasControl.OffsetX;
+                float y = CanvasControl.Height / 2f - block.Properties.Height / 2f - block.Coordinates.Y*CanvasControl.ZoomFactor + CanvasControl.OffsetY;
                 CanvasControl.OffsetX = x;
                 CanvasControl.OffsetY = y;
+                CanvasControl.Refresh();
                 break;
             }
             

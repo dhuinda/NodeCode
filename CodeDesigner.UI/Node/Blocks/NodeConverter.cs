@@ -56,7 +56,7 @@ public static class NodeConverter
                     if (left == null) return;
                 } else if (binExpNode.Parameters.Count > 0 && binExpNode.Parameters[0] != null)
                 {
-                    left = GetASTNodeFromParam(binExpNode.Parameters[0] ?? throw new Exception());
+                    left = GetASTNodeFromParam(binExpNode.Parameters[0] ?? throw new Exception(), binExpNode.Id);
                 }
                 else
                 {
@@ -71,7 +71,7 @@ public static class NodeConverter
                     if (right == null) return;
                 } else if (binExpNode.Parameters.Count > 1 && binExpNode.Parameters[1] != null)
                 {
-                    right = GetASTNodeFromParam(binExpNode.Parameters[1] ?? throw new Exception());
+                    right = GetASTNodeFromParam(binExpNode.Parameters[1] ?? throw new Exception(), binExpNode.Id);
                 }
                 else
                 {
@@ -96,7 +96,7 @@ public static class NodeConverter
                 {
                     if (p == null)
                     {
-                        Program.dash.AddError("Error: nexpected null parameter in definition of function " + funDefNode.Name + ": either remove the parameter or assign it a value", node.Id);
+                        Program.dash.AddError("Error: unexpected null parameter in definition of function " + funDefNode.Name + ": either remove the parameter or assign it a value", node.Id);
                         return;
                     }
 
@@ -132,7 +132,7 @@ public static class NodeConverter
                         continue;
                     }
 
-                    var n = GetASTNodeFromParam(arg);
+                    var n = GetASTNodeFromParam(arg, funInvNode.Id);
                     if (n == null) return;
                     astArgs.Add(n);
                 }
@@ -153,7 +153,7 @@ public static class NodeConverter
                     return;
                 }
 
-                var astCondition = GetASTNodeFromParam((Parameter) ifNode.Parameters[1]);
+                var astCondition = GetASTNodeFromParam((Parameter) ifNode.Parameters[1], ifNode.Id);
                 if (astCondition == null) return;
                 var ifBody = new List<ASTNode>();
                 if (ifNode.SecondaryOutput != null)
@@ -218,7 +218,7 @@ public static class NodeConverter
                             "Unexpected null parameter of return: either remove the parameter or assign it a value", node.Id);
                         return;
                     }
-                    pc.Add(new ASTReturn(GetASTNodeFromParam(val)).SetId(node.Id));
+                    pc.Add(new ASTReturn(GetASTNodeFromParam(val, node.Id)).SetId(node.Id));
                 }
                 else
                 {
@@ -236,7 +236,7 @@ public static class NodeConverter
                     return;
                 }
 
-                pc.Add(new ASTVariableAssignment(varAssignNode.Name, GetASTNodeFromParam(varAssignNode.Parameters[1] ?? throw new Exception("Unexpected null parameter in variable assignment")).SetId(node.Id)));
+                pc.Add(new ASTVariableAssignment(varAssignNode.Name, GetASTNodeFromParam(varAssignNode.Parameters[1] ?? throw new Exception("Unexpected null parameter in variable assignment"), node.Id).SetId(node.Id)));
                 break;
             }
             case NodeType.VARIABLE_DECLARATION:
@@ -247,7 +247,13 @@ public static class NodeConverter
                     Program.dash.AddError("Expected variable assignment to have one parameter but instead it has " + varDeclNode.Parameters.Count, node.Id);
                     return;
                 }
-                pc.Add(new ASTVariableDeclaration(varDeclNode.Name, GetVariableType(varDeclNode.Type, varDeclNode.ObjectType), GetASTNodeFromParam(varDeclNode.Parameters[1] ?? throw new Exception("Unexpected null parameter in variable assignment")).SetId(node.Id)));
+
+                var paramNode =
+                    GetASTNodeFromParam(
+                        varDeclNode.Parameters[1] ??
+                        throw new Exception("Unexpected null parameter in variable assignment"), node.Id);
+                
+                pc.Add(new ASTVariableDeclaration(varDeclNode.Name, GetVariableType(varDeclNode.Type, varDeclNode.ObjectType), paramNode).SetId(node.Id));
                 break;
             }
             case NodeType.VARIABLE_DEFINITION:
@@ -273,7 +279,7 @@ public static class NodeConverter
                     return;
                 }
 
-                var astCondition = GetASTNodeFromParam((Parameter) whileNode.Parameters[1]);
+                var astCondition = GetASTNodeFromParam((Parameter) whileNode.Parameters[1], whileNode.Id);
                 if (astCondition == null) return;
                 var body = new List<ASTNode>();
                 if (whileNode.Output != null)
@@ -287,7 +293,7 @@ public static class NodeConverter
         }
     }
 
-    private static ASTNode? GetASTNodeFromParam(Parameter param)
+    private static ASTNode? GetASTNodeFromParam(Parameter param, Guid nodeId)
     {
         if (param.RawValue != null)
         {
@@ -296,7 +302,7 @@ public static class NodeConverter
 
         if (param.ReferenceValue == null)
         {
-            Program.dash.AddError("RawValue and ReferenceValue can't both be null!");
+            Program.dash.AddError("Empty parameter", nodeId);
             return null;
         }
         
@@ -305,7 +311,7 @@ public static class NodeConverter
         if (l.Count != 1)
         {
             Program.dash.AddError("Expected exactly one expression for one parameter; found " +
-                                l.Count);
+                                l.Count, nodeId);
             return null;
         }
         return l[0].SetId(param.ReferenceValue.Id);
