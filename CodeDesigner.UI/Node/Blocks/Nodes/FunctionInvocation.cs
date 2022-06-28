@@ -4,8 +4,11 @@ using CodeDesigner.UI.Node.Interaction.Elements;
 
 namespace CodeDesigner.UI.Node.Blocks.Nodes;
 
+[Serializable]
 public class FunctionInvocation : BlockBase
 {
+    public string Value;
+    
     public FunctionInvocation() : base(new BlockProperties
     {
         BorderColor = Color.FromArgb(69, 69, 69),
@@ -18,19 +21,26 @@ public class FunctionInvocation : BlockBase
         OutputType = Parameter.ParameterType.Object
     })
     {
-        // todo need a way to add/remove parameters in the UI
+        if (Value == null)
+        {
+            Value = "extern.printf";
+        }
+        NodeType = NodeType.FUNCTION_INVOCATION;
+        UpdateFunction();
+        CheckNext();
+    }
 
+    public override void AddElements()
+    {
+        Elements = new List<Element>();
         TextBoxElement element = new TextBoxElement(new ElementProperties
         {
             BlockCoordinates = new PointF(60, 38),
             Size = new SizeF(120, 30)
         }, Color.Gray, Color.DarkGray, Color.Beige, null);
-        element.Text = "extern.printf";
+        element.Text = Value;
         
         Elements.Add(element);
-        NodeType = NodeType.FUNCTION_INVOCATION;
-        UpdateFunction();
-        CheckNext();
     }
 
     public void UpdateFunction()

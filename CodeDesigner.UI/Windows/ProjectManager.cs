@@ -46,6 +46,7 @@ namespace CodeDesigner.UI.Windows
                     {
                         BinaryFormatter formatter = new BinaryFormatter();
                         map = (NodeMap)formatter.Deserialize(fs);
+                        map.Blocks.ForEach(b => b.AddElements());
                     }
 
                     ProjectPanel panel = new ProjectPanel();

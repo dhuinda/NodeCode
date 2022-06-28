@@ -8,6 +8,7 @@ using CodeDesigner.UI.Node.Blocks.Types;
 
 namespace CodeDesigner.UI.Node.Blocks.Nodes;
 
+[Serializable]
 public class BinaryExpression : BlockBase
 {
     public BinOp Operator;

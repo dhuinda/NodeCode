@@ -4,8 +4,11 @@ using CodeDesigner.UI.Node.Interaction.Elements;
 
 namespace CodeDesigner.UI.Node.Blocks.Nodes;
 
+[Serializable]
 public class StringExpression : BlockBase
 {
+    public String Value;
+    
     public StringExpression() : base(new BlockProperties
     {
         BorderColor = Color.FromArgb(69, 69, 69),
@@ -18,14 +21,26 @@ public class StringExpression : BlockBase
         OutputType = Parameter.ParameterType.Object
     })
     {
+        if (Value == null)
+        {
+            Value = "";
+        }
+        NodeType = NodeType.STRING_EXPRESSION;
+        CanHavePrevious = false;
+    }
+
+    public override void AddElements()
+    {
+        Elements = new List<Element>();
         TextBoxElement element = new TextBoxElement(new ElementProperties
         {
             BlockCoordinates = new PointF(10, 30),
             Size = new SizeF(90, 30)
-        }, Color.Gray, Color.DarkGray, Color.Beige, null);
+        }, Color.Gray, Color.DarkGray, Color.Beige, () =>
+        {
+            Value = ((TextBoxElement) Elements[0]).Text;
+        });
+        element.Text = Value;
         Elements.Add(element);
-
-        NodeType = NodeType.STRING_EXPRESSION;
-        CanHavePrevious = false;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace CodeDesigner.UI.Node.Blocks.Nodes;
 
+[Serializable]
 public class WhileLoop : BlockBase
 {
     public WhileLoop() : base(new BlockProperties
