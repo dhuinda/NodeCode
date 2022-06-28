@@ -63,8 +63,8 @@
             this.neoPanel1.DragControl = false;
             this.neoPanel1.DragForm = null;
             this.neoPanel1.GradientAngle = 45F;
-            this.neoPanel1.GradientOne = System.Drawing.Color.FromArgb(((int)(((byte)(168)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.neoPanel1.GradientTwo = System.Drawing.Color.FromArgb(((int)(((byte)(63)))), ((int)(((byte)(43)))), ((int)(((byte)(150)))));
+            this.neoPanel1.GradientOne = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(210)))), ((int)(((byte)(255)))));
+            this.neoPanel1.GradientTwo = System.Drawing.Color.FromArgb(((int)(((byte)(58)))), ((int)(((byte)(123)))), ((int)(((byte)(213)))));
             this.neoPanel1.Location = new System.Drawing.Point(0, 0);
             this.neoPanel1.Name = "neoPanel1";
             this.neoPanel1.Size = new System.Drawing.Size(51, 246);
@@ -265,6 +265,7 @@
             this.MinimizeBox = false;
             this.Name = "PackageManager";
             this.Text = "PackageManager";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PackageManager_FormClosing);
             this.neoPanel1.ResumeLayout(false);
             this.neoPanel1.PerformLayout();
             this.panel3.ResumeLayout(false);

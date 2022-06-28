@@ -11,8 +11,14 @@ namespace CodeDesigner.UI.Utility.Project
     [Serializable]
     public class NodeMap
     {
+        public NodeMap()
+        {
+            Dependencies = new List<NodeMap>();
+        }
+        
         public string Name { get; set; }
         public System.Drawing.Image Thumbnail { get; set; }
         public List<BlockBase?> Blocks { get; set; }
+        public List<NodeMap> Dependencies { get; set; }
     }
 }

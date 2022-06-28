@@ -34,7 +34,7 @@
             this.panel8 = new System.Windows.Forms.Panel();
             this.button8 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
+            this.PackageManagerBtn = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.SaveBtn = new System.Windows.Forms.Button();
@@ -102,7 +102,7 @@
             this.neoPanel3.Controls.Add(this.panel8);
             this.neoPanel3.Controls.Add(this.button8);
             this.neoPanel3.Controls.Add(this.button7);
-            this.neoPanel3.Controls.Add(this.button6);
+            this.neoPanel3.Controls.Add(this.PackageManagerBtn);
             this.neoPanel3.Controls.Add(this.button5);
             this.neoPanel3.Controls.Add(this.button4);
             this.neoPanel3.Controls.Add(this.SaveBtn);
@@ -112,8 +112,8 @@
             this.neoPanel3.DragControl = false;
             this.neoPanel3.DragForm = null;
             this.neoPanel3.GradientAngle = 45F;
-            this.neoPanel3.GradientOne = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(112)))), ((int)(((byte)(156)))));
-            this.neoPanel3.GradientTwo = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(148)))), ((int)(((byte)(114)))));
+            this.neoPanel3.GradientOne = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(210)))), ((int)(((byte)(255)))));
+            this.neoPanel3.GradientTwo = System.Drawing.Color.FromArgb(((int)(((byte)(58)))), ((int)(((byte)(123)))), ((int)(((byte)(213)))));
             this.neoPanel3.Location = new System.Drawing.Point(0, 0);
             this.neoPanel3.Name = "neoPanel3";
             this.neoPanel3.Size = new System.Drawing.Size(51, 608);
@@ -157,19 +157,20 @@
             this.button7.TabIndex = 14;
             this.button7.UseVisualStyleBackColor = false;
             // 
-            // button6
+            // PackageManagerBtn
             // 
-            this.button6.BackColor = System.Drawing.Color.Transparent;
-            this.button6.FlatAppearance.BorderSize = 0;
-            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button6.Font = new System.Drawing.Font("Gilroy-Medium", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(69)))), ((int)(((byte)(69)))));
-            this.button6.Image = ((System.Drawing.Image)(resources.GetObject("button6.Image")));
-            this.button6.Location = new System.Drawing.Point(7, 220);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(37, 31);
-            this.button6.TabIndex = 13;
-            this.button6.UseVisualStyleBackColor = false;
+            this.PackageManagerBtn.BackColor = System.Drawing.Color.Transparent;
+            this.PackageManagerBtn.FlatAppearance.BorderSize = 0;
+            this.PackageManagerBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PackageManagerBtn.Font = new System.Drawing.Font("Gilroy-Medium", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.PackageManagerBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(69)))), ((int)(((byte)(69)))));
+            this.PackageManagerBtn.Image = ((System.Drawing.Image)(resources.GetObject("PackageManagerBtn.Image")));
+            this.PackageManagerBtn.Location = new System.Drawing.Point(7, 220);
+            this.PackageManagerBtn.Name = "PackageManagerBtn";
+            this.PackageManagerBtn.Size = new System.Drawing.Size(37, 31);
+            this.PackageManagerBtn.TabIndex = 13;
+            this.PackageManagerBtn.UseVisualStyleBackColor = false;
+            this.PackageManagerBtn.Click += new System.EventHandler(this.PackageManagerBtn_Click);
             // 
             // button5
             // 
@@ -302,6 +303,7 @@
             // 
             // neoPanel2
             // 
+            this.neoPanel2.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.neoPanel2.BorderGradientAngle = 0F;
             this.neoPanel2.BorderGradientOne = System.Drawing.SystemColors.ButtonShadow;
             this.neoPanel2.BorderGradientTwo = System.Drawing.SystemColors.ButtonShadow;
@@ -318,7 +320,7 @@
             // 
             // BlockSearchBox
             // 
-            this.BlockSearchBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.BlockSearchBox.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.BlockSearchBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.BlockSearchBox.Location = new System.Drawing.Point(29, 1);
             this.BlockSearchBox.Name = "BlockSearchBox";
@@ -346,7 +348,7 @@
             "test 8",
             "test 9",
             "test 10"});
-            this.listBox1.Location = new System.Drawing.Point(0, 26);
+            this.listBox1.Location = new System.Drawing.Point(0, 28);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(288, 75);
             this.listBox1.TabIndex = 12;
@@ -652,7 +654,7 @@
         private Button SaveBtn;
         private Button button4;
         private Button button5;
-        private Button button6;
+        private Button PackageManagerBtn;
         private Button button7;
         private Button button8;
         private Panel panel8;
