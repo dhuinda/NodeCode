@@ -27,6 +27,7 @@ public class StringExpression : BlockBase
         }
         NodeType = NodeType.STRING_EXPRESSION;
         CanHavePrevious = false;
+        AddElements();
     }
 
     public override void AddElements()
