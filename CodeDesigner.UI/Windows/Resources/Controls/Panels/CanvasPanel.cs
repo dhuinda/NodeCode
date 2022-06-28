@@ -43,8 +43,8 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
             float width = Size.Width;
             float height = Size.Height;
 
-            float x = 0;
-            float y = 0;
+            float x = (OffsetX % (20 * ZoomFactor));
+            float y = (OffsetY % (20 * ZoomFactor));
             
             Graphics g = pe.Graphics;
 
@@ -52,82 +52,14 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
             
             while (x < width)
             {
-                g.DrawLine(pen, x + OffsetX, 0, x + OffsetX, height);
+                g.DrawLine(pen, x, 0, x, height);
                 x += (20 * ZoomFactor);
             }
 
             while (y < height)
             {
-                g.DrawLine(pen, 0, y + OffsetY, width, y + OffsetY);
+                g.DrawLine(pen, 0, y, width, y);
                 y += (20 * ZoomFactor);
-            }
-
-            bool offXNeg = false;
-            bool offYNeg = false;
-
-            x = 0;
-            y = 0;
-
-            if (OffsetX < 0)
-                offXNeg = true;
-
-            if (OffsetY < 0)
-                offYNeg = true;
-
-            switch (offXNeg)
-            {
-                case false when Math.Abs(OffsetX) > (20 * ZoomFactor):
-                {
-                    int lines = (int)(OffsetX / (20 * ZoomFactor));
-                
-                    while (x < lines)
-                    {
-                        g.DrawLine(pen, OffsetX - ((20 * x) * ZoomFactor), 0, OffsetX - ((20 * x) * ZoomFactor), height);
-                        x += 1;
-                    }
-
-                    break;
-                }
-                case true when Math.Abs(OffsetX) > (20 * ZoomFactor):
-                {
-                    int lines = (int)Math.Ceiling(OffsetX / (20 * ZoomFactor));
-                
-                    while (x < Math.Abs(lines))
-                    {
-                        g.DrawLine(pen, (Width + OffsetX) + ((20 * x) * ZoomFactor), 0, (Width + OffsetX) + ((20 * x) * ZoomFactor), height);
-                        x += 1;
-                    }
-
-                    break;
-                }
-            }
-
-            switch (offYNeg)
-            {
-                case false when Math.Abs(OffsetY) > (20 * ZoomFactor):
-                {
-                    int lines = (int)Math.Ceiling(OffsetY / (20 * ZoomFactor));
-                
-                    while (y < lines)
-                    {
-                        g.DrawLine(pen, 0, OffsetY - ((20 * y) * ZoomFactor), width, OffsetY - ((20 * y) * ZoomFactor));
-                        y += 1;
-                    }
-
-                    break;
-                }
-                case true when Math.Abs(OffsetY) > (20 * ZoomFactor):
-                {
-                    int lines = (int)(OffsetY / (20 * ZoomFactor));
-                
-                    while (y < Math.Abs(lines))
-                    {
-                        g.DrawLine(pen, 0, (height + OffsetY) + ((20 * y) * ZoomFactor), width, (height + OffsetY) + ((20 * y) * ZoomFactor));
-                        y += 1;
-                    }
-
-                    break;
-                }
             }
         }
     }
