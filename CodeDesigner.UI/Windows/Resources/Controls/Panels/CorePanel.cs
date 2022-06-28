@@ -31,7 +31,8 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
 
         private void TestExpression_Click(object sender, EventArgs e)
         {
-            BlockProperties properties = new BlockProperties();
+            Canvas.AddNode(new VariableExpression());
+            /*BlockProperties properties = new BlockProperties();
             properties.Height = 100;
             properties.OutputType = Parameter.ParameterType.Object;
             properties.Width = 300;
@@ -68,7 +69,7 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
             ((TextBoxElement)textbox).Text = "Test String lalala";
 
             blockbase.Elements.Add(textbox);
-            Canvas.AddNode(blockbase);
+            Canvas.AddNode(blockbase);*/
         }
 
         private void BinaryExpression_Click(object sender, EventArgs e)
@@ -84,6 +85,16 @@ namespace CodeDesigner.UI.Windows.Resources.Controls.Panels
         private void ReturnExpression_Click(object sender, EventArgs e)
         {
             Canvas.AddNode(new ReturnExpression());
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Canvas.AddNode(new IfStatement());
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Canvas.AddNode(new WhileLoop());
         }
     }
 }
