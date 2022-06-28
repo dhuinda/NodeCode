@@ -243,13 +243,14 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.deletePackageToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(155, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 48);
             // 
             // deletePackageToolStripMenuItem
             // 
             this.deletePackageToolStripMenuItem.Name = "deletePackageToolStripMenuItem";
-            this.deletePackageToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.deletePackageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deletePackageToolStripMenuItem.Text = "Delete Package";
+            this.deletePackageToolStripMenuItem.Click += new System.EventHandler(this.deletePackageToolStripMenuItem_Click);
             // 
             // neoPanel5
             // 

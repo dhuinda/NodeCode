@@ -57,5 +57,17 @@ namespace CodeDesigner.UI.Windows
                 listBox1.Items.Add(pack.Name);
             }
         }
+
+        private void deletePackageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (NodeMap map in Program.dash.Map.Dependencies)
+            {
+                if (map.Name == listBox1.SelectedItem.ToString())
+                {
+                    Program.dash.Map.Dependencies.Remove(map);
+                    listBox1.Items.Remove(listBox1.SelectedItem);
+                }
+            }
+        }
     }
 }
