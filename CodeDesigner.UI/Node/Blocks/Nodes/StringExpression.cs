@@ -26,6 +26,6 @@ public class StringExpression : BlockBase
         Elements.Add(element);
 
         NodeType = NodeType.STRING_EXPRESSION;
-        UseNext = false;
+        CanHavePrevious = false;
     }
 }

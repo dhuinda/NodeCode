@@ -32,6 +32,7 @@ namespace CodeDesigner.UI.Windows.Interaction.TextBox
         private void button1_Click(object sender, EventArgs e)
         {
             _e.Text = textBox1.Text.Replace("\\n", "\n");
+            _e.Method?.Invoke();
             Canvas.CanvasControl.Refresh();
             Hide();
         }
