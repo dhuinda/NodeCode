@@ -33,7 +33,6 @@ public class ASTFunctionDefinition : ASTNode
         {
             fullName = Name == "main" ? "__main_designer" : $"{data.NamespaceName}.{Name}";
         }
-        var func = LLVM.GetNamedFunction(data.Module, fullName);
         var paramTypes = new LLVMTypeRef[Params.Count];
 
         for (var i = 0; i < Params.Count; i++)
@@ -42,13 +41,13 @@ public class ASTFunctionDefinition : ASTNode
         }
 
         var functionType = LLVM.FunctionType(ReturnType.GetLLVMType(data), paramTypes, false);
-        var isAlreadyDefined = func.Pointer.ToInt64() != 0;
-        if (!isAlreadyDefined)
-        {
-            func = LLVM.AddFunction(data.Module, fullName, functionType);
-        }
+        // var isAlreadyDefined = func.Pointer.ToInt64() != 0;
+        // if (!isAlreadyDefined)
+        // {
+        var func = LLVM.AddFunction(data.Module, fullName, functionType);
+        // }
 
-        var funcEntryBlock = fullName == "__main_designer" && isAlreadyDefined ? LLVM.GetFirstBasicBlock(func) : LLVM.AppendBasicBlockInContext(data.Context, func, "entry");
+        var funcEntryBlock = LLVM.AppendBasicBlockInContext(data.Context, func, "entry");
         LLVM.PositionBuilderAtEnd(data.Builder, funcEntryBlock);
         data.NamedValues.Clear();
         data.Func = func;
@@ -67,10 +66,7 @@ public class ASTFunctionDefinition : ASTNode
             node.Codegen(data);
         }
         
-        if (ReturnType.IsPrimitive && ReturnType.PrimitiveType == PrimitiveVariableType.VOID && (fullName != "__main_designer" || isAlreadyDefined))
-        {
-            LLVM.BuildRetVoid(data.Builder);
-        } else if ((Body.Count == 0 || Body[^1].GetType().Name != "ASTReturn") && fullName != "__main_designer")
+        if ((ReturnType.IsPrimitive && ReturnType.PrimitiveType == PrimitiveVariableType.VOID) || Body.Count == 0 || Body[^1].GetType().Name != "ASTReturn")
         {
             LLVM.BuildRetVoid(data.Builder);
         }

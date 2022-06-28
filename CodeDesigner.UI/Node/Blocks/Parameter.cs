@@ -24,12 +24,12 @@ namespace CodeDesigner.UI.Node.Blocks
 
         public enum ParameterType
         {
+            Void,
             String,
             Bool,
             Double,
             Int,
             Object,
-            Void,
             Next
         }
 

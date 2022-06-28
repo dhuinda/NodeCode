@@ -37,7 +37,7 @@ namespace CodeDesigner.Core
             analysisManager.AddAnalyzer(new ClassAnalyzer(data));
             analysisManager.RunAnalysis(ast);
             
-            ast.Insert(0, new ASTFunctionDefinition("main", new List<ASTVariableDefinition>(), new List<ASTNode>(), new VariableType(PrimitiveVariableType.VOID)));
+            // ast.Insert(0, new ASTFunctionDefinition("main", new List<ASTVariableDefinition>(), new List<ASTNode>(), new VariableType(PrimitiveVariableType.VOID)));
             foreach (var node in ast)
             {
                 node.Codegen(data);

@@ -13,6 +13,11 @@ public static class NodeConverter
     {
         Console.WriteLine("compiling");
         var ast = new List<ASTNode>();
+        foreach (var map in Canvas.Canvas.NodeMap.Dependencies)
+        {
+            Console.WriteLine("map: " + map.Name);
+            ConvertToAST(map.Blocks, ast, true);
+        }
         ConvertToAST(nodes, ast);
         if (Program.dash.HasErrors())
         {
@@ -25,10 +30,14 @@ public static class NodeConverter
         CodeGenerator.Run(ast);
     }
 
-    private static void ConvertToAST(List<BlockBase> nodes, List<ASTNode> parentChildren)
+    private static void ConvertToAST(List<BlockBase> nodes, List<ASTNode> parentChildren, bool topLevelOnly = false)
     {
         foreach (var node in nodes)
         {
+            if (topLevelOnly && node.NodeType != NodeType.FUNCTION_DEFINITION)
+            {
+                continue;
+            }
             AnalyzeNode(node, parentChildren);
         }
     }
@@ -81,6 +90,7 @@ public static class NodeConverter
             case NodeType.FUNCTION_DEFINITION:
             {
                 var funDefNode = (FunctionDefinition) node;
+                Console.WriteLine("generating " + funDefNode.Name + ": " + funDefNode.ReturnType);
                 var astParams = new List<ASTVariableDefinition>();
                 foreach (var p in funDefNode.Parameters)
                 {

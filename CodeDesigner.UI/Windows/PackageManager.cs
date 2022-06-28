@@ -34,7 +34,9 @@ namespace CodeDesigner.UI.Windows
 
             using (MemoryStream ms = new (data))
             {
-                Program.dash.Map.Dependencies.Add((NodeMap)new BinaryFormatter().Deserialize(ms));
+                var nodeMap = (NodeMap) new BinaryFormatter().Deserialize(ms);
+                Program.dash.Map.Dependencies.Add(nodeMap);
+                nodeMap.ScanForFunctions();
             }
 
             listBox1.Items.Clear();
